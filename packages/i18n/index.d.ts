@@ -42,3 +42,4 @@ export type I18nProvider = {
 };
 
 export const enUS: I18nProvider;
+export const deDE: I18nProvider;
