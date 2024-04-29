@@ -1,4 +1,4 @@
-import { lighten } from 'polished';
+import { lighten, rgba } from 'polished';
 import styled from 'styled-components';
 
 export const StyledNotes = styled.div`
@@ -47,7 +47,7 @@ export const NotesContent = styled.div`
   font-family: 'ZH', sans-serif;
   outline: none;
   border: 2px solid ${(props) => lighten(0.1, props.theme.colors.border)};
-  background: transparent;
+  background: ${(props) => rgba(props.theme.colors.background, 0.5)};
   resize: none;
   padding: 1rem;
   cursor: text;
