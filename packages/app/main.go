@@ -32,7 +32,8 @@ func main() {
 		Debug: options.Debug{
 			OpenInspectorOnStartup: app.IsDev(),
 		},
-		Windows: &windows.Options{},
+		Windows:                  &windows.Options{},
+		EnableDefaultContextMenu: false,
 	})
 
 	if err != nil {
