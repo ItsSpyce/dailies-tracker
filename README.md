@@ -32,4 +32,11 @@ TBD :)
 
 ## Translation help
 
-I'm not multilingual, so translations are ALWAYS welcome. You can look at `packages/app/frontend/src/i18n` to see the current state of internationalization and contribute!
+I'm not multilingual, so translations are ALWAYS welcome. You can look at `packages/i18n` to see the current state of internationalization and contribute!
+
+### Adding translations
+
+1. Navigate to `packages/i18n` and add your localization. Required fields are described in `index.d.ts`.
+2. Once you've created your translations, ensure it is exported through `index.js` and declared in `index.d.ts` with `{language_lowercased_2_chars}{COUNTRY_UPPERCASED_2_CHARS}`.
+3. Navigate to `packages/app/frontend/src/main.tsx` and update the switch `localeSwitch`
+4. Open a pull request and I'll merge it in!

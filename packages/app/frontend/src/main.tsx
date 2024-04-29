@@ -4,10 +4,10 @@ import Modal from 'react-modal';
 import App from './App';
 import { deskify } from './deskify';
 import { StyleSheetManager, ThemeProvider } from 'styled-components';
-import { GlobalStyle } from './styles';
-import { theme } from './theme';
-import { I18nContext } from './contexts';
-import { enUs } from './i18n';
+import * as locales from '@dailies-tracker/i18n';
+import { I18nContext, theme, GlobalStyle } from '@dailies-tracker/ui';
+import * as app from '@/internal/main/App';
+import { match } from 'ts-pattern';
 
 deskify({
   allowContextMenu: false,
@@ -15,21 +15,31 @@ deskify({
   allowReloadKey: true,
 });
 
-const container = document.getElementById('root');
+const localeSwitch = (lang: string) =>
+  match(lang)
+    .with('en-US.UTF-8', () => locales.enUS)
+    // insert more locales here
+    .otherwise(() => locales.enUS);
 
-const root = createRoot(container!);
+(async () => {
+  const lang = await app.GetLocale();
+  const selectedLocale = localeSwitch(lang);
+  const container = document.getElementById('root');
 
-Modal.setAppElement(container!);
+  const root = createRoot(container!);
 
-root.render(
-  <React.StrictMode>
-    <StyleSheetManager>
-      <I18nContext.Provider value={enUs}>
-        <ThemeProvider theme={theme}>
-          <GlobalStyle />
-          <App />
-        </ThemeProvider>
-      </I18nContext.Provider>
-    </StyleSheetManager>
-  </React.StrictMode>
-);
+  Modal.setAppElement(container!);
+
+  root.render(
+    <React.StrictMode>
+      <StyleSheetManager>
+        <I18nContext.Provider value={selectedLocale}>
+          <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            <App />
+          </ThemeProvider>
+        </I18nContext.Provider>
+      </StyleSheetManager>
+    </React.StrictMode>
+  );
+})();

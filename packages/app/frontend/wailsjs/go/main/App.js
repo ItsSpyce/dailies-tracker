@@ -14,6 +14,10 @@ export function DeleteTask(arg1) {
   return window['go']['main']['App']['DeleteTask'](arg1);
 }
 
+export function GetLocale() {
+  return window['go']['main']['App']['GetLocale']();
+}
+
 export function IsDev() {
   return window['go']['main']['App']['IsDev']();
 }

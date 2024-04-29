@@ -1,0 +1,6 @@
+{
+  "name": "@dailies-tracker/i18n",
+  "type": "module",
+  "main": "index.js",
+  "types": "index.d.ts"
+}
