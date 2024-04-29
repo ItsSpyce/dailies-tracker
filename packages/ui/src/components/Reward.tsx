@@ -1,6 +1,6 @@
 import { match } from 'ts-pattern';
 import { Rarity, RewardCount, RewardIcon, StyledReward } from './Reward.styles';
-import { RewardType } from '@/types';
+import { RewardType } from '../types';
 
 export { Rarity };
 

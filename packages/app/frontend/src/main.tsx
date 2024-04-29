@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 import App from './App';
 import { deskify } from './deskify';
 import { StyleSheetManager, ThemeProvider } from 'styled-components';
-import { enUs } from '@dailies-tracker/i18n';
+import { enUS } from '@dailies-tracker/i18n';
 import { I18nContext, theme, GlobalStyle } from '@dailies-tracker/ui';
 
 deskify({
@@ -22,7 +22,7 @@ Modal.setAppElement(container!);
 root.render(
   <React.StrictMode>
     <StyleSheetManager>
-      <I18nContext.Provider value={enUs}>
+      <I18nContext.Provider value={enUS}>
         <ThemeProvider theme={theme}>
           <GlobalStyle />
           <App />

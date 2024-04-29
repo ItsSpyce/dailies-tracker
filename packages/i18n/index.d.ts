@@ -41,4 +41,4 @@ export type I18nProvider = {
   'rewards.health': string;
 };
 
-export const enUs: I18nProvider;
+export const enUS: I18nProvider;

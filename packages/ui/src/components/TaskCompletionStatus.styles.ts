@@ -1,4 +1,4 @@
-import { sif } from '@/utils/scomp';
+import { sif } from '../utils/scomp';
 import { lighten } from 'polished';
 import styled, { css } from 'styled-components';
 import { Rarity } from './Reward.styles';

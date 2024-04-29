@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { sif } from '@/utils/scomp';
+import { sif } from '../utils/scomp';
 
 export const StyledSection = styled.section`
   display: grid;

@@ -1,4 +1,4 @@
-import { sif } from '@/utils/scomp';
+import { sif } from '../utils/scomp';
 import { darken } from 'polished';
 import React from 'react';
 import styled from 'styled-components';

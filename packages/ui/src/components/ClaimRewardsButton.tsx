@@ -1,4 +1,4 @@
-import { useI18n } from '@/hooks';
+import { useI18n } from '../hooks';
 import { StyledClaimRewardsButton } from './ClaimRewardsButton.styles';
 import { Checkbox } from './Checkbox';
 import { useState } from 'react';

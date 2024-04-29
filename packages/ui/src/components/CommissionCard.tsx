@@ -1,4 +1,4 @@
-import { DailyCommission, RewardType } from '@/types';
+import { DailyCommission, RewardType } from '../types';
 import {
   CommissionCardText,
   CommissionMarker,

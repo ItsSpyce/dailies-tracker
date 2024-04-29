@@ -1,4 +1,4 @@
-import { sides } from '@/utils/scomp';
+import { sides } from '../utils/scomp';
 import { lighten } from 'polished';
 import styled from 'styled-components';
 import { TextButton } from './Button';

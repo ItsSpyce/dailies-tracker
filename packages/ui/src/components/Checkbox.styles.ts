@@ -1,4 +1,4 @@
-import { sif } from '@/utils/scomp';
+import { sif } from '../utils/scomp';
 import styled from 'styled-components';
 
 export const StyledCheckbox = styled.div`

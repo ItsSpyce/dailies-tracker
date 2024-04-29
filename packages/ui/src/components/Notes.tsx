@@ -17,7 +17,7 @@ import {
   thematicBreakPlugin,
 } from '@mdxeditor/editor';
 import '@mdxeditor/editor/style.css';
-import { useLocalStorage } from '@/hooks';
+import { useLocalStorage } from '../hooks';
 
 export const Notes = () => {
   const leftRef = useRef<MDXEditorMethods>(null);

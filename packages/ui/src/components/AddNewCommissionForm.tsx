@@ -1,4 +1,4 @@
-import { RewardType, TaskReward } from '@/types';
+import { RewardType, TaskReward } from '../types';
 import { useState } from 'react';
 import {
   RewardSelectionColumn,
@@ -6,7 +6,7 @@ import {
   StyledAddNewCommissionForm,
 } from './AddNewCommissionForm.styles';
 import { Input } from './Input';
-import { useI18n } from '@/hooks';
+import { useI18n } from '../hooks';
 import { I18n } from './I18n';
 import { Button } from './Button';
 import { ButtonGroup } from './ButtonGroup';

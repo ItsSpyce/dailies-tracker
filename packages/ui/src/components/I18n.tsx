@@ -1,5 +1,5 @@
-import { useI18n } from '@/hooks';
-import { I18nProvider } from '@/i18n/types';
+import { I18nProvider } from '@dailies-tracker/i18n';
+import { useI18n } from '../hooks';
 
 export type I18nProps = {
   iden: Suggestion<keyof I18nProvider>;

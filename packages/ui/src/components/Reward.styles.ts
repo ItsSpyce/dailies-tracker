@@ -1,4 +1,4 @@
-import { sif } from '@/utils/scomp';
+import { sif } from '../utils/scomp';
 import { darken, invert, rgba } from 'polished';
 import styled from 'styled-components';
 

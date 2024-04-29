@@ -47,3 +47,11 @@ func (a *App) DeleteTask(id int) error {
 func (a *App) IsDev() bool {
 	return len(os.Getenv("DEBUG")) != 0 || len(os.Getenv("DEV")) != 0
 }
+
+func (a *App) GetLocale() string {
+	envVar := os.Getenv("LANG")
+	if len(envVar) == 0 {
+		return "en-US.UTF-8"
+	}
+	return envVar
+}
