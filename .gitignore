@@ -1,4 +1,5 @@
-build/
-node_modules
-dist/
+**/build/
+**/node_modules
+**/dist/
 app.db
+package.json.md5
