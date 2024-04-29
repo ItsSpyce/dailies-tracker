@@ -40,3 +40,5 @@ export type I18nProvider = {
   'rewards.creativePoints': string;
   'rewards.health': string;
 };
+
+export const enUs: I18nProvider;

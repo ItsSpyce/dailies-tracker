@@ -1,6 +1,7 @@
-import { I18nProvider } from './types';
-
-export const enUs: I18nProvider = {
+/**
+ * @type {import('./index').I18nProvider}
+ */
+export const enUS = {
   'app.title': 'Dailies Tracker',
   'app.description': 'A simple app to track your daily activities',
   'app.header': 'Daily Commission Rewards',

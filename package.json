@@ -1,0 +1,16 @@
+{
+  "name": "dailies-tracker",
+  "private": true,
+  "workspaces": [
+    "packages/app/frontend",
+    "packages/ui",
+    "packages/server",
+    "packages/i18n"
+  ],
+  "scripts": {
+    "dev": "cd packages/app && cross-env DEBUG=1 wails dev"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3"
+  }
+}

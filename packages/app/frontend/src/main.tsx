@@ -4,10 +4,8 @@ import Modal from 'react-modal';
 import App from './App';
 import { deskify } from './deskify';
 import { StyleSheetManager, ThemeProvider } from 'styled-components';
-import { GlobalStyle } from './styles';
-import { theme } from './theme';
-import { I18nContext } from './contexts';
-import { enUs } from './i18n';
+import { enUs } from '@dailies-tracker/i18n';
+import { I18nContext, theme, GlobalStyle } from '@dailies-tracker/ui';
 
 deskify({
   allowContextMenu: false,
