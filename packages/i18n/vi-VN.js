@@ -1,7 +1,7 @@
 /**
  * @type {import('./index').I18nProvider}
  */
-export const enUS = {
+export const viVN = {
   'app.title': 'Dailies Tracker',
   'app.description': 'Một ứng dụng theo dõi hoạt động hàng ngày của bạn',
   'app.header': 'Thưởng Ủy Thác Mỗi Ngày',
