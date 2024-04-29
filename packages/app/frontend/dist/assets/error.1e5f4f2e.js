@@ -1,1 +1,0 @@
-import{j as c,a as e}from"./index.334db849.js";const s=r=>{var n;return c("div",{children:[e("h1",{children:r.error.name}),e("h2",{children:r.error.message}),e("p",{children:(n=r.error.stack)!=null?n:""})]})};export{s as component$};
