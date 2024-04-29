@@ -15,6 +15,7 @@
     "react-modal": "^3.16.1",
     "run-all": "^1.0.1",
     "styled-components": "^6.1.8",
+    "ts-pattern": "^5.1.1",
     "vite-plugin-tsconfig-paths": "^1.4.1"
   },
   "devDependencies": {
