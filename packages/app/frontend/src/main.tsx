@@ -20,6 +20,7 @@ const localeSwitch = (lang: string) =>
     .with('en-US.UTF-8', () => locales.enUS)
     .with('de-DE.UTF-8', () => locales.deDE)
     .with('vi-VN.UTF-8', () => locales.viVN)
+    .with('fr-FR.UTF-8', () => locales.frFR)
     // insert more locales here
     .otherwise(() => locales.enUS);
 
