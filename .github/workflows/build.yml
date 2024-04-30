@@ -13,15 +13,15 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
           go-version: 1.21
 
       - name: Set up Node 18
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
 
@@ -35,25 +35,25 @@ jobs:
           npm run build:macos
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: dailies-tracker-macos
-          path: packages/app/bin
+          name: dailies-tracker.app
+          path: packages/app/bin/dailies-tracker.app
 
   build-windows:
     runs-on: windows-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
           go-version: 1.21
 
       - name: Set up Node 18
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
 
@@ -69,23 +69,23 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: dailies-tracker-windows
-          path: packages/app/bin
+          name: 'Dailies Tracker.exe'
+          path: 'packages/app/bin/Dailies Tracker.exe'
 
   build-linux:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
           go-version: 1.21
 
       - name: Set up Node 18
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
 
@@ -104,7 +104,7 @@ jobs:
           npm run build:linux
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: dailies-tracker-linux
-          path: packages/app/bin
+          name: dailies-tracker
+          path: packages/app/bin/dailies-tracker
