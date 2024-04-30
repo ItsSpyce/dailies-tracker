@@ -29,6 +29,7 @@ jobs:
 
       - name: Build and Package
         run: |
+          npm install
           npm run build:macos
 
       - name: Upload Artifact
@@ -60,6 +61,7 @@ jobs:
 
       - name: Build and Package
         run: |
+          npm install
           npm run build:windows
 
       - name: Upload Artifact
@@ -91,6 +93,7 @@ jobs:
 
       - name: Build and Package
         run: |
+          npm install
           npm run build:linux
 
       - name: Upload Artifact
