@@ -4,17 +4,17 @@
 export const nlNL = {
     'app.title': 'Dailies Tracker',
     'app.description': 'Een simpele app om je dagelijkse activiteiten mee bij te houden.',
-    'app.header': 'Beloning voor dagelijkse missies',
+    'app.header': 'Beloning voor je dagelijkse commissies',
     'app.subHeader':
-        'Voltooi dagelijks alle missies om bonussen te ontvangen van de avonturiersgilde.',
+        'Voltooi dagelijks alle commissies om bonussen te ontvangen van de avonturiersgilde.',
     'app.chooseDate':
         'Kies de juiste datum waarop je commissies wilt voltooien.',
-    'app.dailies.title': 'Dagelijkse missies',
+    'app.dailies.title': 'Dagelijkse commissies',
     'app.dailies.claimed': 'Dagelijkse beloning geclaimd',
     'app.dailies.notes': 'Notities',
     'app.dailies.bonusRewards': 'Extra beloningen',
-    'app.dailies.addCommission': 'Nieuwe missie toevoegen',
-    'app.dailies.none': 'Nog geen missies toegevoegd',
+    'app.dailies.addCommission': 'Nieuwe commissie toevoegen',
+    'app.dailies.none': 'Nog geen commissies toegevoegd',
     'app.cancel': 'Annuleren',
     'app.create': 'Aanmaken',
     'app.ok': 'Ok',
@@ -42,6 +42,6 @@ export const nlNL = {
     'rewards.coins': 'Mora',
     'rewards.arexp': 'AR-Exp',
     'rewards.cleaningPoints': 'Schoonmaakpunten',
-    'rewards.creativePoints': 'Creatieviteitspunten',
+    'rewards.creativePoints': 'Creativiteitspunten',
     'rewards.health': 'HP',
   };
