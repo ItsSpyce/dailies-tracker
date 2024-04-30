@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strings"
 )
 
 // App struct
@@ -45,6 +46,11 @@ func (a *App) DeleteTask(id int) error {
 }
 
 func (a *App) IsDev() bool {
+	exeName, err := os.Executable()
+	fmt.Println("Executable name:", exeName)
+	if err == nil && strings.Contains(exeName, "-dev") {
+		return true
+	}
 	return len(os.Getenv("DEBUG")) != 0 || len(os.Getenv("DEV")) != 0
 }
 

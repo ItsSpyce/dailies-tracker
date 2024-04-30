@@ -1,5 +1,7 @@
 # Dailies Tracker
 
+## [All original credit goes to Juls for their amazing idea](https://twitter.com/milkhatersinc)
+
 ## WIP
 
 ## Architecture

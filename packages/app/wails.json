@@ -9,5 +9,11 @@
   "author": {
     "name": "ItsSpyce",
     "email": "spycevt@gmail.com"
+  },
+  "info": {
+    "companyName": "ItsSpyce",
+    "productName": "Dailies Tracker",
+    "productVersion": "0.0.1",
+    "copyright": "MIT"
   }
 }
