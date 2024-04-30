@@ -1,0 +1,32 @@
+name: Build and Upload
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    runs-on: macos-12
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.21
+
+      - name: Set up Node 18
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Set up Wails
+        run: |
+          go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
+      - name: Build and Package
+        run: |
+          npm run build

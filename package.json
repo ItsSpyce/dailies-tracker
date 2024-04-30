@@ -9,7 +9,10 @@
   ],
   "scripts": {
     "dev": "cd packages/app && cross-env DEBUG=1 wails dev",
-    "build": "cd packages/app && wails build"
+    "build": "run-p build:*",
+    "build:windows": "cd packages/app && wails build -platform windows",
+    "build:macos": "cd packages/app && wails build -platform darwin/universal",
+    "build:linux": "cd packages/app && wails build -platform linux"
   },
   "dependencies": {
     "cross-env": "^7.0.3",
