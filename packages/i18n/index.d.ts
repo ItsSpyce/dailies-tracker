@@ -46,3 +46,4 @@ export const deDE: I18nProvider;
 export const viVN: I18nProvider;
 export const frFR: I18nProvider;
 export const ptBR: I18nProvider;
+export const esES: I18nProvider;
