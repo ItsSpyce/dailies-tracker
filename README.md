@@ -43,6 +43,7 @@ I'm not multilingual, so translations are ALWAYS welcome. You can look at `packa
 - Indonesian (credit @a0z0u)
 - Vietnamese (credit @xuanhaivptthn)
 - German (credit @justjustie)
+- Dutch (credit @SnooLuna)
 
 ### Adding translations
 
