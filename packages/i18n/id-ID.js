@@ -39,7 +39,7 @@ export const idID = {
   'calendar.days.5': 'Jum',
   'calendar.days.6': 'Sab',
   'rewards.primos': 'Primos',
-  'rewards.coins': 'Koin',
+  'rewards.coins': 'Mora',
   'rewards.arexp': 'ARExp',
   'rewards.cleaningPoints': 'Poin Kebersihan',
   'rewards.creativePoints': 'Poin Kreativitas',
