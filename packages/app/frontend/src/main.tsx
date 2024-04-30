@@ -17,10 +17,11 @@ deskify({
 
 const localeSwitch = (lang: string) => 
   match(lang)
-    .with('en_US.UTF-8', () => locales.enUS)
-    .with('de_DE.UTF-8', () => locales.deDE)
-    .with('vi_VN.UTF-8', () => locales.viVN)
+    .with('en-US.UTF-8', () => locales.enUS)
+    .with('de-DE.UTF-8', () => locales.deDE)
+    .with('vi-VN.UTF-8', () => locales.viVN)
     .with('pt_BR.UTF-8', () => locales.ptBR)
+    .with('fr-FR.UTF-8', () => locales.frFR)
     .with('es_ES.UTF-8', () => locales.esES)
     // insert more locales here
     .otherwise(() => locales.enUS);
