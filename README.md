@@ -34,6 +34,16 @@ TBD :)
 
 I'm not multilingual, so translations are ALWAYS welcome. You can look at `packages/i18n` to see the current state of internationalization and contribute!
 
+### Current translations
+
+- Spanish (credit @anjosmelanie and @amukasekon)
+- French (credit @Honeyxilia)
+- Brazilian Portuguese (credit @rebsilva)
+- Russian (credit @hllwrld7)
+- Indonesian (credit @a0z0u)
+- Vietnamese (credit @xuanhaivptthn)
+- German (credit @justjustie)
+
 ### Adding translations
 
 1. Navigate to `packages/i18n` and add your localization. Required fields are described in `index.d.ts`.

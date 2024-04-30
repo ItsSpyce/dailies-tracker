@@ -4,4 +4,4 @@ export * from './vi_VN';
 export * from './fr_FR';
 export * from './pt_BR';
 export * from './ru_RU';
-export * from './id-ID';
+export * from './id_ID';
