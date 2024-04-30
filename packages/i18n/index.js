@@ -1,3 +1,3 @@
-export * from './en-US';
-export * from './de-DE';
-export * from './vi-VN';
+export * from './en_US';
+export * from './de_DE';
+export * from './vi_VN';
