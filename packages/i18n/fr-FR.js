@@ -3,7 +3,7 @@
  */
 export const frFR = {
   'app.title': 'Dailies Tracker',
-  'app.description': 'Une simple application pour vos activités quotidiennes',
+  'app.description': 'Une application simple pour vos activités quotidiennes',
   'app.header': 'Récompenses de missions quotidiennes',
   'app.subHeader':
     "Complétez toutes les Missions chaque jour pour recevoir des récompenses bonus de la Guilde des aventuriers.",
@@ -43,5 +43,5 @@ export const frFR = {
   'rewards.arexp': 'Exp d\'av.',
   'rewards.cleaningPoints': 'Points de Nettoyage',
   'rewards.creativePoints': 'Points de Créativité',
-  'rewards.health': 'Points de Vie',
+  'rewards.health': 'Vie',
 }
