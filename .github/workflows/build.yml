@@ -36,13 +36,13 @@ jobs:
 
       - name: List binaries
         run: |
-          ls -la ./packages/app
+          ls -la ./packages/app/build/bin
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: dailies-tracker.app
-          path: packages/app/bin/dailies-tracker.app
+          path: packages/app/build/bin/dailies-tracker.app
 
   build-windows:
     runs-on: windows-latest
@@ -72,13 +72,13 @@ jobs:
 
       - name: List binaries
         run: |
-          ls -a ./packages/app
+          ls -a ./packages/app/build/bin
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: 'Dailies Tracker.exe'
-          path: 'packages/app/bin/Dailies Tracker.exe'
+          path: 'packages/app/build/bin/Dailies Tracker.exe'
 
   build-linux:
     runs-on: ubuntu-latest
@@ -113,10 +113,10 @@ jobs:
 
       - name: List binaries
         run: |
-          ls -la ./packages/app
+          ls -la ./packages/app/build/bin
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: dailies-tracker
-          path: packages/app/bin/dailies-tracker
+          path: packages/app/build/bin/dailies-tracker
