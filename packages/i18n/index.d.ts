@@ -49,3 +49,4 @@ export const frFR: I18nProvider;
 export const ptBR: I18nProvider;
 export const esES: I18nProvider;
 export const ruRU: I18nProvider;
+export const nlNL: I18nProvider;
