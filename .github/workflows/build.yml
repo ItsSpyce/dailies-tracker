@@ -36,7 +36,7 @@ jobs:
 
       - name: List binaries
         run: |
-          ls -la packages/app/bin
+          ls -la .
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
@@ -72,7 +72,7 @@ jobs:
 
       - name: List binaries
         run: |
-          ls -la packages/app/bin
+          ls -la .
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
@@ -113,7 +113,7 @@ jobs:
 
       - name: List binaries
         run: |
-          ls -la packages/app/bin
+          ls -la .
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
