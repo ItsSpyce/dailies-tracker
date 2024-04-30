@@ -1,7 +1,7 @@
 /**
  * @type {import('./index').I18nProvider}
  */
-export const esSPA = {
+export const esES = {
   'app.title': 'Agenda diaria',
   'app.description': 'Una simple app para organizar tus actividades diarias',
   'app.header': 'Recompensas De Encargos',
