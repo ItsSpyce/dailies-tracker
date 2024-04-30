@@ -21,7 +21,7 @@ export const nlNL = {
     'app.addCommission.description': 'Beschrijving',
     'calendar.months.1': 'Jan',
     'calendar.months.2': 'Feb',
-    'calendar.months.3': 'Mar',
+    'calendar.months.3': 'Mrt',
     'calendar.months.4': 'Apr',
     'calendar.months.5': 'Mei',
     'calendar.months.6': 'Jun',
@@ -41,7 +41,7 @@ export const nlNL = {
     'rewards.primos': "Primo's",
     'rewards.coins': 'Mora',
     'rewards.arexp': 'AR-Exp',
-    'rewards.cleaningPoints': 'Schoonmaak-punten',
-    'rewards.creativePoints': 'Creatieve-punten',
+    'rewards.cleaningPoints': 'Schoonmaakpunten',
+    'rewards.creativePoints': 'Creatieviteitspunten',
     'rewards.health': 'HP',
   };
