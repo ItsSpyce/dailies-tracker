@@ -34,15 +34,11 @@ jobs:
           npm install
           npm run build:macos
 
-      - name: List binaries
-        run: |
-          ls -la ./packages/app/build/bin
-
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: dailies-tracker.app
-          path: packages/app/build/bin/dailies-tracker.app
+          name: dailies-tracker-macos
+          path: packages/app/build/bin
 
   build-windows:
     runs-on: windows-latest
@@ -70,15 +66,11 @@ jobs:
           npm install
           npm run build:windows
 
-      - name: List binaries
-        run: |
-          ls -a ./packages/app/build/bin
-
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: 'Dailies Tracker.exe'
-          path: 'packages/app/build/bin/Dailies Tracker.exe'
+          name: dailies-tracker-win
+          path: packages/app/build/bin
 
   build-linux:
     runs-on: ubuntu-latest
@@ -111,12 +103,8 @@ jobs:
           npm install
           npm run build:linux
 
-      - name: List binaries
-        run: |
-          ls -la ./packages/app/build/bin
-
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: dailies-tracker
-          path: packages/app/build/bin/dailies-tracker
+          name: dailies-tracker-linux
+          path: packages/app/build/bin
