@@ -6,7 +6,7 @@ export const frFR = {
   'app.description': 'Une application simple pour vos activités quotidiennes',
   'app.header': 'Récompenses de missions quotidiennes',
   'app.subHeader':
-    "Complétez toutes les Missions chaque jour pour recevoir des récompenses bonus de la Guilde des aventuriers.",
+    "Complétez toutes les missions chaque jour pour recevoir des récompenses bonus de la Guilde des aventuriers.",
   'app.chooseDate':
     'Veuillez choisir la date prévue de complétion des Missions',
   'app.dailies.title': 'Missions quotidiennes',
@@ -26,7 +26,7 @@ export const frFR = {
   'calendar.months.5': 'Mai',
   'calendar.months.6': 'Juin',
   'calendar.months.7': 'Juil',
-  'calendar.months.8': 'Aou',
+  'calendar.months.8': 'Aoû',
   'calendar.months.9': 'Sep',
   'calendar.months.10': 'Oct',
   'calendar.months.11': 'Nov',
