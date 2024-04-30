@@ -34,6 +34,10 @@ jobs:
           npm install
           npm run build:macos
 
+      - name: List binaries
+        run: |
+          ls -la packages/app/bin
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -65,6 +69,10 @@ jobs:
         run: |
           npm install
           npm run build:windows
+
+      - name: List binaries
+        run: |
+          ls -la packages/app/bin
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
@@ -102,6 +110,10 @@ jobs:
         run: |
           npm install
           npm run build:linux
+
+      - name: List binaries
+        run: |
+          ls -la packages/app/bin
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
