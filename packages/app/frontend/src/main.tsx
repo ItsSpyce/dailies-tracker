@@ -15,11 +15,12 @@ deskify({
   allowReloadKey: true,
 });
 
-const localeSwitch = (lang: string) =>
+const localeSwitch = (lang: string) => 
   match(lang)
     .with('en-US.UTF-8', () => locales.enUS)
     .with('de-DE.UTF-8', () => locales.deDE)
     .with('vi-VN.UTF-8', () => locales.viVN)
+    .with('pt_BR.UTF-8', () => locales.ptBR)
     .with('fr-FR.UTF-8', () => locales.frFR)
     // insert more locales here
     .otherwise(() => locales.enUS);
