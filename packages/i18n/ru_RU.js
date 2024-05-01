@@ -1,7 +1,7 @@
 /**
  * @type {import('./index').I18nProvider}
  */
-export const ruRu = {
+export const ruRU = {
   'app.title': 'Ежедневник поручений',
   'app.description':
     'Простое приложение для отслеживания ежедневной активности',
