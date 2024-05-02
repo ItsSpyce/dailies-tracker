@@ -13,11 +13,14 @@ import (
 type App struct {
 	dailiesService DailiesService
 	ctx            context.Context
+	config         *Config
 }
 
 // NewApp creates a new App application struct
-func NewApp() *App {
-	return &App{}
+func NewApp(config *Config) *App {
+	return &App{
+		config: config,
+	}
 }
 
 func (a *App) startup(ctx context.Context) {
@@ -49,7 +52,6 @@ func (a *App) DeleteTask(id int) error {
 
 func (a *App) IsDev() bool {
 	exeName, err := os.Executable()
-	fmt.Println("Executable name:", exeName)
 	if err == nil && strings.Contains(exeName, "-dev") {
 		return true
 	}
@@ -57,11 +59,7 @@ func (a *App) IsDev() bool {
 }
 
 func (a *App) GetLocale() string {
-	envVar := os.Getenv("LANG")
-	if len(envVar) == 0 {
-		return "en-US.UTF-8"
-	}
-	return envVar
+	return a.config.Locale
 }
 
 func (a *App) Notify(title string, message string) {

@@ -23,15 +23,15 @@ deskify({
 
 const localeSwitch = (lang: string) =>
   match(lang)
-    .with('en_US.UTF-8', () => locales.enUS)
-    .with('de_DE.UTF-8', () => locales.deDE)
-    .with('vi_VN.UTF-8', () => locales.viVN)
-    .with('pt_BR.UTF-8', () => locales.ptBR)
-    .with('ru_RU.UTF-8', () => locales.ruRU)
-    .with('fr_FR.UTF-8', () => locales.frFR)
-    .with('es_ES.UTF-8', () => locales.esES)
-    .with('id_ID.UTF-8', () => locales.idID)
-    .with('nl_NL.UTF-8', () => locales.nlNL)
+    .with('en_US', () => locales.enUS)
+    .with('de_DE', () => locales.deDE)
+    .with('vi_VN', () => locales.viVN)
+    .with('pt_BR', () => locales.ptBR)
+    .with('ru_RU', () => locales.ruRU)
+    .with('fr_FR', () => locales.frFR)
+    .with('es_ES', () => locales.esES)
+    .with('id_ID', () => locales.idID)
+    .with('nl_NL', () => locales.nlNL)
     // insert more locales here
     .otherwise(() => locales.enUS);
 
