@@ -7,7 +7,7 @@ import {
   NotesRight,
   StyledNotes,
 } from './Notes.styles';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import {
   MDXEditor,
   MDXEditorMethods,
@@ -18,23 +18,32 @@ import {
 } from '@mdxeditor/editor';
 import '@mdxeditor/editor/style.css';
 import { useLocalStorage } from '../hooks';
+import { I18n } from './I18n';
 
-export const Notes = () => {
+export type NotesProps = {
+  leftContent: string;
+  onChangeLeft: (content: string) => void;
+  rightContent: string;
+  onChangeRight: (content: string) => void;
+};
+
+export const Notes: React.FC<NotesProps> = ({
+  leftContent,
+  rightContent,
+  onChangeLeft,
+  onChangeRight,
+}) => {
   const leftRef = useRef<MDXEditorMethods>(null);
   const rightRef = useRef<MDXEditorMethods>(null);
-
-  const [leftContent, setLeftContent] = useLocalStorage(
-    'notes-left',
-    '#Take your notes!'
-  );
-  const [rightContent, setRightContent] = useLocalStorage('notes-right', '');
 
   return (
     <ContainerWithTail>
       <StyledNotes>
         <NotesBackground src="/images/notes-bg.png" />
         <ActualContent>
-          <h4>Notes</h4>
+          <h4>
+            <I18n iden="app.dailies.notes" />
+          </h4>
           <NotesContainer>
             <NotesLeft onClick={(e) => leftRef.current?.focus()}>
               <MDXEditor
@@ -46,7 +55,7 @@ export const Notes = () => {
                 ]}
                 ref={leftRef}
                 markdown={leftContent}
-                onChange={setLeftContent}
+                onChange={onChangeLeft}
               />
             </NotesLeft>
             <NotesRight onClick={(e) => rightRef.current?.focus()}>
@@ -59,7 +68,7 @@ export const Notes = () => {
                 ]}
                 ref={rightRef}
                 markdown={rightContent}
-                onChange={setRightContent}
+                onChange={onChangeRight}
               />
             </NotesRight>
           </NotesContainer>

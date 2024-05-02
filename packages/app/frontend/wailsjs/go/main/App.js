@@ -6,8 +6,8 @@ export function CompleteTask(arg1) {
   return window['go']['main']['App']['CompleteTask'](arg1);
 }
 
-export function CreateTask(arg1, arg2) {
-  return window['go']['main']['App']['CreateTask'](arg1, arg2);
+export function CreateTask(arg1, arg2, arg3) {
+  return window['go']['main']['App']['CreateTask'](arg1, arg2, arg3);
 }
 
 export function DeleteTask(arg1) {
@@ -24,4 +24,8 @@ export function IsDev() {
 
 export function LoadCommissions(arg1) {
   return window['go']['main']['App']['LoadCommissions'](arg1);
+}
+
+export function Notify(arg1, arg2) {
+  return window['go']['main']['App']['Notify'](arg1, arg2);
 }

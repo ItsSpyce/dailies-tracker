@@ -1,4 +1,4 @@
-import { sides } from '../utils/scomp';
+import { hasChildOf, sides } from '../utils/scomp';
 import { lighten } from 'polished';
 import styled from 'styled-components';
 import { TextButton } from './Button';
@@ -15,6 +15,7 @@ export const StyledDatePicker = styled.div`
   cursor: pointer;
   user-select: none;
   align-items: center;
+  height: fit-content;
 `;
 
 export const CalText = styled.span`
@@ -34,7 +35,8 @@ export const DatePickerPopup = styled.div`
   background-color: ${(props) => props.theme.colors.background};
   ${sides('-3px', '-3px', 'initial')}
   border-radius: 1.5rem 1.5rem 0 0;
-  border: 3px solid ${(props) => props.theme.colors.border};
+  border: 3px solid ${(props) => props.theme.colors.accent};
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
   z-index: 999;
 `;
 

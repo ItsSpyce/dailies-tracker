@@ -1,4 +1,4 @@
-import { lighten } from 'polished';
+import { lighten, rgba } from 'polished';
 import styled from 'styled-components';
 import { CheckboxBox } from './Checkbox.styles';
 
@@ -27,10 +27,12 @@ export const CommissionCardText = styled.div`
   flex-direction: column;
   row-gap: 0.5rem;
   padding: 1.5rem 1rem;
+  z-index: 1;
+  background-color: ${(props) => rgba(props.theme.colors.background, 0.7)};
 `;
 
 export const CommissionTitle = styled.span`
-  font-size: 1.25rem;
+  font-size: 1.15rem;
 `;
 
 export const CommissionRealm = styled.span`

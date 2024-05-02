@@ -10,23 +10,32 @@ export const StyledApp = styled.main`
   font-size: 1rem;
 `;
 
-export const StatusPanel = styled.div`
+export const LeftPanel = styled.div`
   max-width: 400px;
   padding: 24px;
+  overflow-y: auto;
 `;
 
-export const DailiesPanel = styled.div`
+export const RightPanel = styled.div`
   background-color: ${(props) => props.theme.colors.backgroundColored};
-  padding: 24px;
+  padding: 1.5rem;
+  overflow-y: auto;
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
   display: grid;
-  grid-template-rows: auto auto 1fr;
+  grid-template-rows: auto 1fr auto 2fr;
+  row-gap: 1.5rem;
 `;
 
-export const DailiesList = styled.ul`
+export const DailiesList = styled.div`
   padding: 0;
-  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+`;
+
+export const DailiesView = styled.div`
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   row-gap: 1rem;
@@ -35,6 +44,8 @@ export const DailiesList = styled.ul`
 export const ChooseDateForm = styled.div`
   display: grid;
   grid-template-columns: 3fr 2fr;
+  height: fit-content;
+  box-sizing: border-box;
 `;
 
 export const ExtraRewards = styled.div`
@@ -43,3 +54,5 @@ export const ExtraRewards = styled.div`
   flex-flow: wrap;
   gap: 0.5rem;
 `;
+
+export const NotesPanel = styled.div``;

@@ -27,7 +27,7 @@
       "import": "./src/contexts/index.ts"
     }
   },
-  "dependencies": {
+  "peerDependencies": {
     "@dailies-tracker/i18n": "file:../i18n",
     "@heroicons/react": "^2.1.1",
     "@mdxeditor/editor": "^3.0.1",
@@ -36,7 +36,7 @@
     "polished": "^4.3.1",
     "react": "^18.2.0",
     "react-calendar": "^4.8.0",
-    "react-dom": "^18.2.0",
+    "react-dom": "^18.3.1",
     "react-feather": "^2.0.10",
     "react-modal": "^3.16.1",
     "run-all": "^1.0.1",

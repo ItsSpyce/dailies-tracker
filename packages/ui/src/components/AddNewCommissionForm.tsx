@@ -11,15 +11,16 @@ import { I18n } from './I18n';
 import { Button } from './Button';
 import { ButtonGroup } from './ButtonGroup';
 import { Checkbox } from './Checkbox';
+import { Select } from './Select';
+import { availableRealms } from '../consts';
 
 export type AddNewCommissionFormProps = {
-  onSubmit: (description: string, rewards: TaskReward[]) => void;
+  onSubmit: (description: string, realm: string, rewards: TaskReward[]) => void;
   onCancel: () => void;
 };
 
 const rewardCounts: Record<RewardType, number> = {
   primos: 400,
-  coins: 50000,
   arexp: 200,
   cleaning_points: 150,
   creative_points: 150,
@@ -32,6 +33,7 @@ export const AddNewCommissionForm: React.FC<AddNewCommissionFormProps> = ({
 }) => {
   const [description, setDescription] = useState('');
   const [rewards, setRewards] = useState<TaskReward[]>([]);
+  const [realm, setRealm] = useState('Realm of Duty');
   const i18n = useI18n();
 
   function bindToAddReward(type: RewardType) {
@@ -42,12 +44,7 @@ export const AddNewCommissionForm: React.FC<AddNewCommissionFormProps> = ({
         if (index === -1) {
           return [...prev, { type, count }];
         }
-        return prev.map((r, i) => {
-          if (i === index) {
-            return { type, count };
-          }
-          return r;
-        });
+        return prev.filter((r) => r.type !== type);
       });
     };
   }
@@ -60,6 +57,14 @@ export const AddNewCommissionForm: React.FC<AddNewCommissionFormProps> = ({
         onChange={(e) => setDescription(e.target.value)}
         placeholder={i18n['app.addCommission.description']}
       />
+      <Select onChange={(e) => setRealm(e.currentTarget.value)}>
+        <option disabled>Select a Realm</option>
+        {availableRealms.map((r) => (
+          <option key={r} value={r}>
+            {r}
+          </option>
+        ))}
+      </Select>
       <RewardSelectionGroup>
         <RewardSelectionColumn>
           <Checkbox
@@ -67,12 +72,6 @@ export const AddNewCommissionForm: React.FC<AddNewCommissionFormProps> = ({
             onChange={bindToAddReward('primos')}
           >
             <I18n iden="rewards.primos" />
-          </Checkbox>
-          <Checkbox
-            checked={rewards.some((r) => r.type === 'coins')}
-            onChange={bindToAddReward('coins')}
-          >
-            <I18n iden="rewards.coins" />
           </Checkbox>
           <Checkbox
             checked={rewards.some((r) => r.type === 'arexp')}
@@ -105,7 +104,7 @@ export const AddNewCommissionForm: React.FC<AddNewCommissionFormProps> = ({
       <ButtonGroup>
         <Button
           onClick={() => {
-            onSubmit(description, rewards);
+            onSubmit(description, realm, rewards);
           }}
           variant="primary"
         >

@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "react-dom": "^18.3.1"
+  }
+}

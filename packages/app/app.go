@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/gen2brain/beeep"
 )
 
 // App struct
@@ -33,8 +35,8 @@ func (a *App) LoadCommissions(dateMs int64) []Commission {
 	return dailies
 }
 
-func (a *App) CreateTask(description string, rewardsJson string) (Commission, error) {
-	return a.dailiesService.CreateNewCommission(description, rewardsJson)
+func (a *App) CreateTask(description string, realm string, rewardsJson string) (Commission, error) {
+	return a.dailiesService.CreateNewCommission(description, realm, rewardsJson)
 }
 
 func (a *App) CompleteTask(id int) error {
@@ -60,4 +62,11 @@ func (a *App) GetLocale() string {
 		return "en-US.UTF-8"
 	}
 	return envVar
+}
+
+func (a *App) Notify(title string, message string) {
+	err := beeep.Notify(title, message, "public/logo-universal.png")
+	if err != nil {
+		fmt.Println("Error notifying:", err)
+	}
 }

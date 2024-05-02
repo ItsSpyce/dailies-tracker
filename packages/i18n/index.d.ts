@@ -10,9 +10,18 @@ export type I18nProvider = {
   'app.dailies.bonusRewards': string;
   'app.dailies.addCommission': string;
   'app.dailies.none': string;
+  'app.dailies.editCommission': string;
+  'app.dailies.deleteCommission': string;
+  'app.dailies.confirmDeleteCommission': string;
   'app.cancel': string;
   'app.create': string;
   'app.ok': string;
+  'app.confirm': string;
+  'app.save': string;
+  'app.fieldDescription': string;
+  'app.fieldDomain': string;
+  'app.fieldRewards': string;
+  'app.fieldRealm': string;
   'app.addCommission.description': string;
   'calendar.months.1': string;
   'calendar.months.2': string;
@@ -39,6 +48,18 @@ export type I18nProvider = {
   'rewards.cleaningPoints': string;
   'rewards.creativePoints': string;
   'rewards.health': string;
+  'realm.duty': string;
+  'realm.fullfilment': string;
+  'realm.artist': string;
+  'realm.musician': string;
+  'realm.writer': string;
+  'realm.engineer': string;
+  'realm.cook': string;
+  'realm.gardener': string;
+  'realm.healing': string;
+  'realm.physical': string;
+  'realm.science': string;
+  'realm.exploration': string;
 };
 
 export const enUS: I18nProvider;

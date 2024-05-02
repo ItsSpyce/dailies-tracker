@@ -18,12 +18,28 @@ export const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
   cursor: pointer;
   box-shadow: none;
   width: 100%;
+  height: fit-content;
+  box-sizing: border-box;
 
   &:hover {
     background-color: ${(props) =>
       darken(0.05, props.theme.colors.backgroundColored)};
     outline: none;
     box-shadow: none;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  ${sif('variant', 'primary')} {
+    background-color: ${(props) => props.theme.colors.accent};
+    color: white;
+    border-color: ${(props) => props.theme.colors.accent};
+
+    &:hover {
+      color: ${(props) => props.theme.colors.text};
+    }
   }
 
   ${sif('variant', 'secondary')} {

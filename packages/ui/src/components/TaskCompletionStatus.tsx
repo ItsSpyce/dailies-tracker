@@ -1,8 +1,6 @@
 import {
-  BackgroundCircle,
   CircleProgress,
   ForegroundCircle,
-  ForegroundGlow,
   StyledTaskCompletionStatus,
   TaskStatus,
 } from './TaskCompletionStatus.styles';
@@ -19,9 +17,7 @@ export const TaskCompletionStatus: React.FC<TaskCompletionStatusProps> = ({
   const progress = (completedTasks / totalTasks) * 100;
   return (
     <StyledTaskCompletionStatus progress={isNaN(progress) ? 0 : progress}>
-      <CircleProgress width="250" height="250" viewBox="0 0 250 250">
-        <ForegroundGlow></ForegroundGlow>
-        <BackgroundCircle></BackgroundCircle>
+      <CircleProgress width="210" height="210" viewBox="0 0 250 250">
         <ForegroundCircle></ForegroundCircle>
       </CircleProgress>
       <TaskStatus>

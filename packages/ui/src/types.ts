@@ -2,6 +2,7 @@ export type DailyCommission = {
   id: number;
   description: string;
   completed: boolean;
+  realm: string;
   rewards: TaskReward[];
 };
 
@@ -12,7 +13,6 @@ export type TaskReward = {
 
 export type RewardType =
   | 'primos'
-  | 'coins'
   | 'arexp'
   | 'cleaning_points'
   | 'creative_points'

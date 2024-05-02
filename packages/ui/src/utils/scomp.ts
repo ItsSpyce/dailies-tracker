@@ -1,4 +1,5 @@
-import { Interpolation } from 'styled-components';
+import React from 'react';
+import { DefaultTheme, Interpolation } from 'styled-components';
 
 export function sif<T extends object>(
   field: keyof T | ((props: T) => boolean),
@@ -80,4 +81,62 @@ export function sides(...args: (number | string)[]): string {
     top: ${args[0]};
     bottom: ${args[2]};
   `;
+}
+
+export function breakpoints<T extends { theme: DefaultTheme }>(
+  breakpoint: keyof T['theme']['breakpoints']
+): Interpolation<T> {
+  return (props: T) => {
+    // @ts-ignore
+    return `@media (min-width: ${props.theme.breakpoints[breakpoint]})`;
+  };
+}
+
+export function childrenCount<T extends React.PropsWithChildren<unknown>>(): (
+  props: T
+) => number;
+export function childrenCount<T extends React.PropsWithChildren<unknown>>(
+  count?: number
+): Interpolation<T> {
+  return (props) => {
+    if (count == null) {
+      return React.Children.count(props.children);
+    }
+    if (count === React.Children.count(props.children)) {
+      return `&`;
+    }
+  };
+}
+
+export function areChildrenOf<T extends React.PropsWithChildren<unknown>>(
+  ...types: React.ComponentType[]
+): Interpolation<T> {
+  return (props) => {
+    const children = React.Children.toArray(props.children);
+    if (children.length !== types.length) {
+      return undefined;
+    }
+    for (let i = 0; i < types.length; i++) {
+      const child = children[i];
+      if (!React.isValidElement(child) || child.type !== types[i]) {
+        return undefined;
+      }
+    }
+    return '&';
+  };
+}
+
+export function hasChildOf<T extends React.PropsWithChildren<unknown>>(
+  type: React.ComponentType
+): Interpolation<T> {
+  return (props) => {
+    const children = React.Children.toArray(props.children);
+    if (
+      children.some(
+        (child) => React.isValidElement(child) && child.type === type
+      )
+    ) {
+      return '&';
+    }
+  };
 }

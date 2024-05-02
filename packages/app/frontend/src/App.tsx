@@ -1,10 +1,11 @@
 import {
   ChooseDateForm,
   DailiesList,
-  DailiesPanel,
+  RightPanel,
   ExtraRewards,
-  StatusPanel,
+  LeftPanel,
   StyledApp,
+  DailiesView,
 } from './styles';
 import { useEffect, useState } from 'react';
 import * as app from '@/internal/main/App';
@@ -25,6 +26,9 @@ import {
   Notes,
   DailyCommission,
   TaskReward,
+  Label,
+  Modal,
+  useLocalStorage,
 } from '@dailies-tracker/ui';
 
 const today = new Date();
@@ -34,6 +38,8 @@ const App = () => {
   const [isClaimed, setIsClaimed] = useState(false);
   const [isCreatingNewCommission, setIsCreatingNewCommission] = useState(false);
   const [date, setDate] = useState(today);
+  const [leftNotes, setLeftNotes] = useLocalStorage('notes-left', '');
+  const [rightNotes, setRightNotes] = useLocalStorage('notes-right', '');
 
   function markAsClaimed() {
     // TODO: store
@@ -42,16 +48,18 @@ const App = () => {
 
   async function onSubmitNewCommission(
     description: string,
+    realm: string,
     rewards: TaskReward[]
   ) {
     const rewardsJson = JSON.stringify(rewards);
-    const result = await app.CreateTask(description, rewardsJson);
+    const result = await app.CreateTask(description, realm, rewardsJson);
     if (result.id != null) {
       setCommissions([
         ...commissions,
         {
           id: result.id,
           description,
+          realm,
           rewards,
           completed: false,
         },
@@ -81,6 +89,7 @@ const App = () => {
       commissions.map((c) => ({
         id: c.id,
         description: c.description,
+        realm: c.realm,
         rewards: JSON.parse(c.rewards),
         completed: c.completed,
       }))
@@ -89,7 +98,7 @@ const App = () => {
 
   return (
     <StyledApp>
-      <StatusPanel>
+      <LeftPanel>
         <Title
           header={<I18n iden="app.header" />}
           subHeader={<I18n iden="app.subHeader" />}
@@ -113,12 +122,15 @@ const App = () => {
             <Reward type="health" amount={1} rarity={Rarity.Rare} size="lg" />
           </ExtraRewards>
         </Section>
-        <Button onClick={markAsClaimed}>
+        <Button
+          onClick={markAsClaimed}
+          disabled={commissions.some((c) => !c.completed)}
+        >
           <Checkbox checked={isClaimed} />
           <I18n iden="app.dailies.claimed" />
         </Button>
-      </StatusPanel>
-      <DailiesPanel>
+      </LeftPanel>
+      <RightPanel>
         <ChooseDateForm>
           <I18n iden="app.chooseDate" />
           <DatePicker
@@ -129,8 +141,11 @@ const App = () => {
             }}
           />
         </ChooseDateForm>
-        <Section header={<I18n iden="app.dailies.title" />} align="left">
-          <DailiesList>
+        <DailiesList>
+          <Label>
+            <I18n iden="app.dailies.title" />
+          </Label>
+          <DailiesView>
             {commissions.length === 0 && (
               <p>
                 <I18n iden="app.dailies.none" />
@@ -146,23 +161,32 @@ const App = () => {
                 readOnly={!dateFns.isSameDay(date, today)}
               />
             ))}
-            {isCreatingNewCommission ? (
-              <AddNewCommissionForm
-                onSubmit={onSubmitNewCommission}
-                onCancel={() => setIsCreatingNewCommission(false)}
-              />
-            ) : (
-              <Button
-                variant="secondary"
-                onClick={() => setIsCreatingNewCommission(true)}
-              >
-                <I18n iden="app.dailies.addCommission" />
-              </Button>
-            )}
-          </DailiesList>
-        </Section>
-        {!isCreatingNewCommission && <Notes />}
-      </DailiesPanel>
+          </DailiesView>
+        </DailiesList>
+        <Button
+          variant="secondary"
+          onClick={() => setIsCreatingNewCommission(true)}
+        >
+          <I18n iden="app.dailies.addCommission" />
+        </Button>
+        <Modal isOpen={isCreatingNewCommission}>
+          <Modal.Header showCloseButton>
+            <I18n iden="app.dailies.addCommission" />
+          </Modal.Header>
+          <Modal.Body>
+            <AddNewCommissionForm
+              onSubmit={onSubmitNewCommission}
+              onCancel={() => setIsCreatingNewCommission(false)}
+            />
+          </Modal.Body>
+        </Modal>
+        <Notes
+          leftContent={leftNotes}
+          rightContent={rightNotes}
+          onChangeLeft={setLeftNotes}
+          onChangeRight={setRightNotes}
+        />
+      </RightPanel>
     </StyledApp>
   );
 };

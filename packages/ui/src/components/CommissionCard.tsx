@@ -9,9 +9,19 @@ import {
   StyledCommissionCard,
 } from './CommissionCard.styles';
 import { Checkbox } from './Checkbox';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ContainerWithTail } from './ContainerWithTail';
 import { Rarity, Reward } from './Reward';
+import { Modal } from './Modal';
+import { ButtonGroup } from './ButtonGroup';
+import { Button } from './Button';
+import { Input } from './Input';
+import { Select } from './Select';
+import { availableRealms } from '../consts';
+import { Confirm } from './Confirm';
+import { useConfirm } from '../hooks';
+import { CommissionServiceContext } from '../contexts';
+import { I18n } from './I18n';
 
 export type CommissionCardProps = React.HTMLAttributes<HTMLDivElement> & {
   commission: DailyCommission;
@@ -21,7 +31,6 @@ export type CommissionCardProps = React.HTMLAttributes<HTMLDivElement> & {
 
 const rewardRarity: Record<RewardType, Rarity> = {
   primos: Rarity.Legendary,
-  coins: Rarity.Uncommon,
   arexp: Rarity.Epic,
   cleaning_points: Rarity.Rare,
   creative_points: Rarity.Rare,
@@ -35,6 +44,17 @@ export const CommissionCard: React.FC<CommissionCardProps> = ({
   ...props
 }) => {
   const [isCompleted, setIsCompleted] = useState(commission.completed);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [newName, setNewName] = useState(commission.description);
+  const [newRealm, setNewRealm] = useState(commission.realm);
+  const commissionService = useContext(CommissionServiceContext);
+  const [confirmDelete, confirmDeleteProps] = useConfirm({
+    async onConfirm() {
+      if (commissionService != null) {
+        await commissionService.deleteCommission(commission.id);
+      }
+    },
+  });
 
   useEffect(() => {
     if (isCompleted !== commission.completed)
@@ -47,7 +67,52 @@ export const CommissionCard: React.FC<CommissionCardProps> = ({
   }, [isCompleted]);
 
   return (
-    <ContainerWithTail>
+    <ContainerWithTail onClick={confirmDelete}>
+      <Confirm
+        title="app.dailies.deleteCommission"
+        message="app.dailies.confirmDeleteCommission"
+        {...confirmDeleteProps}
+      />
+      <Modal
+        isOpen={isEditModalOpen}
+        closeRequested={() => setIsEditModalOpen(false)}
+      >
+        <Modal.Header showCloseButton>
+          <I18n iden="app.dailies.editCommission" />
+        </Modal.Header>
+        <Modal.Body>
+          <label>
+            <I18n iden="app.fieldDescription" />
+          </label>
+          <Input value={newName} onChange={(e) => setNewName(e.target.value)} />
+          <label>
+            <I18n iden="app.fieldRealm" />
+          </label>
+          <Select
+            value={newRealm}
+            onChange={(e) => setNewRealm(e.currentTarget.value)}
+          >
+            {availableRealms.map((realm) => (
+              <option key={realm} value={realm}>
+                {realm}
+              </option>
+            ))}
+          </Select>
+        </Modal.Body>
+        <Modal.Footer>
+          <ButtonGroup>
+            <Button onClick={() => setIsEditModalOpen(false)} variant="primary">
+              <I18n iden="app.save" />
+            </Button>
+            <Button
+              onClick={() => setIsEditModalOpen(false)}
+              variant="secondary"
+            >
+              <I18n iden="app.cancel" />
+            </Button>
+          </ButtonGroup>
+        </Modal.Footer>
+      </Modal>
       <StyledCommissionCard
         {...props}
         onClick={(e) => {
@@ -61,7 +126,9 @@ export const CommissionCard: React.FC<CommissionCardProps> = ({
         <CommissionMarker></CommissionMarker>
         <CommissionCardText>
           <CommissionTitle>{commission.description}</CommissionTitle>
-          <CommissionRealm>Realm of Spyce</CommissionRealm>
+          <CommissionRealm>
+            {commission.realm ?? 'Realm of Missing Data'}
+          </CommissionRealm>
         </CommissionCardText>
         <Rewards>
           {commission.rewards.map((reward) => (

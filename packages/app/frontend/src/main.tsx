@@ -5,9 +5,15 @@ import App from './App';
 import { deskify } from './deskify';
 import { StyleSheetManager, ThemeProvider } from 'styled-components';
 import * as locales from '@dailies-tracker/i18n';
-import { I18nContext, theme, GlobalStyle } from '@dailies-tracker/ui';
+import {
+  I18nContext,
+  theme,
+  GlobalStyle,
+  AppProvider,
+} from '@dailies-tracker/ui';
 import * as app from '@/internal/main/App';
 import { match } from 'ts-pattern';
+import { commissionService } from './services/commission-service';
 
 deskify({
   allowContextMenu: false,
@@ -33,6 +39,7 @@ const localeSwitch = (lang: string) =>
   const lang = await app.GetLocale();
   const selectedLocale = localeSwitch(lang);
   const container = document.getElementById('root');
+  const appCommissionService = commissionService();
 
   const root = createRoot(container!);
 
@@ -44,7 +51,9 @@ const localeSwitch = (lang: string) =>
         <I18nContext.Provider value={selectedLocale}>
           <ThemeProvider theme={theme}>
             <GlobalStyle />
-            <App />
+            <AppProvider commissionService={appCommissionService}>
+              <App />
+            </AppProvider>
           </ThemeProvider>
         </I18nContext.Provider>
       </StyleSheetManager>

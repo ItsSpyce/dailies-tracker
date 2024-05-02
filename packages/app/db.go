@@ -9,6 +9,7 @@ type TaskEntity struct {
 	gorm.Model
 	ID          int    `json:"id"`
 	Description string `json:"description"`
+	Realm       string `json:"realm"`
 	CreatedAt   int64  `json:"createdAt"`
 	Deleted     bool   `json:"deleted"`
 	Rewards     string `json:"rewards"`

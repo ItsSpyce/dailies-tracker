@@ -21,12 +21,10 @@ export const RewardCount = styled.span`
   width: 100%;
   text-align: center;
   color: #fff;
-  background-color: ${(props) =>
-    rgba(invert(props.theme.colors.background), 0.3)};
   border-radius: 0 0 0.5rem 0.5rem;
   font-size: 0.75rem;
   z-index: 1;
-  padding: 0.125rem 0;
+  padding: 5% 0;
 `;
 
 export const StyledReward = styled.div<{
@@ -43,6 +41,8 @@ export const StyledReward = styled.div<{
   display: grid;
   place-items: end;
   position: relative;
+  flex-shrink: 0;
+  flex-grow: 0;
 
   ${sif('size', 'sm')} {
     ${RewardCount} {
@@ -53,7 +53,7 @@ export const StyledReward = styled.div<{
   }
 
   ${sif('size', 'md')} {
-    height: 4.5rem;
+    height: 4.4rem;
     width: 4rem;
     ${RewardCount} {
       font-size: 0.75rem;
@@ -61,7 +61,7 @@ export const StyledReward = styled.div<{
   }
 
   ${sif('size', 'lg')} {
-    height: 5.5rem;
+    height: 5.3rem;
     width: 5rem;
     ${RewardCount} {
       font-size: 0.875rem;

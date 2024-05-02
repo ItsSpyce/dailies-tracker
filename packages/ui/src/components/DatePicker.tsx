@@ -24,28 +24,6 @@ export type DatePickerProps = Omit<
   onChange?: (date: Date) => void;
 };
 
-const daysInMonth = (month: number, year: number) => {
-  if (month === 2) {
-    return year % 4 === 0 ? 29 : 28;
-  }
-  return month % 2 === 0 ? 30 : 31;
-};
-
-const getPreviousMonthDays = (month: number, year: number) => {
-  if (month === 1) {
-    year -= 1;
-    month = 12;
-  }
-  return daysInMonth(month, year);
-};
-
-const getRowsForMonth = (month: number, year: number) => {
-  const daysCount = daysInMonth(month, year);
-  const firstDay = new Date(year, month, 1);
-  const lastDay = new Date(year, month, daysCount);
-  const lastMonthsDaysCount = getPreviousMonthDays(month, year);
-};
-
 export const DatePicker: React.FC<DatePickerProps> = ({
   value,
   onChange,

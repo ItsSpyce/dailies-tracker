@@ -14,6 +14,7 @@ var CommissionAlreadyCompleted = errors.New("commission already completed")
 type Commission struct {
 	ID          int    `json:"id"`
 	Description string `json:"description"`
+	Realm       string `json:"realm"`
 	Completed   bool   `json:"completed"`
 	Rewards     string `json:"rewards"`
 }
@@ -51,6 +52,7 @@ func (s *DailiesService) LoadCommissionsForDate(dateMs int64) ([]Commission, err
 					ID:          task.ID,
 					Description: task.Description,
 					Rewards:     task.Rewards,
+					Realm:       task.Realm,
 				}
 			}
 			return nil, tx.Error
@@ -60,13 +62,14 @@ func (s *DailiesService) LoadCommissionsForDate(dateMs int64) ([]Commission, err
 				Description: task.Description,
 				Completed:   historyForTask.Completed,
 				Rewards:     task.Rewards,
+				Realm:       task.Realm,
 			}
 		}
 	}
 	return commissions, nil
 }
 
-func (s *DailiesService) CreateNewCommission(description string, rewardsJson string) (Commission, error) {
+func (s *DailiesService) CreateNewCommission(description string, realm string, rewardsJson string) (Commission, error) {
 	now := time.Now()
 	taskDb, err := InitDb(TaskEntity{})
 	if err != nil {
@@ -80,6 +83,7 @@ func (s *DailiesService) CreateNewCommission(description string, rewardsJson str
 		Description: description,
 		CreatedAt:   now.Unix(),
 		Deleted:     false,
+		Realm:       realm,
 		Rewards:     rewardsJson,
 	}
 	taskTx := taskDb.Create(&taskEntity)
@@ -100,6 +104,7 @@ func (s *DailiesService) CreateNewCommission(description string, rewardsJson str
 		Description: taskEntity.Description,
 		Completed:   false,
 		Rewards:     taskEntity.Rewards,
+		Realm:       taskEntity.Realm,
 	}, nil
 }
 

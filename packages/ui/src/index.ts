@@ -5,3 +5,6 @@ export * from './utils';
 export * from './hooks';
 export * from './contexts';
 export * from './types';
+export * from './images';
+export * from './services';
+export * from './providers';
