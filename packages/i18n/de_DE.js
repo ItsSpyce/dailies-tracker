@@ -15,8 +15,8 @@ export const deDE = {
   'app.dailies.bonusRewards': 'Zusätzliche Belohnung',
   'app.dailies.addCommission': 'Neue Mission hinzufügen',
   'app.dailies.none': 'Noch keine Missionen hinzugefügt',
-  'app.dailies.editCommission': 'Edit Commission',
-  'app.dailies.deleteCommission': 'Delete Commission',
+  'app.dailies.editCommission': 'Mission bearbeiten',
+  'app.dailies.deleteCommission': 'Mission löschen',
   'app.dailies.confirmDeleteCommission':
     'Bist du sicher, dass du diese Mission löschen willst? Diese Aktion kann nicht rückgängig gemacht werden.',
   'app.cancel': 'Abbrechen',
