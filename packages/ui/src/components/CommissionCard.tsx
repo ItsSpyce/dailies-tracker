@@ -1,4 +1,4 @@
-import { DailyCommission, RewardType } from '../types';
+import { DailyCommission } from '../types';
 import {
   CommissionCardText,
   CommissionMarker,
@@ -20,8 +20,8 @@ import { Select } from './Select';
 import { availableRealms } from '../consts';
 import { Confirm } from './Confirm';
 import { useConfirm } from '../hooks';
-import { CommissionServiceContext } from '../contexts';
 import { I18n } from './I18n';
+import { useCommissionService } from '../states';
 
 export type CommissionCardProps = React.HTMLAttributes<HTMLDivElement> & {
   commission: DailyCommission;
@@ -29,7 +29,7 @@ export type CommissionCardProps = React.HTMLAttributes<HTMLDivElement> & {
   onStatusChange?: (completed: boolean) => void;
 };
 
-const rewardRarity: Record<RewardType, Rarity> = {
+const rewardRarity: Record<string, Rarity> = {
   primos: Rarity.Legendary,
   arexp: Rarity.Epic,
   cleaning_points: Rarity.Rare,
@@ -47,7 +47,7 @@ export const CommissionCard: React.FC<CommissionCardProps> = ({
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [newName, setNewName] = useState(commission.description);
   const [newRealm, setNewRealm] = useState(commission.realm);
-  const commissionService = useContext(CommissionServiceContext);
+  const [commissionService] = useCommissionService();
   const [confirmDelete, confirmDeleteProps] = useConfirm({
     async onConfirm() {
       if (commissionService != null) {

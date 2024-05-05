@@ -1,7 +1,8 @@
 import { sif } from '../utils/scomp';
 import { darken } from 'polished';
 import React from 'react';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
+import * as Icons from 'react-feather';
 
 export const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
   background-color: ${(props) => props.theme.colors.backgroundColored};
@@ -86,4 +87,43 @@ export const TextButton = styled.button`
       background-color: transparent;
     }
   }
+`;
+
+export type IconButtonProps = Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  'children'
+> &
+  Icons.IconProps & {
+    icon: keyof typeof Icons;
+  };
+
+export const IconButton: React.FC<IconButtonProps> = ({
+  icon,
+  onClick,
+  className,
+  id,
+  style,
+  ...props
+}) => {
+  const Icon = Icons[icon];
+  const theme = useTheme();
+  return (
+    <StyledIconButton
+      onClick={onClick}
+      className={className}
+      id={id}
+      style={style}
+    >
+      <Icon color={theme.colors.textColored} {...props} />
+    </StyledIconButton>
+  );
+};
+
+const StyledIconButton = styled.button`
+  outline: none;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  width: fit-content;
+  padding: 1rem;
 `;

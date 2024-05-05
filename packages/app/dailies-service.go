@@ -2,37 +2,60 @@ package main
 
 import (
 	"errors"
+	"fmt"
+	"strings"
 	"time"
 
 	"gorm.io/gorm"
 )
 
-var DuplicateCommission = errors.New("duplicate commission")
-var CommissionNotFound = errors.New("commission not found")
-var CommissionAlreadyCompleted = errors.New("commission already completed")
+var ErrorDuplicateCommission = errors.New("duplicate commission")
+var ErrorCommissionNotFound = errors.New("commission not found")
+var ErrorCommissionAlreadyCompleted = errors.New("commission already completed")
+var ErrorSomeDailiesNotComplete = errors.New("some dailies not complete")
 
 type Commission struct {
-	ID          int    `json:"id"`
-	Description string `json:"description"`
-	Realm       string `json:"realm"`
-	Completed   bool   `json:"completed"`
-	Rewards     string `json:"rewards"`
+	ID          int      `json:"id"`
+	Description string   `json:"description"`
+	Realm       string   `json:"realm"`
+	Completed   bool     `json:"completed"`
+	Rewards     []Reward `json:"rewards"`
 }
 
-type DailiesService struct {
+type DailiesService struct{}
+
+func (s *DailiesService) MarkTodayAsClaimed() error {
+	dueDate := convertDateMsToDueDate(time.Now().Unix())
+	historyDb, err := InitDb(&HistoryEntity{})
+	if err != nil {
+		return err
+	}
+	var histories []HistoryEntity
+	tx := historyDb.Where("due_date = ?", dueDate).Find(&histories)
+	if tx.Error != nil {
+		return tx.Error
+	}
+	for _, history := range histories {
+		if !history.Completed {
+			return ErrorSomeDailiesNotComplete
+		}
+	}
+	return nil
 }
 
-func (s *DailiesService) LoadCommissionsForDate(dateMs int64) ([]Commission, error) {
+func (s *DailiesService) LoadCommissionsForDate(dateMs int64, rewardService *RewardService) ([]Commission, error) {
 	dueDate := convertDateMsToDueDate(dateMs)
 	var tasks []TaskEntity
-	taskDb, err := InitDb(TaskEntity{})
+	taskDb, err := InitDb(&TaskEntity{})
 	if err != nil {
+		fmt.Printf("Error initializing task db: %v\n", err)
 		return nil, err
 	}
 	taskDb.Where("deleted = ?", false).Find(&tasks)
 
-	historyDb, err := InitDb(HistoryEntity{})
+	historyDb, err := InitDb(&HistoryEntity{})
 	if err != nil {
+		fmt.Printf("Error initializing history db: %v\n", err)
 		return nil, err
 	}
 
@@ -51,7 +74,6 @@ func (s *DailiesService) LoadCommissionsForDate(dateMs int64) ([]Commission, err
 				commissions[i] = Commission{
 					ID:          task.ID,
 					Description: task.Description,
-					Rewards:     task.Rewards,
 					Realm:       task.Realm,
 				}
 			}
@@ -61,24 +83,34 @@ func (s *DailiesService) LoadCommissionsForDate(dateMs int64) ([]Commission, err
 				ID:          task.ID,
 				Description: task.Description,
 				Completed:   historyForTask.Completed,
-				Rewards:     task.Rewards,
 				Realm:       task.Realm,
 			}
 		}
+		commissions[i].Rewards, err = rewardService.GetRewardsFromIds(strings.Split(task.Rewards, ","))
 	}
 	return commissions, nil
 }
 
-func (s *DailiesService) CreateNewCommission(description string, realm string, rewardsJson string) (Commission, error) {
+func (s *DailiesService) CreateNewCommission(description string, realm string, rewards []Reward, rewardService *RewardService) (Commission, error) {
 	now := time.Now()
-	taskDb, err := InitDb(TaskEntity{})
+
+	taskDb, err := InitDb(&TaskEntity{})
+	if err != nil {
+		fmt.Printf("Error initializing task db: %v\n", err)
+		return Commission{}, err
+	}
+	historyDb, err := InitDb(&HistoryEntity{})
+	if err != nil {
+		fmt.Printf("Error initializing history db: %v\n", err)
+		return Commission{}, err
+	}
+
+	rewardIds, err := rewardService.GetRewardIdsFromRewards(rewards)
 	if err != nil {
 		return Commission{}, err
 	}
-	historyDb, err := InitDb(HistoryEntity{})
-	if err != nil {
-		return Commission{}, err
-	}
+	rewardsJson := strings.Join(rewardIds, ",")
+
 	taskEntity := TaskEntity{
 		Description: description,
 		CreatedAt:   now.Unix(),
@@ -103,13 +135,13 @@ func (s *DailiesService) CreateNewCommission(description string, realm string, r
 		ID:          taskEntity.ID,
 		Description: taskEntity.Description,
 		Completed:   false,
-		Rewards:     taskEntity.Rewards,
+		Rewards:     rewards,
 		Realm:       taskEntity.Realm,
 	}, nil
 }
 
 func (s *DailiesService) CompleteCommission(commissionId int) error {
-	historyDb, err := InitDb(HistoryEntity{})
+	historyDb, err := InitDb(&HistoryEntity{})
 	if err != nil {
 		return err
 	}
@@ -127,11 +159,11 @@ func (s *DailiesService) CompleteCommission(commissionId int) error {
 }
 
 func (s *DailiesService) DeleteCommission(commissionId int) error {
-	taskDb, err := InitDb(TaskEntity{})
+	taskDb, err := InitDb(&TaskEntity{})
 	if err != nil {
 		return err
 	}
-	historyDb, err := InitDb(HistoryEntity{})
+	historyDb, err := InitDb(&HistoryEntity{})
 	if err != nil {
 		return err
 	}

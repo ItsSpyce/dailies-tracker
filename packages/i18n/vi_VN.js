@@ -2,13 +2,14 @@
  * @type {import('./index').I18nProvider}
  */
 export const viVN = {
+  languageName: 'Tiếng Việt',
+  'app.language': 'Ngôn ngữ',
   'app.title': 'Dailies Tracker',
   'app.description': 'Một ứng dụng theo dõi hoạt động hàng ngày của bạn',
   'app.header': 'Thưởng Ủy Thác Mỗi Ngày',
   'app.subHeader':
-    "Hoàn thành tất cả Ủy Thác Mỗi Ngày để nhận thưởng từ Hiệp Hội Nhà Mạo Hiểm",
-  'app.chooseDate':
-    'Vui lòng chọn ngày để hoàn thành Ủy Thác',
+    'Hoàn thành tất cả Ủy Thác Mỗi Ngày để nhận thưởng từ Hiệp Hội Nhà Mạo Hiểm',
+  'app.chooseDate': 'Vui lòng chọn ngày để hoàn thành Ủy Thác',
   'app.dailies.title': 'Ủy Thác Mỗi Ngày',
   'app.dailies.claimed': 'Đã nhận thưởng',
   'app.dailies.notes': 'Ghi chú',
@@ -19,6 +20,7 @@ export const viVN = {
   'app.create': 'Tạo mới',
   'app.ok': 'Ok',
   'app.addCommission.description': 'Mô tả',
+  'app.about': 'Về ứng dụng',
   'calendar.months.1': 'Một',
   'calendar.months.2': 'Hai',
   'calendar.months.3': 'Ba',

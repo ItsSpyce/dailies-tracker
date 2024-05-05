@@ -1,12 +1,11 @@
 import { match } from 'ts-pattern';
 import { Rarity, RewardCount, RewardIcon, StyledReward } from './Reward.styles';
-import { RewardType } from '../types';
 import * as Images from '../images';
 
 export { Rarity };
 
 export interface RewardProps {
-  type: RewardType;
+  type: string;
   amount: number;
   rarity: Rarity;
   size?: 'sm' | 'md' | 'lg';

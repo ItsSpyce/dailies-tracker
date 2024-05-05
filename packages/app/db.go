@@ -24,12 +24,19 @@ type HistoryEntity struct {
 	Deleted   bool  `json:"deleted"`
 }
 
-func InitDb[Model comparable](instance Model) (*gorm.DB, error) {
+type RewardEntity struct {
+	gorm.Model
+	ID          int    `json:"id"`
+	Type        string `json:"type"`
+	ImageBase64 string `json:"imageBase64"`
+	Count       int    `json:"count"`
+}
+
+func InitDb[Model comparable](instance *Model) (*gorm.DB, error) {
 	db, err := gorm.Open(sqlite.Open("app.db"), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
-	db.AutoMigrate(&TaskEntity{})
-	db.AutoMigrate(&HistoryEntity{})
+	db.AutoMigrate(instance)
 	return db, nil
 }

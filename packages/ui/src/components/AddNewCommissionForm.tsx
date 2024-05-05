@@ -1,25 +1,25 @@
-import { RewardType, TaskReward } from '../types';
-import { useState } from 'react';
+import { TaskReward } from '../types';
+import { useContext, useEffect, useState } from 'react';
 import {
   RewardSelectionColumn,
   RewardSelectionGroup,
   StyledAddNewCommissionForm,
 } from './AddNewCommissionForm.styles';
 import { Input } from './Input';
-import { useI18n } from '../hooks';
 import { I18n } from './I18n';
 import { Button } from './Button';
 import { ButtonGroup } from './ButtonGroup';
 import { Checkbox } from './Checkbox';
 import { Select } from './Select';
 import { availableRealms } from '../consts';
+import { useI18n, useRewardService } from '../states';
 
 export type AddNewCommissionFormProps = {
   onSubmit: (description: string, realm: string, rewards: TaskReward[]) => void;
   onCancel: () => void;
 };
 
-const rewardCounts: Record<RewardType, number> = {
+const rewardCounts: Record<string, number> = {
   primos: 400,
   arexp: 200,
   cleaning_points: 150,
@@ -31,18 +31,26 @@ export const AddNewCommissionForm: React.FC<AddNewCommissionFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
+  const [rewardService] = useRewardService();
+  const [availableRewards, setAvailableRewards] = useState<TaskReward[]>([]);
   const [description, setDescription] = useState('');
   const [rewards, setRewards] = useState<TaskReward[]>([]);
   const [realm, setRealm] = useState('Realm of Duty');
-  const i18n = useI18n();
+  const [i18n] = useI18n();
 
-  function bindToAddReward(type: RewardType) {
+  useEffect(() => {
+    rewardService.getAvailableRewards().then((rewards) => {
+      setAvailableRewards(rewards);
+    });
+  }, []);
+
+  function bindToAddReward(type: string) {
     return () => {
       const count = rewardCounts[type];
       setRewards((prev) => {
         const index = prev.findIndex((r) => r.type === type);
         if (index === -1) {
-          return [...prev, { type, count }];
+          return [...prev, { id: 0, type, count, imageBase64: '' }];
         }
         return prev.filter((r) => r.type !== type);
       });
@@ -66,40 +74,15 @@ export const AddNewCommissionForm: React.FC<AddNewCommissionFormProps> = ({
         ))}
       </Select>
       <RewardSelectionGroup>
-        <RewardSelectionColumn>
+        {availableRewards.map((r) => (
           <Checkbox
-            checked={rewards.some((r) => r.type === 'primos')}
-            onChange={bindToAddReward('primos')}
+            checked={rewards.some((reward) => reward.type === r.type)}
+            onChange={bindToAddReward(r.type)}
+            key={r.id}
           >
-            <I18n iden="rewards.primos" />
+            {r.type}
           </Checkbox>
-          <Checkbox
-            checked={rewards.some((r) => r.type === 'arexp')}
-            onChange={bindToAddReward('arexp')}
-          >
-            <I18n iden="rewards.arexp" />
-          </Checkbox>
-        </RewardSelectionColumn>
-        <RewardSelectionColumn>
-          <Checkbox
-            checked={rewards.some((r) => r.type === 'cleaning_points')}
-            onChange={bindToAddReward('cleaning_points')}
-          >
-            <I18n iden="rewards.cleaningPoints" />
-          </Checkbox>
-          <Checkbox
-            checked={rewards.some((r) => r.type === 'creative_points')}
-            onChange={bindToAddReward('creative_points')}
-          >
-            <I18n iden="rewards.creativePoints" />
-          </Checkbox>
-          <Checkbox
-            checked={rewards.some((r) => r.type === 'health')}
-            onChange={bindToAddReward('health')}
-          >
-            <I18n iden="rewards.health" />
-          </Checkbox>
-        </RewardSelectionColumn>
+        ))}
       </RewardSelectionGroup>
       <ButtonGroup>
         <Button

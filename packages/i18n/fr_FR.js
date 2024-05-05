@@ -2,11 +2,13 @@
  * @type {import('./index').I18nProvider}
  */
 export const frFR = {
+  languageName: 'Français',
+  'app.language': 'Langue',
   'app.title': 'Dailies Tracker',
   'app.description': 'Une application simple pour vos activités quotidiennes',
   'app.header': 'Récompenses de missions quotidiennes',
   'app.subHeader':
-    "Complétez toutes les missions chaque jour pour recevoir des récompenses bonus de la Guilde des aventuriers.",
+    'Complétez toutes les missions chaque jour pour recevoir des récompenses bonus de la Guilde des aventuriers.',
   'app.chooseDate':
     'Veuillez choisir la date prévue de complétion des Missions',
   'app.dailies.title': 'Missions quotidiennes',
@@ -19,6 +21,7 @@ export const frFR = {
   'app.create': 'Créer',
   'app.ok': 'Ok',
   'app.addCommission.description': 'Description',
+  'app.about': 'À propos',
   'calendar.months.1': 'Jan',
   'calendar.months.2': 'Fév',
   'calendar.months.3': 'Mar',
@@ -40,8 +43,8 @@ export const frFR = {
   'calendar.days.6': 'Dim',
   'rewards.primos': 'Primos',
   'rewards.coins': 'Pièces',
-  'rewards.arexp': 'Exp d\'av.',
+  'rewards.arexp': "Exp d'av.",
   'rewards.cleaningPoints': 'Points de Nettoyage',
   'rewards.creativePoints': 'Points de Créativité',
   'rewards.health': 'Vie',
-}
+};

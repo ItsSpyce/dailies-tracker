@@ -2,6 +2,8 @@
  * @type {import('./index').I18nProvider}
  */
 export const ruRU = {
+  languageName: 'Русский',
+  'app.language': 'Язык',
   'app.title': 'Ежедневник поручений',
   'app.description':
     'Простое приложение для отслеживания ежедневной активности',
@@ -19,6 +21,7 @@ export const ruRU = {
   'app.create': 'Создать',
   'app.ok': 'ОК',
   'app.addCommission.description': 'Описание',
+  'app.about': 'О приложении',
   'calendar.months.1': 'Янв.',
   'calendar.months.2': 'Февр.',
   'calendar.months.3': 'Март',

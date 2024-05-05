@@ -4,16 +4,10 @@ import Modal from 'react-modal';
 import App from './App';
 import { deskify } from './deskify';
 import { StyleSheetManager, ThemeProvider } from 'styled-components';
-import * as locales from '@dailies-tracker/i18n';
-import {
-  I18nContext,
-  theme,
-  GlobalStyle,
-  AppProvider,
-} from '@dailies-tracker/ui';
-import * as app from '@/internal/main/App';
-import { match } from 'ts-pattern';
+import { theme, GlobalStyle, AppProvider, images } from '@dailies-tracker/ui';
 import { commissionService } from './services/commission-service';
+import { rewardService } from './services/reward-service';
+import { langService } from './services/lang-service';
 
 deskify({
   allowContextMenu: false,
@@ -21,26 +15,41 @@ deskify({
   allowReloadKey: true,
 });
 
-const localeSwitch = (lang: string) =>
-  match(lang)
-    .with('en_US', () => locales.enUS)
-    .with('de_DE', () => locales.deDE)
-    .with('vi_VN', () => locales.viVN)
-    .with('pt_BR', () => locales.ptBR)
-    .with('ru_RU', () => locales.ruRU)
-    .with('fr_FR', () => locales.frFR)
-    .with('es_ES', () => locales.esES)
-    .with('id_ID', () => locales.idID)
-    .with('nl_NL', () => locales.nlNL)
-    .with('it_IT', () => locales.itIT)
-    // insert more locales here
-    .otherwise(() => locales.enUS);
-
 (async () => {
-  const lang = await app.GetLocale();
-  const selectedLocale = localeSwitch(lang);
   const container = document.getElementById('root');
+
   const appCommissionService = commissionService();
+  const appRewardService = rewardService();
+  const appLangService = langService();
+
+  const rewards = await appRewardService.getAvailableRewards();
+  if (rewards.length === 0) {
+    await appRewardService.addReward(
+      'Primos',
+      400,
+      await convertImageUrlToBase64(images.Primos)
+    );
+    await appRewardService.addReward(
+      'ARExp',
+      200,
+      await convertImageUrlToBase64(images.ARExp)
+    );
+    await appRewardService.addReward(
+      'Cleaning Points',
+      150,
+      await convertImageUrlToBase64(images.CleanPoints)
+    );
+    await appRewardService.addReward(
+      'Creative Points',
+      150,
+      await convertImageUrlToBase64(images.CreativePoints)
+    );
+    await appRewardService.addReward(
+      'Health',
+      100,
+      await convertImageUrlToBase64(images.HealthPoints)
+    );
+  }
 
   const root = createRoot(container!);
 
@@ -49,15 +58,34 @@ const localeSwitch = (lang: string) =>
   root.render(
     <React.StrictMode>
       <StyleSheetManager>
-        <I18nContext.Provider value={selectedLocale}>
-          <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            <AppProvider commissionService={appCommissionService}>
-              <App />
-            </AppProvider>
-          </ThemeProvider>
-        </I18nContext.Provider>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <AppProvider
+            commissionService={appCommissionService}
+            rewardService={appRewardService}
+            langService={appLangService}
+          >
+            <App />
+          </AppProvider>
+        </ThemeProvider>
       </StyleSheetManager>
     </React.StrictMode>
   );
 })();
+
+function convertImageUrlToBase64(imageUrl: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve(reader.result as string);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(xhr.response);
+    };
+    xhr.open('GET', imageUrl);
+    xhr.responseType = 'blob';
+    xhr.send();
+  });
+}

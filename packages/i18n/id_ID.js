@@ -2,13 +2,14 @@
  * @type {import('./index').I18nProvider}
  */
 export const idID = {
+  languageName: 'Bahasa Indonesia',
+  'app.language': 'Bahasa',
   'app.title': 'Dailies Tracker',
   'app.description': 'Aplikasi sederhana untuk mencatat aktivitas harianmu',
   'app.header': 'Hadiah Misi Harian',
   'app.subHeader':
     "Terima hadiah misi tiap harinya untuk mendapatkan hadiah tambahan dari Adventurers' Guild.",
-  'app.chooseDate':
-    'Pilih tanggal penyelesaian Misi Harian',
+  'app.chooseDate': 'Pilih tanggal penyelesaian Misi Harian',
   'app.dailies.title': 'Misi Harian',
   'app.dailies.claimed': 'Hadiah harian diperoleh',
   'app.dailies.notes': 'Catatan',
@@ -19,6 +20,7 @@ export const idID = {
   'app.create': 'Tambahkan',
   'app.ok': 'Ok',
   'app.addCommission.description': 'Deskripsi',
+  'app.about': 'Tentang',
   'calendar.months.1': 'Jan',
   'calendar.months.2': 'Feb',
   'calendar.months.3': 'Mar',

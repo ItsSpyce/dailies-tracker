@@ -2,6 +2,8 @@
  * @type {import('./index').I18nProvider}
  */
 export const enUS = {
+  languageName: 'English',
+  'app.language': 'Language',
   'app.title': 'Dailies Tracker',
   'app.description': 'A simple app to track your daily activities',
   'app.header': 'Daily Commission Rewards',
@@ -23,7 +25,9 @@ export const enUS = {
   'app.create': 'Create',
   'app.ok': 'Ok',
   'app.confirm': 'Confirm',
+  'app.settings': 'Settings',
   'app.addCommission.description': 'Description',
+  'app.about': 'About',
   'calendar.months.1': 'Jan',
   'calendar.months.2': 'Feb',
   'calendar.months.3': 'Mar',

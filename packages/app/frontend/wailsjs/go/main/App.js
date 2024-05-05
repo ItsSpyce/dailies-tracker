@@ -6,12 +6,24 @@ export function CompleteTask(arg1) {
   return window['go']['main']['App']['CompleteTask'](arg1);
 }
 
+export function CreateReward(arg1, arg2, arg3) {
+  return window['go']['main']['App']['CreateReward'](arg1, arg2, arg3);
+}
+
 export function CreateTask(arg1, arg2, arg3) {
   return window['go']['main']['App']['CreateTask'](arg1, arg2, arg3);
 }
 
+export function DeleteReward(arg1) {
+  return window['go']['main']['App']['DeleteReward'](arg1);
+}
+
 export function DeleteTask(arg1) {
   return window['go']['main']['App']['DeleteTask'](arg1);
+}
+
+export function GetAvailableRewards() {
+  return window['go']['main']['App']['GetAvailableRewards']();
 }
 
 export function GetLocale() {
@@ -26,6 +38,14 @@ export function LoadCommissions(arg1) {
   return window['go']['main']['App']['LoadCommissions'](arg1);
 }
 
+export function MarkTodayAsClaimed() {
+  return window['go']['main']['App']['MarkTodayAsClaimed']();
+}
+
 export function Notify(arg1, arg2) {
   return window['go']['main']['App']['Notify'](arg1, arg2);
+}
+
+export function SetLocale(arg1) {
+  return window['go']['main']['App']['SetLocale'](arg1);
 }

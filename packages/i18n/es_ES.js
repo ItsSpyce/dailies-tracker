@@ -2,13 +2,15 @@
  * @type {import('./index').I18nProvider}
  */
 export const esES = {
+  languageName: 'Español',
+  'app.language': 'Idioma',
   'app.title': 'Tracker Diarias',
   'app.description': 'Una simple app para monitorizar tus actividades diarias',
   'app.header': 'Recompensas Comisiones Diarias',
   'app.subHeader':
-    "Completa todas las Comisiones diariamente para recibir recompensas adicionales del Gremio de Aventureros.",
+    'Completa todas las Comisiones diariamente para recibir recompensas adicionales del Gremio de Aventureros.',
   'app.chooseDate':
-    'Por favor, escoge la fecha correcta en la que completar las misiones de comisiones', 
+    'Por favor, escoge la fecha correcta en la que completar las misiones de comisiones',
   'app.dailies.title': 'Comisiones Diarias',
   'app.dailies.claimed': 'Recompensas diarias reclamadas',
   'app.dailies.notes': 'Notas',
@@ -19,6 +21,7 @@ export const esES = {
   'app.create': 'Crear',
   'app.ok': 'Ok',
   'app.addCommission.description': 'Descripción',
+  'app.about': 'Acerca de',
   'calendar.months.1': 'Ene',
   'calendar.months.2': 'Feb',
   'calendar.months.3': 'Mar',

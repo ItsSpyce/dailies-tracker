@@ -5,20 +5,25 @@ export function commissionService(): CommissionService {
   return {
     async getCommissions(unixDate) {
       const results = await app.LoadCommissions(unixDate);
-      return results.map((c) => ({
-        ...c,
-        rewards: JSON.parse(c.rewards),
+      return results.map((result) => ({
+        id: result.id,
+        description: result.description,
+        realm: result.realm,
+        rewards: result.rewards,
+        completed: result.completed,
       }));
     },
     async addCommission(description, realm, rewards) {
-      const rewardsJson = JSON.stringify(rewards);
-      await app.CreateTask(description, realm, rewardsJson);
+      return await app.CreateTask(description, realm, rewards);
     },
-    async updateCommission(commission) {
-      await app.CompleteTask(commission.id);
+    async markCommissionAsCompleted(id) {
+      await app.CompleteTask(id);
     },
     async deleteCommission(id) {
       await app.DeleteTask(id);
+    },
+    async markTodayAsClaimed() {
+      //
     },
   };
 }

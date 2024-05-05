@@ -7,13 +7,8 @@ export type DailyCommission = {
 };
 
 export type TaskReward = {
-  type: RewardType;
+  id: number;
+  type: string;
   count: number;
+  imageBase64: string;
 };
-
-export type RewardType =
-  | 'primos'
-  | 'arexp'
-  | 'cleaning_points'
-  | 'creative_points'
-  | 'health';

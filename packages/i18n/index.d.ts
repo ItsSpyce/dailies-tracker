@@ -1,4 +1,6 @@
 export type I18nProvider = {
+  languageName: string;
+  'app.language': string;
   'app.title': string;
   'app.description': string;
   'app.header': string;
@@ -18,11 +20,13 @@ export type I18nProvider = {
   'app.ok': string;
   'app.confirm': string;
   'app.save': string;
+  'app.settings': string;
   'app.fieldDescription': string;
   'app.fieldDomain': string;
   'app.fieldRewards': string;
   'app.fieldRealm': string;
   'app.addCommission.description': string;
+  'app.about': string;
   'calendar.months.1': string;
   'calendar.months.2': string;
   'calendar.months.3': string;
