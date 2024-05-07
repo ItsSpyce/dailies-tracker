@@ -61,7 +61,7 @@ export const frFR = {
   'realm.engineer': "Royaume de l'Ingénieurie",
   'realm.cook': 'Royaume de la Cuisine',
   'realm.gardener': 'Royaume du Jardinage',
-  'realm.healing': "Royaume de l'Appaisement",
+  'realm.healing': "Royaume de l'Apaisement",
   'realm.physical': 'Royaume de la Physicalité',
   'realm.science': 'Royaume de la Science',
   'realm.exploration': "Royaume de l'Exploration",
