@@ -58,7 +58,7 @@ export const deDE = {
   'realm.cook': 'Reich des Kochens',
   'realm.gardener': 'Reich des Gärtnerns',
   'realm.healing': 'Reich der Heilung',
-  'realm.physical': 'Reich der Körperlichkeit',
+  'realm.physical': 'Reich des Körpers',
   'realm.science': 'Reich der Wissenschaft',
   'realm.exploration': 'Reich der Erkundung',
 };
