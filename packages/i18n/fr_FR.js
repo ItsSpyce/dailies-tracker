@@ -17,6 +17,10 @@ export const frFR = {
   'app.dailies.bonusRewards': 'Récompenses bonus',
   'app.dailies.addCommission': 'Ajouter une nouvelle mission',
   'app.dailies.none': 'Aucune mission ajoutée',
+  'app.dailies.editCommission': 'Modifier la Mission',
+  'app.dailies.deleteCommission': 'Supprimer la Mission',
+  'app.dailies.confirmDeleteCommission':
+    '�tes-vous s�r? This action cannot be undone.',
   'app.cancel': 'Annuler',
   'app.create': 'Créer',
   'app.ok': 'Ok',
