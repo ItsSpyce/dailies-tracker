@@ -57,7 +57,7 @@ export const frFR = {
   'realm.fullfilment': "Royaume de l'Accomplissement",
   'realm.artist': "Royaume de l'Artiste",
   'realm.musician': 'Royaume de la Musique',
-  'realm.writer': "Royaume de l'Ecriture",
+  'realm.writer': "Royaume de l'Écriture",
   'realm.engineer': "Royaume de l'Ingénieurie",
   'realm.cook': 'Royaume de la Cuisine',
   'realm.gardener': 'Royaume du Jardinage',
