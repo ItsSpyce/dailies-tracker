@@ -6,4 +6,5 @@ export * from './pt_BR';
 export * from './ru_RU';
 export * from './id_ID';
 export * from './nl_NL';
+export * from './tg_PH';
 export * from './it_IT';

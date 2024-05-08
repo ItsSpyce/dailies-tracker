@@ -14,7 +14,6 @@ deskify({
   allowFullscreenWithKeys: true,
   allowReloadKey: true,
 });
-
 const container = document.getElementById('root');
 const root = createRoot(container!);
 
