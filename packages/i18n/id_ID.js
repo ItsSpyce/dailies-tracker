@@ -1,24 +1,32 @@
 /**
  * @type {import('./index').I18nProvider}
  */
-export const idID = {
+export const id_ID = {
+  languageName: 'Bahasa Indonesia',
+  'app.language': 'Bahasa',
   'app.title': 'Dailies Tracker',
   'app.description': 'Aplikasi sederhana untuk mencatat aktivitas harianmu',
   'app.header': 'Hadiah Misi Harian',
   'app.subHeader':
     "Terima hadiah misi tiap harinya untuk mendapatkan hadiah tambahan dari Adventurers' Guild.",
-  'app.chooseDate':
-    'Pilih tanggal penyelesaian Misi Harian',
+  'app.chooseDate': 'Pilih tanggal penyelesaian Misi Harian',
   'app.dailies.title': 'Misi Harian',
   'app.dailies.claimed': 'Hadiah harian diperoleh',
   'app.dailies.notes': 'Catatan',
   'app.dailies.bonusRewards': 'Hadiah Bonus',
   'app.dailies.addCommission': 'Tambahkan Misi baru',
   'app.dailies.none': 'Belum ada Misi yang ditambahkan',
+  'app.dailies.editCommission': 'Sunting Misi',
+  'app.dailies.deleteCommission': 'Hapus Misi',
+  'app.dailies.confirmDeleteCommission':
+    'Apa kamu yakin ingin menghapus misi ini? Aksi ini bersifat permanen.',
   'app.cancel': 'Batalkan',
   'app.create': 'Tambahkan',
-  'app.ok': 'Ok',
+  'app.ok': 'Oke',
+  'app.confirm': 'Konfirmasi',
+  'app.settings': 'Setelan',
   'app.addCommission.description': 'Deskripsi',
+  'app.about': 'Tentang',
   'calendar.months.1': 'Jan',
   'calendar.months.2': 'Feb',
   'calendar.months.3': 'Mar',
@@ -44,4 +52,17 @@ export const idID = {
   'rewards.cleaningPoints': 'Poin Kebersihan',
   'rewards.creativePoints': 'Poin Kreativitas',
   'rewards.health': 'Kesehatan',
+  'realm.duty': 'Realm of Duty',
+  'realm.fullfilment': 'Realm of Fullfilment',
+  'realm.artist': 'Realm of the Artist',
+  'realm.musician': 'Realm of the Musician',
+  'realm.writer': 'Realm of the Writer',
+  'realm.engineer': 'Realm of the Engineer',
+  'realm.cook': 'Realm of the Cook',
+  'realm.gardener': 'Realm of the Gardener',
+  'realm.healing': 'Realm of Healing',
+  'realm.physical': 'Realm of Physicality',
+  'realm.science': 'Realm of Science',
+  'realm.exploration': 'Realm of Exploration',
+  realms: [],
 };

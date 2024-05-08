@@ -14,7 +14,6 @@ export const RewardIcon = styled.img`
   position: absolute;
   height: 100%;
   width: 100%;
-  top: -0.2rem;
 `;
 
 export const RewardCount = styled.span`
@@ -24,25 +23,25 @@ export const RewardCount = styled.span`
   border-radius: 0 0 0.5rem 0.5rem;
   font-size: 0.75rem;
   z-index: 1;
-  padding: 5% 0;
+  padding-bottom: 2%;
 `;
 
 export const StyledReward = styled.div<{
-  rarity: Rarity;
-  size: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg';
 }>`
-  background-image: linear-gradient(
-    to top left,
-    ${(props) => props.rarity},
-    ${(props) => darken(0.1, props.rarity)}
-  );
-  background-color: ${(props) => props.rarity};
   border-radius: 0.5rem;
   display: grid;
   place-items: end;
   position: relative;
   flex-shrink: 0;
   flex-grow: 0;
+
+  ${sif('size', undefined)} {
+    aspect-ratio: 9/10;
+    ${RewardCount} {
+      display: none;
+    }
+  }
 
   ${sif('size', 'sm')} {
     ${RewardCount} {

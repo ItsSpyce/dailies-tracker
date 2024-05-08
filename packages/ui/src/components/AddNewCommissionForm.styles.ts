@@ -7,9 +7,10 @@ export const StyledAddNewCommissionForm = styled.div`
 `;
 
 export const RewardSelectionGroup = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-auto-flow: column;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
 `;
 
 export const RewardSelectionColumn = styled.div`

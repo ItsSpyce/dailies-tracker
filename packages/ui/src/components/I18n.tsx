@@ -1,5 +1,5 @@
 import { I18nProvider } from '@dailies-tracker/i18n';
-import { useI18n } from '../hooks';
+import { useI18n } from '../states';
 
 export type I18nProps = {
   iden: Suggestion<keyof I18nProvider>;

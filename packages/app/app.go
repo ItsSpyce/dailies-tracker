@@ -9,14 +9,14 @@ import (
 	"github.com/gen2brain/beeep"
 )
 
-// App struct
 type App struct {
-	dailiesService DailiesService
+	DailiesService *DailiesService
+	RewardService  *RewardService
+	LangService    *LangService
 	ctx            context.Context
 	config         *Config
 }
 
-// NewApp creates a new App application struct
 func NewApp(config *Config) *App {
 	return &App{
 		config: config,
@@ -25,11 +25,34 @@ func NewApp(config *Config) *App {
 
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
-	a.dailiesService = DailiesService{}
+	a.DailiesService = &DailiesService{}
+	a.RewardService = &RewardService{}
+	a.LangService = &LangService{}
+}
+
+func (a *App) GetAvailableRewards() []Reward {
+	rewards, err := a.RewardService.GetAvailableRewards()
+	if err != nil {
+		fmt.Println("Error getting rewards:", err)
+		return nil
+	}
+	return rewards
+}
+
+func (a *App) CreateReward(rewardType string, count int, imageBase64 string) (Reward, error) {
+	return a.RewardService.CreateReward(Reward{
+		Type:        rewardType,
+		Count:       count,
+		ImageBase64: imageBase64,
+	})
+}
+
+func (a *App) DeleteReward(id int) error {
+	return a.RewardService.DeleteReward(id)
 }
 
 func (a *App) LoadCommissions(dateMs int64) []Commission {
-	dailies, err := a.dailiesService.LoadCommissionsForDate(dateMs)
+	dailies, err := a.DailiesService.LoadCommissionsForDate(dateMs, a.RewardService)
 	if err != nil {
 		fmt.Println("Error loading dailies:", err)
 		return nil
@@ -38,16 +61,20 @@ func (a *App) LoadCommissions(dateMs int64) []Commission {
 	return dailies
 }
 
-func (a *App) CreateTask(description string, realm string, rewardsJson string) (Commission, error) {
-	return a.dailiesService.CreateNewCommission(description, realm, rewardsJson)
+func (a *App) CreateTask(description string, realm string, rewards []Reward) (Commission, error) {
+	return a.DailiesService.CreateNewCommission(description, realm, rewards, a.RewardService)
 }
 
 func (a *App) CompleteTask(id int) error {
-	return a.dailiesService.CompleteCommission(id)
+	return a.DailiesService.CompleteCommission(id)
 }
 
 func (a *App) DeleteTask(id int) error {
-	return a.dailiesService.DeleteCommission(id)
+	return a.DailiesService.DeleteCommission(id)
+}
+
+func (a *App) MarkTodayAsClaimed() error {
+	return a.DailiesService.MarkTodayAsClaimed()
 }
 
 func (a *App) IsDev() bool {
@@ -59,7 +86,11 @@ func (a *App) IsDev() bool {
 }
 
 func (a *App) GetLocale() string {
-	return a.config.Locale
+	return a.LangService.GetLang()
+}
+
+func (a *App) SetLocale(lang string) {
+	a.LangService.SetLang(lang)
 }
 
 func (a *App) Notify(title string, message string) {
