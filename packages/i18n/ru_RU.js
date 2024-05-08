@@ -1,7 +1,9 @@
 /**
  * @type {import('./index').I18nProvider}
  */
-export const ruRU = {
+export const ru_RU = {
+  languageName: 'Русский',
+  'app.language': 'Язык',
   'app.title': 'Ежедневник поручений',
   'app.description':
     'Простое приложение для отслеживания ежедневной активности',
@@ -24,6 +26,7 @@ export const ruRU = {
   'app.ok': 'ОК',
   'app.confirm': 'Подтвердить',
   'app.addCommission.description': 'Описание',
+  'app.about': 'О приложении',
   'calendar.months.1': 'Янв.',
   'calendar.months.2': 'Февр.',
   'calendar.months.3': 'Март',
@@ -61,4 +64,5 @@ export const ruRU = {
   'realm.physical': 'Королевство Силы',
   'realm.science': 'Королевство Науки',
   'realm.exploration': 'Королевство Исследования',
+  realms: [],
 };

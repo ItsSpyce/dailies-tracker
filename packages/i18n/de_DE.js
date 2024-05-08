@@ -1,12 +1,15 @@
 /**
  * @type {import('./index').I18nProvider}
  */
-export const deDE = {
+export const de_DE = {
+  languageName: 'Deutsch',
+  'app.language': 'Sprache',
   'app.title': 'Dailies Tracker',
-  'app.description': 'Eine einfache App, um deine täglichen Aktivitäten zu tracken',
+  'app.description':
+    'Eine einfache App, um deine täglichen Aktivitäten zu tracken',
   'app.header': 'Belohnung für tägliche Missionen',
   'app.subHeader':
-      "Sobald du alle Belohnungen für Missionen an einem Tag erhalten hast, kannst du dir bei der Abenteurergilde eine zusätzliche Belohnung einsammeln.",
+    'Sobald du alle Belohnungen für Missionen an einem Tag erhalten hast, kannst du dir bei der Abenteurergilde eine zusätzliche Belohnung einsammeln.',
   'app.chooseDate':
     'Bitte wähle das korrekte Datum, um die täglichen Missionen zu erfüllen',
   'app.dailies.title': 'Tägliche Missionen',
@@ -19,6 +22,7 @@ export const deDE = {
   'app.create': 'Erstellen',
   'app.ok': 'Ok',
   'app.addCommission.description': 'Beschreibung',
+  'app.about': 'Über',
   'calendar.months.1': 'Jan.',
   'calendar.months.2': 'Feb.',
   'calendar.months.3': 'März',
@@ -44,4 +48,5 @@ export const deDE = {
   'rewards.cleaningPoints': 'Reinigungspunkte',
   'rewards.creativePoints': 'Kreativpunkte',
   'rewards.health': 'HP',
+  realms: [],
 };

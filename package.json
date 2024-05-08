@@ -4,11 +4,10 @@
   "workspaces": [
     "packages/app/frontend",
     "packages/ui",
-    "packages/server",
     "packages/i18n"
   ],
   "scripts": {
-    "dev": "cd packages/app && cross-env DEBUG=1 wails dev",
+    "dev": "cd packages/app && wails dev",
     "build": "run-p build:*",
     "build:windows": "cd packages/app && wails build -platform windows",
     "build:macos": "cd packages/app && wails build -platform darwin/universal",
@@ -19,5 +18,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "styled-components": "^5.3.11"
-  }
+  },
+  "trustedDependencies": [
+    "es5-ext"
+  ]
 }

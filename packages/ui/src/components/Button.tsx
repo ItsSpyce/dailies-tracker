@@ -1,7 +1,8 @@
 import { sif } from '../utils/scomp';
 import { darken } from 'polished';
 import React from 'react';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
+import * as Icons from 'react-feather';
 
 export const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
   background-color: ${(props) => props.theme.colors.backgroundColored};
@@ -57,13 +58,14 @@ export const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
   }
 `;
 
-export const TextButton = styled.button`
+export const TextButton = styled.button<{ noLine?: boolean }>`
   cursor: pointer;
   background-color: transparent;
   border: none;
   outline: none;
   font-size: 1rem;
-  color: ${(props) => props.theme.colors.text};
+  color: ${(props) => props.theme.colors.accent};
+  text-decoration: underline solid ${(props) => props.theme.colors.accent};
   padding: 0;
   margin: 0;
   display: inline;
@@ -71,19 +73,54 @@ export const TextButton = styled.button`
   font-family: inherit;
   position: relative;
 
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background-color: ${(props) => props.theme.colors.text};
+  &:hover {
+    text-decoration: none;
   }
 
-  &:hover {
-    &::after {
-      background-color: transparent;
-    }
+  ${sif('noLine', true)} {
+    text-decoration: none;
   }
+
+  svg {
+    transform: translateY(0.5rem);
+  }
+`;
+
+export type IconButtonProps = Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  'children'
+> &
+  Icons.IconProps & {
+    icon: keyof typeof Icons;
+  };
+
+export const IconButton: React.FC<IconButtonProps> = ({
+  icon,
+  onClick,
+  className,
+  id,
+  style,
+  ...props
+}) => {
+  const Icon = Icons[icon];
+  const theme = useTheme();
+  return (
+    <StyledIconButton
+      onClick={onClick}
+      className={className}
+      id={id}
+      style={style}
+    >
+      <Icon color={theme.colors.textColored} {...props} />
+    </StyledIconButton>
+  );
+};
+
+const StyledIconButton = styled.button`
+  outline: none;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  width: fit-content;
+  padding: 1rem;
 `;

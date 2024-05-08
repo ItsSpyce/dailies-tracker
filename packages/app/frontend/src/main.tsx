@@ -4,16 +4,10 @@ import Modal from 'react-modal';
 import App from './App';
 import { deskify } from './deskify';
 import { StyleSheetManager, ThemeProvider } from 'styled-components';
-import * as locales from '@dailies-tracker/i18n';
-import {
-  I18nContext,
-  theme,
-  GlobalStyle,
-  AppProvider,
-} from '@dailies-tracker/ui';
-import * as app from '@/internal/main/App';
-import { match } from 'ts-pattern';
+import { theme, GlobalStyle, AppProvider } from '@dailies-tracker/ui';
 import { commissionService } from './services/commission-service';
+import { rewardService } from './services/reward-service';
+import { langService } from './services/lang-service';
 
 deskify({
   allowContextMenu: false,
@@ -21,42 +15,24 @@ deskify({
   allowReloadKey: true,
 });
 
-const localeSwitch = (lang: string) =>
-  match(lang)
-    .with('en_US', () => locales.enUS)
-    .with('de_DE', () => locales.deDE)
-    .with('vi_VN', () => locales.viVN)
-    .with('pt_BR', () => locales.ptBR)
-    .with('ru_RU', () => locales.ruRU)
-    .with('fr_FR', () => locales.frFR)
-    .with('es_ES', () => locales.esES)
-    .with('id_ID', () => locales.idID)
-    .with('nl_NL', () => locales.nlNL)
-    // insert more locales here
-    .otherwise(() => locales.enUS);
+const container = document.getElementById('root');
+const root = createRoot(container!);
 
-(async () => {
-  const lang = await app.GetLocale();
-  const selectedLocale = localeSwitch(lang);
-  const container = document.getElementById('root');
-  const appCommissionService = commissionService();
+Modal.setAppElement(container!);
 
-  const root = createRoot(container!);
-
-  Modal.setAppElement(container!);
-
-  root.render(
-    <React.StrictMode>
-      <StyleSheetManager>
-        <I18nContext.Provider value={selectedLocale}>
-          <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            <AppProvider commissionService={appCommissionService}>
-              <App />
-            </AppProvider>
-          </ThemeProvider>
-        </I18nContext.Provider>
-      </StyleSheetManager>
-    </React.StrictMode>
-  );
-})();
+root.render(
+  <React.StrictMode>
+    <StyleSheetManager>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <AppProvider
+          commissionService={commissionService}
+          rewardService={rewardService}
+          langService={langService}
+        >
+          <App />
+        </AppProvider>
+      </ThemeProvider>
+    </StyleSheetManager>
+  </React.StrictMode>
+);

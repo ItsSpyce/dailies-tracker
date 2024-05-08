@@ -1,7 +1,9 @@
 /**
  * @type {import('./index').I18nProvider}
  */
-export const enUS = {
+export const en_US = {
+  languageName: 'English',
+  'app.language': 'Language',
   'app.title': 'Dailies Tracker',
   'app.description': 'A simple app to track your daily activities',
   'app.header': 'Daily Commission Rewards',
@@ -23,7 +25,9 @@ export const enUS = {
   'app.create': 'Create',
   'app.ok': 'Ok',
   'app.confirm': 'Confirm',
+  'app.settings': 'Settings',
   'app.addCommission.description': 'Description',
+  'app.about': 'About',
   'calendar.months.1': 'Jan',
   'calendar.months.2': 'Feb',
   'calendar.months.3': 'Mar',
@@ -49,16 +53,18 @@ export const enUS = {
   'rewards.cleaningPoints': 'Cleaning Points',
   'rewards.creativePoints': 'Creative Points',
   'rewards.health': 'Health',
-  'realm.duty': 'Realm of Duty',
-  'realm.fullfilment': 'Realm of Fullfilment',
-  'realm.artist': 'Realm of the Artist',
-  'realm.musician': 'Realm of the Musician',
-  'realm.writer': 'Realm of the Writer',
-  'realm.engineer': 'Realm of the Engineer',
-  'realm.cook': 'Realm of the Cook',
-  'realm.gardener': 'Realm of the Gardener',
-  'realm.healing': 'Realm of Healing',
-  'realm.physical': 'Realm of Physicality',
-  'realm.science': 'Realm of Science',
-  'realm.exploration': 'Realm of Exploration',
+  realms: [
+    'Realm of Duty',
+    'Realm of Fullfilment',
+    'Realm of the Artist',
+    'Realm of the Musician',
+    'Realm of the Writer',
+    'Realm of the Engineer',
+    'Realm of the Cook',
+    'Realm of the Gardener',
+    'Realm of Healing',
+    'Realm of Physicality',
+    'Realm of Science',
+    'Realm of Exploration',
+  ],
 };
