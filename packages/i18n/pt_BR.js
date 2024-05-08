@@ -1,7 +1,7 @@
 /**
  * @type {import('./index').I18nProvider}
  */
-export const ptBR = {
+export const pt_BR = {
   languageName: 'Português',
   'app.language': 'Idioma',
   'app.title': 'Monitorador de Diárias',
@@ -47,4 +47,5 @@ export const ptBR = {
   'rewards.cleaningPoints': 'Pontos de Limpeza',
   'rewards.creativePoints': 'Pontos de Criatividade',
   'rewards.health': 'Vida',
+  realms: [],
 };

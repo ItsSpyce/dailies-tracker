@@ -1,7 +1,7 @@
 import { CommissionService } from '@dailies-tracker/ui';
 import * as app from '@/internal/main/App';
 
-export function commissionService(): CommissionService {
+export async function commissionService(): Promise<CommissionService> {
   return {
     async getCommissions(unixDate) {
       const results = await app.LoadCommissions(unixDate);

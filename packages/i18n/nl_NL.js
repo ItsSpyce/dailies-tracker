@@ -1,7 +1,7 @@
 /**
  * @type {import('./index').I18nProvider}
  */
-export const nlNL = {
+export const nl_NL = {
   languageName: 'Nederlands',
   'app.language': 'Taal',
   'app.title': 'Dailies Tracker',
@@ -47,4 +47,5 @@ export const nlNL = {
   'rewards.cleaningPoints': 'Schoonmaakpunten',
   'rewards.creativePoints': 'Creativiteitspunten',
   'rewards.health': 'HP',
+  realms: [],
 };

@@ -1,7 +1,7 @@
 /**
  * @type {import('./index').I18nProvider}
  */
-export const itIT = {
+export const it_IT = {
   languageName: 'Italiano',
   'app.language': 'Lingua',
   'app.title': 'Dailies Tracker',
@@ -60,4 +60,5 @@ export const itIT = {
   'realm.physical': 'Reame della Fisicità',
   'realm.science': 'Reame della Scienza',
   'realm.exploration': "Reame dell'Esplorazione",
+  realms: [],
 };

@@ -10,11 +10,16 @@ import {
 } from './MainPage.styles';
 import { useContext, useEffect, useState } from 'react';
 import * as dateFns from 'date-fns';
-import { useModal, useLocalStorage } from '../hooks';
-import { useCommissionService } from '../states';
+import { useModal, useLocalStorage, useAsyncState } from '../hooks';
+import {
+  useCommissionService,
+  useLang,
+  useLangService,
+  useRewardService,
+} from '../states';
 import { DailyCommission, TaskReward } from '../types';
 import { AddNewCommissionForm } from './AddNewCommissionForm';
-import { Button, IconButton } from './Button';
+import { Button, IconButton, TextButton } from './Button';
 import { ButtonGroup } from './ButtonGroup';
 import { Checkbox } from './Checkbox';
 import { CommissionCard } from './CommissionCard';
@@ -28,19 +33,25 @@ import { Rarity } from './Reward.styles';
 import { Section } from './Section';
 import { TaskCompletionStatus } from './TaskCompletionStatus';
 import { Title } from './Title';
-import { SettingsAndAboutModal } from './SettingsAndAboutModal';
+import { SettingsAndAboutModal } from './SettingsModal';
+import { Heart } from 'react-feather';
+import { AboutModal } from './AboutModal';
 
 const today = new Date();
 
 export const MainPage = () => {
+  const [commissionService] = useCommissionService();
+  const [rewardService] = useRewardService();
+  const [lang] = useLang();
   const [commissions, setCommissions] = useState<DailyCommission[]>([]);
   const [isClaimed, setIsClaimed] = useState(false);
+  const [availableRewards] = useAsyncState(rewardService.getAvailableRewards);
   const [addNewCommissionModal, toggleCommissionModal] = useModal();
   const [settingsModal, toggleSettingsModal] = useModal();
+  const [aboutModal, toggleAboutModal] = useModal();
   const [date, setDate] = useState(today);
   const [leftNotes, setLeftNotes] = useLocalStorage('notes-left', '');
   const [rightNotes, setRightNotes] = useLocalStorage('notes-right', '');
-  const [commissionService] = useCommissionService();
 
   function markAsClaimed() {
     // TODO: store
@@ -104,14 +115,15 @@ export const MainPage = () => {
           align="center"
         >
           <ExtraRewards>
-            <Reward
-              type="primos"
-              amount={3000}
-              rarity={Rarity.Legendary}
-              size="lg"
-            />
-            <Reward type="arexp" amount={1000} rarity={Rarity.Rare} size="lg" />
-            <Reward type="health" amount={1} rarity={Rarity.Rare} size="lg" />
+            {availableRewards &&
+              availableRewards.map((reward) => (
+                <Reward
+                  key={reward.id}
+                  {...reward}
+                  count={reward.count * 5}
+                  size="lg"
+                />
+              ))}
           </ExtraRewards>
         </Section>
         <ButtonGroup direction="column">
@@ -122,6 +134,9 @@ export const MainPage = () => {
             <Checkbox checked={isClaimed} />
             <I18n iden="app.dailies.claimed" />
           </Button>
+          <TextButton noLine {...aboutModal.bind}>
+            About
+          </TextButton>
         </ButtonGroup>
       </LeftPanel>
       <RightPanel>
@@ -133,6 +148,7 @@ export const MainPage = () => {
               setDate(e);
               console.log(e);
             }}
+            lang={lang.replace('_', '-')}
           />
         </ChooseDateForm>
         <DailiesList>
@@ -157,7 +173,7 @@ export const MainPage = () => {
             ))}
           </DailiesView>
         </DailiesList>
-        <Button variant="secondary" onClick={toggleCommissionModal}>
+        <Button variant="secondary" {...addNewCommissionModal.bind}>
           <I18n iden="app.dailies.addCommission" />
         </Button>
         <Modal {...addNewCommissionModal}>
@@ -179,9 +195,10 @@ export const MainPage = () => {
         />
       </RightPanel>
       <SettingsButton>
-        <IconButton icon="Settings" onClick={toggleSettingsModal} />
+        <IconButton icon="Settings" {...settingsModal.bind} />
       </SettingsButton>
       <SettingsAndAboutModal {...settingsModal} />
+      <AboutModal {...aboutModal} />
     </StyledApp>
   );
 };

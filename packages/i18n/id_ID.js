@@ -1,7 +1,7 @@
 /**
  * @type {import('./index').I18nProvider}
  */
-export const idID = {
+export const id_ID = {
   languageName: 'Bahasa Indonesia',
   'app.language': 'Bahasa',
   'app.title': 'Dailies Tracker',
@@ -46,4 +46,5 @@ export const idID = {
   'rewards.cleaningPoints': 'Poin Kebersihan',
   'rewards.creativePoints': 'Poin Kreativitas',
   'rewards.health': 'Kesehatan',
+  realms: [],
 };

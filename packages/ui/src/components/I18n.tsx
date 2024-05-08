@@ -6,6 +6,6 @@ export type I18nProps = {
 };
 
 export const I18n: React.FC<I18nProps> = ({ iden }) => {
-  const [i18n] = useI18n();
+  const i18n = useI18n();
   return <>{i18n[iden as keyof I18nProvider] ?? iden}</>;
 };

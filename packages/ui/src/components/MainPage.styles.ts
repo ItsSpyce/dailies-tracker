@@ -1,3 +1,4 @@
+import { rgba } from 'polished';
 import styled from 'styled-components';
 
 export const StyledApp = styled.main`
@@ -59,4 +60,9 @@ export const NotesPanel = styled.div``;
 
 export const SettingsButton = styled.div`
   position: fixed;
+  background-color: ${(props) => rgba(props.theme.colors.background, 0.8)};
+
+  button {
+    padding: 0.5rem;
+  }
 `;

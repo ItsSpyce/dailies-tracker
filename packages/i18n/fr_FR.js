@@ -1,7 +1,7 @@
 /**
  * @type {import('./index').I18nProvider}
  */
-export const frFR = {
+export const fr_FR = {
   languageName: 'Français',
   'app.language': 'Langue',
   'app.title': 'Dailies Tracker',
@@ -65,4 +65,5 @@ export const frFR = {
   'realm.physical': 'Royaume du Physique',
   'realm.science': 'Royaume de la Science',
   'realm.exploration': "Royaume de l'Exploration",
+  realms: [],
 };

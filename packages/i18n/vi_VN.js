@@ -1,7 +1,7 @@
 /**
  * @type {import('./index').I18nProvider}
  */
-export const viVN = {
+export const vi_VN = {
   languageName: 'Tiếng Việt',
   'app.language': 'Ngôn ngữ',
   'app.title': 'Dailies Tracker',
@@ -46,4 +46,5 @@ export const viVN = {
   'rewards.cleaningPoints': 'Điểm dọn dẹp',
   'rewards.creativePoints': 'Điểm sáng tạo',
   'rewards.health': 'HP',
+  realms: [],
 };
