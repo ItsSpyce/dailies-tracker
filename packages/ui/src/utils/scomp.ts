@@ -140,3 +140,18 @@ export function hasChildOf<T extends React.PropsWithChildren<unknown>>(
     }
   };
 }
+
+export function doesNotHaveChildOf<T extends React.PropsWithChildren<unknown>>(
+  type: React.ComponentType
+): Interpolation<T> {
+  return (props) => {
+    const children = React.Children.toArray(props.children);
+    if (
+      children.every(
+        (child) => !React.isValidElement(child) || child.type !== type
+      )
+    ) {
+      return '&';
+    }
+  };
+}

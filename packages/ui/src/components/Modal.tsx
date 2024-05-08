@@ -17,6 +17,8 @@ export type ModalProps = {
   children: React.ReactNode;
 };
 
+export type NewModalProps = Omit<ModalProps, 'children'>;
+
 const noop = () => {};
 const RequestCloseContext = createContext<() => void>(noop);
 

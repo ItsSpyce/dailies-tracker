@@ -3,8 +3,9 @@ export * from './theme';
 export * from './components';
 export * from './utils';
 export * from './hooks';
-export * from './contexts';
 export * from './types';
-export * from './images';
 export * from './services';
 export * from './providers';
+export * from './states';
+
+export * as images from './images';

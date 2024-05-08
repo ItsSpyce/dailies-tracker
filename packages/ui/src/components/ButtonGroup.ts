@@ -1,8 +1,13 @@
 import styled from 'styled-components';
+import { breakpoints } from '../utils';
 
-export const ButtonGroup = styled.div`
+export const ButtonGroup = styled.div<{ direction?: 'row' | 'column' }>`
   display: flex;
   justify-content: stretch;
-  flex-direction: row-reverse;
-  column-gap: 16px;
+  flex-direction: column;
+  gap: 16px;
+
+  ${breakpoints('md')} {
+    flex-direction: ${(props) => props.direction || 'row-reverse'};
+  }
 `;

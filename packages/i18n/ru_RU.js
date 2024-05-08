@@ -1,7 +1,9 @@
 /**
  * @type {import('./index').I18nProvider}
  */
-export const ruRU = {
+export const ru_RU = {
+  languageName: 'Русский',
+  'app.language': 'Язык',
   'app.title': 'Ежедневник поручений',
   'app.description':
     'Простое приложение для отслеживания ежедневной активности',
@@ -9,16 +11,22 @@ export const ruRU = {
   'app.subHeader':
     'Выполняйте поручения каждый день, чтобы получить дополнительные награды от гильдии искателей приключений.',
   'app.chooseDate': 'Выберите, когда будете выполнять ежедневные поручения',
-  'app.dailies.title': 'Ежедневные поручения',
+  'app.dailies.title': 'Поручения',
   'app.dailies.claimed': 'Награды собраны',
   'app.dailies.notes': 'Записки',
   'app.dailies.bonusRewards': 'Дополнительные награды',
   'app.dailies.addCommission': 'Добавить поручение',
   'app.dailies.none': 'Поручений пока нет',
+  'app.dailies.editCommission': 'Редактировать поручение',
+  'app.dailies.deleteCommission': 'Удалить поручение',
+  'app.dailies.confirmDeleteCommission':
+    'Вы уверены, что хотите удалить поручение? Это действие нельзя будет отменить.',
   'app.cancel': 'Отмена',
   'app.create': 'Создать',
   'app.ok': 'ОК',
+  'app.confirm': 'Подтвердить',
   'app.addCommission.description': 'Описание',
+  'app.about': 'О приложении',
   'calendar.months.1': 'Янв.',
   'calendar.months.2': 'Февр.',
   'calendar.months.3': 'Март',
@@ -44,4 +52,17 @@ export const ruRU = {
   'rewards.cleaningPoints': 'Очки уборки',
   'rewards.creativePoints': 'Очки творчества',
   'rewards.health': 'Здоровье',
+  'realm.duty': 'Королевство Обязанностей',
+  'realm.fullfilment': 'Королевство Реализации',
+  'realm.artist': 'Королевство Художницы',
+  'realm.musician': 'Королевство Музыканта',
+  'realm.writer': 'Королевство Писательницы',
+  'realm.engineer': 'Королевство Инженера',
+  'realm.cook': 'Королевство Кулинара',
+  'realm.gardener': 'Королевство Садовницы',
+  'realm.healing': 'Королевство Исцеления',
+  'realm.physical': 'Королевство Силы',
+  'realm.science': 'Королевство Науки',
+  'realm.exploration': 'Королевство Исследования',
+  realms: [],
 };

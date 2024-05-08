@@ -56,3 +56,7 @@ export const ExtraRewards = styled.div`
 `;
 
 export const NotesPanel = styled.div``;
+
+export const SettingsButton = styled.div`
+  position: fixed;
+`;

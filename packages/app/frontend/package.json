@@ -4,27 +4,27 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "cross-env VITE_CJS_TRACE=true vite",
+    "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@dailies-tracker/i18n": "file:../../i18n",
-    "@dailies-tracker/ui": "file:../../ui",
-    "date-fns": "^3.6.0",
-    "react-modal": "^3.16.1",
-    "run-all": "^1.0.1",
-    "styled-components": "^5.3.11",
-    "ts-pattern": "^5.1.1",
-    "vite-plugin-tsconfig-paths": "^1.4.1",
+    "@dailies-tracker/i18n": "workspace:*",
+    "@dailies-tracker/ui": "workspace:*",
     "@heroicons/react": "^2.1.1",
     "@mdxeditor/editor": "^3.0.1",
     "autoprefixer": "^10.4.16",
+    "date-fns": "^3.6.0",
     "polished": "^4.3.1",
     "react": "^18.2.0",
     "react-calendar": "^4.8.0",
     "react-dom": "^18.3.1",
-    "react-feather": "^2.0.10"
+    "react-feather": "^2.0.10",
+    "react-modal": "^3.16.1",
+    "run-all": "^1.0.1",
+    "styled-components": "^5.3.11",
+    "ts-pattern": "^5.1.1",
+    "vite-plugin-tsconfig-paths": "^1.4.1"
   },
   "devDependencies": {
     "@types/node": "^20.12.7",
@@ -33,7 +33,7 @@
     "@types/react-modal": "^3.16.3",
     "@types/styled-components": "^5.1.34",
     "@vitejs/plugin-react": "^2.0.1",
-    "typescript": "^4.6.4",
+    "typescript": "^5.4.5",
     "vite": "^3.0.7"
   }
 }
