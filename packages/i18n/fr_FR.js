@@ -1,7 +1,7 @@
 /**
  * @type {import('./index').I18nProvider}
  */
-export const frFR = {
+export const fr_FR = {
   languageName: 'Français',
   'app.language': 'Langue',
   'app.title': 'Dailies Tracker',
@@ -47,4 +47,5 @@ export const frFR = {
   'rewards.cleaningPoints': 'Points de Nettoyage',
   'rewards.creativePoints': 'Points de Créativité',
   'rewards.health': 'Vie',
+  realms: [],
 };

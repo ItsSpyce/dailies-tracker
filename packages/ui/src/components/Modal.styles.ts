@@ -1,6 +1,12 @@
 import styled from 'styled-components';
 import { rgba, invert } from 'polished';
-import { breakpoints, areChildrenOf, sides, hasChildOf } from '../utils';
+import {
+  breakpoints,
+  areChildrenOf,
+  sides,
+  hasChildOf,
+  doesNotHaveChildOf,
+} from '../utils';
 
 export const StyledModal = styled.div`
   position: fixed;
@@ -33,6 +39,7 @@ export const ModalHeader = styled.div`
 export const ModalHeaderText = styled.h2`
   color: ${(props) => props.theme.colors.textColored};
   width: 100%;
+  margin: 0;
 `;
 
 export const ModalBody = styled.div`
@@ -41,6 +48,7 @@ export const ModalBody = styled.div`
   row-gap: 1rem;
   color: ${(props) => props.theme.colors.text};
   overflow-y: auto;
+  flex-grow: 1;
 `;
 
 export const ModalFooter = styled.div`
@@ -48,17 +56,19 @@ export const ModalFooter = styled.div`
 `;
 
 export const ModalWindow = styled.div`
+  position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: stretch;
   row-gap: 2rem;
   background-color: ${(props) => props.theme.colors.background};
-  max-height: calc(100% - 2rem);
-  width: calc(100% - 2rem);
+  height: fit-content;
+  max-height: calc(100vh - 2rem);
+  width: calc(100vw - 2rem);
   padding: 2rem;
 
-  ${hasChildOf(ModalHeader)} {
-    padding-top: 1rem;
+  ${doesNotHaveChildOf(ModalFooter)} {
+    bottom: 0;
   }
 
   ${breakpoints('sm')} {
@@ -67,9 +77,11 @@ export const ModalWindow = styled.div`
     border: 3px solid ${(props) => props.theme.colors.border};
     border-radius: 1.5rem;
     padding: 2rem;
+    bottom: unset;
   }
 
   ${breakpoints('md')} {
     width: 50%;
+    max-width: 700px;
   }
 `;

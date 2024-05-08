@@ -1,7 +1,7 @@
 /**
  * @type {import('./index').I18nProvider}
  */
-export const ruRU = {
+export const ru_RU = {
   languageName: 'Русский',
   'app.language': 'Язык',
   'app.title': 'Ежедневник поручений',
@@ -47,4 +47,5 @@ export const ruRU = {
   'rewards.cleaningPoints': 'Очки уборки',
   'rewards.creativePoints': 'Очки творчества',
   'rewards.health': 'Здоровье',
+  realms: [],
 };

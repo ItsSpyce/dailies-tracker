@@ -1,7 +1,7 @@
 /**
  * @type {import('./index').I18nProvider}
  */
-export const deDE = {
+export const de_DE = {
   languageName: 'Deutsch',
   'app.language': 'Sprache',
   'app.title': 'Dailies Tracker',
@@ -48,4 +48,5 @@ export const deDE = {
   'rewards.cleaningPoints': 'Reinigungspunkte',
   'rewards.creativePoints': 'Kreativpunkte',
   'rewards.health': 'HP',
+  realms: [],
 };

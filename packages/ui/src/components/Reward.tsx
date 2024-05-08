@@ -6,32 +6,14 @@ export { Rarity };
 
 export interface RewardProps {
   type: string;
-  amount: number;
-  rarity: Rarity;
+  count: number;
+  imageBase64: string;
   size?: 'sm' | 'md' | 'lg';
 }
 
-export const Reward: React.FC<RewardProps> = ({
-  type,
-  amount,
-  rarity,
-  size = 'md',
-}) => {
-  const iconSrc = match(type)
-    .with('primos', () => Images.Primos)
-    .with('cleaning_points', () => Images.CleanPoints)
-    .with('health', () => Images.HealthPoints)
-    .with('arexp', () => Images.ARExp)
-    .with('creative_points', () => Images.CreativePoints)
-    .otherwise(() => {
-      throw new Error(`Unknown reward type: ${type}`);
-    });
-  return (
-    <StyledReward rarity={rarity} size={size}>
-      {iconSrc && (
-        <RewardIcon src={typeof iconSrc === 'string' ? iconSrc : ''} />
-      )}
-      <RewardCount>{amount}</RewardCount>
-    </StyledReward>
-  );
-};
+export const Reward: React.FC<RewardProps> = ({ imageBase64, count, size }) => (
+  <StyledReward size={size}>
+    <RewardIcon src={imageBase64} />
+    <RewardCount>{count}</RewardCount>
+  </StyledReward>
+);

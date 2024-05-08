@@ -11,20 +11,11 @@ import { Button } from './Button';
 import { ButtonGroup } from './ButtonGroup';
 import { Checkbox } from './Checkbox';
 import { Select } from './Select';
-import { availableRealms } from '../consts';
-import { useI18n, useRewardService } from '../states';
+import { useI18n, useRewardService, useAvailableRealms } from '../states';
 
 export type AddNewCommissionFormProps = {
   onSubmit: (description: string, realm: string, rewards: TaskReward[]) => void;
   onCancel: () => void;
-};
-
-const rewardCounts: Record<string, number> = {
-  primos: 400,
-  arexp: 200,
-  cleaning_points: 150,
-  creative_points: 150,
-  health: 100,
 };
 
 export const AddNewCommissionForm: React.FC<AddNewCommissionFormProps> = ({
@@ -34,9 +25,10 @@ export const AddNewCommissionForm: React.FC<AddNewCommissionFormProps> = ({
   const [rewardService] = useRewardService();
   const [availableRewards, setAvailableRewards] = useState<TaskReward[]>([]);
   const [description, setDescription] = useState('');
-  const [rewards, setRewards] = useState<TaskReward[]>([]);
-  const [realm, setRealm] = useState('Realm of Duty');
-  const [i18n] = useI18n();
+  const [rewards, setRewards] = useState<number[]>([]);
+  const [realms] = useAvailableRealms();
+  const [realm, setRealm] = useState(realms[0]);
+  const i18n = useI18n();
 
   useEffect(() => {
     rewardService.getAvailableRewards().then((rewards) => {
@@ -44,16 +36,18 @@ export const AddNewCommissionForm: React.FC<AddNewCommissionFormProps> = ({
     });
   }, []);
 
-  function bindToAddReward(type: string) {
+  function bindToAddReward(id: number) {
     return () => {
-      const count = rewardCounts[type];
-      setRewards((prev) => {
-        const index = prev.findIndex((r) => r.type === type);
-        if (index === -1) {
-          return [...prev, { id: 0, type, count, imageBase64: '' }];
-        }
-        return prev.filter((r) => r.type !== type);
-      });
+      const count = availableRewards.find((r) => r.id === id);
+      if (count == null) {
+        console.error('Reward not found', id);
+        return;
+      }
+      if (rewards.includes(id)) {
+        setRewards(rewards.filter((r) => r !== id));
+      } else {
+        setRewards([...rewards, id]);
+      }
     };
   }
 
@@ -67,7 +61,7 @@ export const AddNewCommissionForm: React.FC<AddNewCommissionFormProps> = ({
       />
       <Select onChange={(e) => setRealm(e.currentTarget.value)}>
         <option disabled>Select a Realm</option>
-        {availableRealms.map((r) => (
+        {realms.map((r) => (
           <option key={r} value={r}>
             {r}
           </option>
@@ -76,8 +70,8 @@ export const AddNewCommissionForm: React.FC<AddNewCommissionFormProps> = ({
       <RewardSelectionGroup>
         {availableRewards.map((r) => (
           <Checkbox
-            checked={rewards.some((reward) => reward.type === r.type)}
-            onChange={bindToAddReward(r.type)}
+            checked={rewards.some((id) => id === r.id)}
+            onChange={bindToAddReward(r.id)}
             key={r.id}
           >
             {r.type}
@@ -87,7 +81,11 @@ export const AddNewCommissionForm: React.FC<AddNewCommissionFormProps> = ({
       <ButtonGroup>
         <Button
           onClick={() => {
-            onSubmit(description, realm, rewards);
+            onSubmit(
+              description,
+              realm,
+              rewards.map((id) => availableRewards.find((r) => r.id === id)!)
+            );
           }}
           variant="primary"
         >
