@@ -1,7 +1,7 @@
 /**
  * @type {import('./index').I18nProvider}
  */
-export const esES = {
+export const es_ES = {
   languageName: 'Español',
   'app.language': 'Idioma',
   'app.title': 'Tracker Diarias',
@@ -47,4 +47,5 @@ export const esES = {
   'rewards.cleaningPoints': 'Puntos de Limpieza',
   'rewards.creativePoints': 'Puntos de Creatividad',
   'rewards.health': 'Vida',
+  realms: [],
 };

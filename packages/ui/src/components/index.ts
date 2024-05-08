@@ -19,3 +19,4 @@ export * from './TaskCompletionStatus';
 export * from './Text';
 export * from './Title';
 export * from './Label';
+export * from './Link';

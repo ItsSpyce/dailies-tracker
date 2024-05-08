@@ -58,13 +58,14 @@ export const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
   }
 `;
 
-export const TextButton = styled.button`
+export const TextButton = styled.button<{ noLine?: boolean }>`
   cursor: pointer;
   background-color: transparent;
   border: none;
   outline: none;
   font-size: 1rem;
-  color: ${(props) => props.theme.colors.text};
+  color: ${(props) => props.theme.colors.accent};
+  text-decoration: underline solid ${(props) => props.theme.colors.accent};
   padding: 0;
   margin: 0;
   display: inline;
@@ -72,20 +73,16 @@ export const TextButton = styled.button`
   font-family: inherit;
   position: relative;
 
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background-color: ${(props) => props.theme.colors.text};
+  &:hover {
+    text-decoration: none;
   }
 
-  &:hover {
-    &::after {
-      background-color: transparent;
-    }
+  ${sif('noLine', true)} {
+    text-decoration: none;
+  }
+
+  svg {
+    transform: translateY(0.5rem);
   }
 `;
 

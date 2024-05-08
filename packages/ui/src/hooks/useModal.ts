@@ -8,7 +8,11 @@ export type UseModalInit = {
 };
 
 export type UseModalHook = [
-  modalProps: Pick<ModalProps, 'isOpen' | 'closeRequested'>,
+  modalProps: Pick<ModalProps, 'isOpen' | 'closeRequested'> & {
+    bind: {
+      onClick: () => void;
+    };
+  },
   toggleModal: () => void
 ];
 
@@ -33,5 +37,16 @@ export function useModal(init?: UseModalInit): UseModalHook {
     }
   }, [beforeClose, afterClose, isOpen]);
 
-  return [{ isOpen, closeRequested: toggleModal }, toggleModal];
+  return [
+    {
+      isOpen,
+      closeRequested: toggleModal,
+      bind: {
+        onClick() {
+          toggleModal();
+        },
+      },
+    },
+    toggleModal,
+  ];
 }

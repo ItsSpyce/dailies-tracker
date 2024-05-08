@@ -7,14 +7,19 @@ import {
   I18nAtom,
   LangServiceAtom,
   RewardServiceAtom,
+  useLang,
 } from '../states';
 import { useEffect } from 'react';
 
+interface ServiceBuilderFunction<T> {
+  (): CouldBePromise<T>;
+}
+
 export interface AppProviderProps {
   children: React.ReactNode;
-  commissionService: CommissionService;
-  rewardService: RewardService;
-  langService: LangService;
+  commissionService: ServiceBuilderFunction<CommissionService>;
+  rewardService: ServiceBuilderFunction<RewardService>;
+  langService: ServiceBuilderFunction<LangService>;
 }
 
 export const AppProvider: React.FC<AppProviderProps> = (props) => (
@@ -34,29 +39,47 @@ const InternalAppRenderer: React.FC<AppProviderProps> = ({
   );
   const [_rewardService, setRewardService] = useRecoilState(RewardServiceAtom);
   const [_langService, setLangService] = useRecoilState(LangServiceAtom);
-  const [locale, setLocale] = useRecoilState(I18nAtom);
+  const [lang, setLang] = useLang();
 
   useEffect(() => {
-    setCommissionService(commissionService);
+    takeResult(commissionService).then(setCommissionService);
+    const result = commissionService();
+    if (result instanceof Promise) {
+      result.then(setCommissionService);
+    } else {
+      setCommissionService(result);
+    }
   }, [commissionService]);
 
   useEffect(() => {
-    setRewardService(rewardService);
+    takeResult(rewardService).then(setRewardService);
   }, [rewardService]);
 
   useEffect(() => {
-    setLangService(langService);
-    // @ts-ignore
-    langService.getLang().then((lang) => setLocale(i18ns[lang] ?? i18ns.enUS));
+    takeResult(langService).then(setLangService);
   }, [langService]);
 
   return (
     <>
-      {_commissionService &&
-        _rewardService &&
-        _langService &&
-        locale &&
-        children}
+      {_commissionService && _rewardService && _langService && lang && children}
     </>
   );
 };
+
+function takeResult<T>(
+  fn: (...args: any) => CouldBePromise<T>,
+  ...args: any[]
+): Promise<T> {
+  return new Promise((resolve, reject) => {
+    try {
+      const result = fn(...args);
+      if (result instanceof Promise) {
+        result.then(resolve).catch(reject);
+      } else {
+        resolve(result);
+      }
+    } catch (err) {
+      reject(err);
+    }
+  });
+}

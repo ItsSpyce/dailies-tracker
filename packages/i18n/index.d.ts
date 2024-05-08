@@ -52,18 +52,7 @@ export type I18nProvider = {
   'rewards.cleaningPoints': string;
   'rewards.creativePoints': string;
   'rewards.health': string;
-  'realm.duty': string;
-  'realm.fullfilment': string;
-  'realm.artist': string;
-  'realm.musician': string;
-  'realm.writer': string;
-  'realm.engineer': string;
-  'realm.cook': string;
-  'realm.gardener': string;
-  'realm.healing': string;
-  'realm.physical': string;
-  'realm.science': string;
-  'realm.exploration': string;
+  realms: string[];
 };
 
 export const enUS: I18nProvider;
