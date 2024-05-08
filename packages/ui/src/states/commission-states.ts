@@ -6,10 +6,10 @@ export const AvailableRealmsSelector = selector<string[]>({
   get: ({ get }) => {
     const i18n = get(I18nAtom);
     const realms = JSON.parse(
-      localStorage.getItem('realms') || '[]'
+      localStorage.getItem('realms') ?? '[]'
     ) as string[] satisfies string[];
     if (i18n != null) {
-      realms.push(...i18n.realms);
+      realms.push(...(i18n.realms ?? []));
     }
     return realms.filter((r, i) => realms.indexOf(r) === i);
   },
