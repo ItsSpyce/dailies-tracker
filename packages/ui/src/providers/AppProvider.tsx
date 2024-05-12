@@ -1,7 +1,7 @@
-import { CommissionService } from '../services';
-import { RewardService } from '../services/reward-service';
+import { CommissionService, RewardService, ClaimsService } from '../services';
 import { RecoilRoot } from 'recoil';
 import {
+  ClaimsServiceContext,
   CommissionServiceContext,
   RewardServiceContext,
   useDayComingToEnd,
@@ -11,6 +11,7 @@ export interface AppProviderProps {
   children: React.ReactNode;
   commissionService: CommissionService;
   rewardService: RewardService;
+  claimsService: ClaimsService;
 }
 
 export const AppProvider: React.FC<AppProviderProps> = (props) => (
@@ -23,12 +24,15 @@ const InternalAppRenderer: React.FC<AppProviderProps> = ({
   children,
   commissionService,
   rewardService,
+  claimsService,
 }) => {
   const [dayComingToEnd] = useDayComingToEnd();
   return (
     <CommissionServiceContext.Provider value={commissionService}>
       <RewardServiceContext.Provider value={rewardService}>
-        {children}
+        <ClaimsServiceContext.Provider value={claimsService}>
+          {children}
+        </ClaimsServiceContext.Provider>
       </RewardServiceContext.Provider>
     </CommissionServiceContext.Provider>
   );

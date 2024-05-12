@@ -15,9 +15,10 @@ const container = document.getElementById('root');
 const root = createRoot(container!);
 
 (async () => {
-  const [commissionService, rewardService] = await Promise.all([
+  const [commissionService, rewardService, claimsService] = await Promise.all([
     services.commissionService(),
     services.rewardService(),
+    services.claimsService(),
   ]);
 
   root.render(
@@ -28,6 +29,7 @@ const root = createRoot(container!);
           <AppProvider
             commissionService={commissionService}
             rewardService={rewardService}
+            claimsService={claimsService}
           >
             <App />
           </AppProvider>

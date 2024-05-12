@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-	"time"
 )
 
 type RewardService struct{}
@@ -44,6 +43,24 @@ func (s *RewardService) GetAvailableRewards() ([]Reward, error) {
 		}
 	}
 	return result, nil
+}
+
+func (s *RewardService) GetReward(id uint) (Reward, error) {
+	db, err := InitDb(&RewardEntity{})
+	if err != nil {
+		return Reward{}, err
+	}
+	var reward RewardEntity
+	tx := db.First(&reward, id)
+	if tx.Error != nil {
+		return Reward{}, tx.Error
+	}
+	return Reward{
+		ID:          reward.ID,
+		Type:        reward.Type,
+		Count:       reward.Count,
+		ImageBase64: reward.ImageBase64,
+	}, nil
 }
 
 func (s *RewardService) GetRewardsFromRewardsString(rewards string) ([]Reward, error) {
@@ -127,73 +144,6 @@ func (s *RewardService) DeleteReward(id uint) error {
 	tx := db.Delete(&RewardEntity{}, id)
 	if tx.Error != nil {
 		return tx.Error
-	}
-	return nil
-}
-
-const dailyBonusRewardCount = 4
-
-// this isn't working like I wanted. For some reason, the SQLITE query returns
-// more than 4 rewards. Gorm's LIMIT doesn't seem to work
-func (s *RewardService) SetupRewardsForToday() ([]Reward, error) {
-	rewardDb, err := InitDb(&RewardEntity{})
-	if err != nil {
-		return nil, err
-	}
-	var rewards []RewardEntity
-	getRewardsTx := rewardDb.Limit(dailyBonusRewardCount).Find(&rewards)
-	if getRewardsTx.Error != nil {
-		return nil, getRewardsTx.Error
-	}
-
-	result := make([]Reward, dailyBonusRewardCount)
-	for i, reward := range rewards {
-		if reward.Count == 0 {
-			return nil, ErrRewardNotFound
-		}
-
-		result[i] = Reward{
-			ID:          reward.ID,
-			Count:       reward.Count * 5,
-			ImageBase64: reward.ImageBase64,
-			Type:        reward.Type,
-		}
-	}
-	return result, nil
-}
-
-func (s *RewardService) ClaimCommissionRewards(rewardIds []uint) error {
-	claimsDb, err := InitDb(&RewardClaimEntity{})
-	if err != nil {
-		return err
-	}
-	for _, reward := range rewardIds {
-		var claim RewardClaimEntity
-		tx := claimsDb.Where("reward_id = ?", reward).First(&claim)
-		if tx.Error != nil {
-			return tx.Error
-		}
-		fmt.Printf("Claiming reward: %v\n", claim)
-		claim.Claimed = true
-		claimsDb.Save(&claim)
-	}
-	return nil
-}
-
-func (s *RewardService) ClaimBonusRewards() error {
-	today := GetDueDateForTime(time.Now())
-	claimsDb, err := InitDb(&RewardClaimEntity{})
-	if err != nil {
-		return err
-	}
-	var todaysClaims []RewardClaimEntity
-	tx := claimsDb.Where("due_date = ?", today).Find(&todaysClaims)
-	if tx.Error != nil {
-		return tx.Error
-	}
-	for _, claim := range todaysClaims {
-		claim.Claimed = true
-		claimsDb.Save(&claim)
 	}
 	return nil
 }

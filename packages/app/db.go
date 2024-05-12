@@ -13,12 +13,19 @@ type CommissionEntity struct {
 	Rewards     string `json:"rewards"`
 }
 
-type HistoryEntity struct {
+type CommissionClaimEntity struct {
 	gorm.Model
-	ID           uint   `json:"id"`
 	CommissionID uint   `json:"commissionId"`
-	Completed    bool   `json:"completed"`
+	Claimed      bool   `json:"claimed"`
 	DueDate      string `json:"dueDate"`
+}
+
+type BonusClaimEntity struct {
+	gorm.Model
+	Claimed      bool   `json:"claimed"`
+	DueDate      string `json:"dueDate"`
+	Rewards      string `json:"rewards"`
+	RewardCounts string `json:"rewardCounts"`
 }
 
 type RewardEntity struct {
@@ -27,14 +34,6 @@ type RewardEntity struct {
 	Type        string `json:"type"`
 	ImageBase64 string `json:"imageBase64"`
 	Count       int    `json:"count"`
-}
-
-type RewardClaimEntity struct {
-	gorm.Model
-	DueDate  string `json:"dueDate"`
-	RewardID uint   `json:"rewardId"`
-	Count    int    `json:"count"`
-	Claimed  bool   `json:"claimed"`
 }
 
 func InitDb[Model comparable](instance *Model) (*gorm.DB, error) {

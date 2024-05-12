@@ -35,6 +35,11 @@ func main() {
 	commissionService := &CommissionService{
 		RewardService: rewardService,
 	}
+	claimsService := &ClaimsService{
+		RewardService:     rewardService,
+		CommissionService: commissionService,
+	}
+	commissionService.ClaimsService = claimsService
 
 	// Create application with options
 	err = wails.Run(&options.App{
@@ -49,6 +54,7 @@ func main() {
 		Bind: []interface{}{
 			rewardService,
 			commissionService,
+			claimsService,
 		},
 		Debug: options.Debug{
 			OpenInspectorOnStartup: app.IsDev(),

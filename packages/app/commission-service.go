@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"strings"
 	"time"
-
-	"gorm.io/gorm"
 )
 
 var ErrDuplicateCommission = errors.New("duplicate commission")
@@ -24,29 +22,10 @@ type Commission struct {
 
 type CommissionService struct {
 	RewardService *RewardService
-}
-
-func (s *CommissionService) MarkTodayAsClaimed() error {
-	dueDate := GetDueDateForTime(time.Now())
-	historyDb, err := InitDb(&HistoryEntity{})
-	if err != nil {
-		return err
-	}
-	var histories []HistoryEntity
-	findHistoryTx := historyDb.Where("due_date = ?", dueDate).Find(&histories)
-	if findHistoryTx.Error != nil {
-		return findHistoryTx.Error
-	}
-	for _, history := range histories {
-		if !history.Completed {
-			return ErrSomeDailiesNotComplete
-		}
-	}
-	return s.RewardService.ClaimBonusRewards()
+	ClaimsService *ClaimsService
 }
 
 func (s *CommissionService) LoadCommissionsForDate(dueDate time.Time) ([]Commission, error) {
-	dueDateStr := GetDueDateForTime(dueDate)
 	fmt.Printf("Loading commissions for date: %v\n", dueDate)
 	var commissions []CommissionEntity
 	commissionDb, err := InitDb(&CommissionEntity{})
@@ -56,29 +35,10 @@ func (s *CommissionService) LoadCommissionsForDate(dueDate time.Time) ([]Commiss
 	}
 	commissionDb.Find(&commissions)
 
-	historyDb, err := InitDb(&HistoryEntity{})
-	if err != nil {
-		fmt.Printf("Error initializing history db: %v\n", err)
-		return nil, err
-	}
-
 	result := make([]Commission, len(commissions))
 
 	for i, commission := range commissions {
-		var history HistoryEntity
-		findHistoryTx := historyDb.Where(
-			"commission_id = ? AND due_date = ?",
-			commission.ID,
-			dueDateStr).First(&history)
-		if findHistoryTx.Error != nil {
-			if findHistoryTx.Error == gorm.ErrRecordNotFound {
-				history = HistoryEntity{
-					Completed: false,
-				}
-			} else {
-				return nil, findHistoryTx.Error
-			}
-		}
+		isCommissionClaimed, err := s.ClaimsService.IsCommissionClaimed(commission.ID, dueDate)
 		rewards, err := s.RewardService.GetRewardsFromRewardsString(commission.Rewards)
 		if err != nil {
 			return nil, err
@@ -87,7 +47,7 @@ func (s *CommissionService) LoadCommissionsForDate(dueDate time.Time) ([]Commiss
 			ID:          commission.ID,
 			Description: commission.Description,
 			Realm:       commission.Realm,
-			Completed:   history.Completed,
+			Completed:   isCommissionClaimed,
 			Rewards:     rewards,
 		}
 	}
@@ -129,41 +89,8 @@ func (s *CommissionService) CreateNewCommission(
 	}, nil
 }
 
-func (s *CommissionService) CompleteCommission(commissionId uint) error {
-	dueDate := GetDueDateForTime(time.Now())
-	historyDb, err := InitDb(&HistoryEntity{})
-	if err != nil {
-		return err
-	}
-	var history HistoryEntity
-	tx := historyDb.Where("commission_id = ? AND due_date = ?", commissionId, dueDate).First(&history)
-	if tx.Error != nil {
-		if tx.Error == gorm.ErrRecordNotFound {
-			historyDb.Create(&HistoryEntity{
-				CommissionID: commissionId,
-				Completed:    true,
-				DueDate:      dueDate,
-			})
-			return nil
-		} else {
-			return tx.Error
-		}
-	}
-
-	history.Completed = !history.Completed
-	tx = historyDb.Save(&history)
-	if tx.Error != nil {
-		return tx.Error
-	}
-	return nil
-}
-
 func (s *CommissionService) DeleteCommission(commissionId int) error {
 	taskDb, err := InitDb(&CommissionEntity{})
-	if err != nil {
-		return err
-	}
-	historyDb, err := InitDb(&HistoryEntity{})
 	if err != nil {
 		return err
 	}
@@ -173,27 +100,6 @@ func (s *CommissionService) DeleteCommission(commissionId int) error {
 		return tx.Error
 	}
 	tx = taskDb.Delete(&task)
-	if tx.Error != nil {
-		return tx.Error
-	}
-	var history HistoryEntity
-	tx = historyDb.Where("commission_id = ?", commissionId).First(&history)
-	if tx.Error != nil {
-		return tx.Error
-	}
-	tx = historyDb.Delete(&history)
-	if tx.Error != nil {
-		return tx.Error
-	}
-	return nil
-}
-
-func (s *CommissionService) DeleteHistories() error {
-	historyDb, err := InitDb(&HistoryEntity{})
-	if err != nil {
-		return err
-	}
-	tx := historyDb.Where("id > ?", 0).Delete(&HistoryEntity{})
 	if tx.Error != nil {
 		return tx.Error
 	}

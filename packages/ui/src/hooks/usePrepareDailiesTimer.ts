@@ -23,7 +23,7 @@ export function usePrepareDailiesTimer() {
     }
     if (hasNotificationPermission) {
       const remainingTasks = (
-        await commissionService.getCommissions(Date.now())
+        await commissionService.getCommissions(new Date().toISOString())
       ).filter((c) => !c.completed);
       if (remainingTasks.length === 0) {
         return;

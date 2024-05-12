@@ -7,7 +7,5 @@ export interface CommissionService {
     realm: string,
     rewards: TaskReward[]
   ): Promise<DailyCommission>;
-  markCommissionAsCompleted(id: number): Promise<void>;
   deleteCommission(id: number): Promise<void>;
-  setupForNewDay(): Promise<void>;
 }

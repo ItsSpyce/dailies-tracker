@@ -73,11 +73,5 @@ export async function rewardService(): Promise<RewardService> {
     deleteReward(id: number) {
       return rewardServiceImpl.DeleteReward(id);
     },
-    async claimDailyRewards() {
-      //
-    },
-    setupForNewDay() {
-      return rewardServiceImpl.SetupRewardsForToday();
-    },
   };
 }

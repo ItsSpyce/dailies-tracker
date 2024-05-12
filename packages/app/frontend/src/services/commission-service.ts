@@ -22,12 +22,8 @@ export async function commissionService(): Promise<CommissionService> {
         rewards
       );
     },
-    async markCommissionAsCompleted(id) {
-      await commissionServiceImpl.CompleteCommission(id);
-    },
     async deleteCommission(id) {
       await commissionServiceImpl.DeleteCommission(id);
     },
-    async setupForNewDay() {},
   };
 }

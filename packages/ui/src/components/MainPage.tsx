@@ -12,8 +12,8 @@ import * as dateFns from 'date-fns';
 import { useModal, useAsyncState } from '../hooks';
 import {
   LanguageSelector,
+  useClaimsService,
   useCommissionService,
-  useRewardService,
 } from '../states';
 import { DailyCommission, TaskReward } from '../types';
 import { AddNewCommissionForm } from './AddNewCommissionForm';
@@ -39,11 +39,13 @@ const today = new Date();
 
 export const MainPage = () => {
   const commissionService = useCommissionService();
-  const rewardService = useRewardService();
+  const claimsService = useClaimsService();
   const lang = useRecoilValue(LanguageSelector);
   const [commissions, setCommissions] = useState<DailyCommission[]>([]);
-  const [isClaimed, setIsClaimed] = useState(false);
-  const [bonusRewards] = useAsyncState(rewardService.setupForNewDay);
+  const [isClaimed, setIsClaimed] = useAsyncState(
+    claimsService.isTodaysBonusClaimed
+  );
+  const [bonusRewards] = useAsyncState(claimsService.setupClaimsForToday);
   const [addNewCommissionModal, toggleCommissionModal] = useModal();
   const [settingsModal] = useModal();
   const [aboutModal] = useModal();
@@ -52,7 +54,7 @@ export const MainPage = () => {
 
   async function markAsClaimed() {
     try {
-      await rewardService.claimDailyRewards();
+      await claimsService.claimDailyBonusForToday();
       setIsClaimed(true);
     } catch (e) {
       console.error(e);
@@ -85,7 +87,7 @@ export const MainPage = () => {
   }
 
   async function onCommissionStatusChanged(completed: boolean, id: number) {
-    await commissionService.markCommissionAsCompleted(id);
+    await claimsService.claimCommissionForToday(id);
     setCommissions((prev) =>
       prev.map((c) => {
         if (c.id === id) {
