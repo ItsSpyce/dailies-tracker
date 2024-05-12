@@ -102,7 +102,7 @@ export const MainPage = () => {
   }
 
   useEffect(() => {
-    commissionService.getCommissions(date.getTime()).then(setCommissions);
+    commissionService.getCommissions(date.toISOString()).then(setCommissions);
   }, [date]);
 
   useEffect(() => {

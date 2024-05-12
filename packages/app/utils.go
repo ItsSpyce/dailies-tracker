@@ -6,13 +6,8 @@ import (
 	"time"
 )
 
-func ConvertDateMsToDueDate(dateMs int64) int64 {
-	dateMsAsDate := time.Unix(dateMs, 0)
-	return time.Date(
-		dateMsAsDate.Year(),
-		dateMsAsDate.Month(),
-		dateMsAsDate.Day()+1,
-		0, 0, 0, 0, time.UTC).Unix()
+func GetDueDateForTime(date time.Time) string {
+	return date.Add(time.Hour * 24).Format("2006-01-02")
 }
 
 func ConvertRewardIdStringToUints(rewardIdString string) ([]uint, error) {

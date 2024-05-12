@@ -22,6 +22,7 @@ var ErrInvalidRewardId = errors.New("invalid reward id")
 var ErrMissingRewardType = errors.New("missing reward type")
 var ErrMissingRewardImage = errors.New("missing imagebase64")
 var ErrMissingRewardCount = errors.New("missing reward count")
+var ErrBonusRewardLengthMismatch = errors.New("bonus reward length mismatch")
 
 func (s *RewardService) GetAvailableRewards() ([]Reward, error) {
 	db, err := InitDb(&RewardEntity{})
@@ -132,60 +133,28 @@ func (s *RewardService) DeleteReward(id uint) error {
 
 const dailyBonusRewardCount = 4
 
+// this isn't working like I wanted. For some reason, the SQLITE query returns
+// more than 4 rewards. Gorm's LIMIT doesn't seem to work
 func (s *RewardService) SetupRewardsForToday() ([]Reward, error) {
-	today := ConvertDateMsToDueDate(time.Now().Unix())
-	claimsDb, err := InitDb(&RewardClaimEntity{})
-	if err != nil {
-		return nil, err
-	}
-	rewardsDb, err := InitDb(&RewardEntity{})
-	if err != nil {
-		return nil, err
-	}
-	var todaysRewardClaims []RewardClaimEntity
-	tx := claimsDb.Where("due_date = ?", today).Find(&todaysRewardClaims)
-	if tx.Error != nil {
-		return nil, tx.Error
-	}
-	if len(todaysRewardClaims) > 0 {
-		result := make([]Reward, len(todaysRewardClaims))
-		for i, claim := range todaysRewardClaims {
-			matchedReward := &RewardEntity{}
-			rewardsDb.First(matchedReward, claim.RewardID)
-			result[i] = Reward{
-				ID:          claim.RewardID,
-				Count:       claim.Count,
-				ImageBase64: matchedReward.ImageBase64,
-				Type:        matchedReward.Type,
-			}
-		}
-		return result, nil
-	}
 	rewardDb, err := InitDb(&RewardEntity{})
 	if err != nil {
 		return nil, err
 	}
-	var randomRewards []RewardEntity
-	randomRewardsTx := rewardDb.Order("RANDOM()").Limit(dailyBonusRewardCount).Find(&randomRewards)
-	if randomRewardsTx.Error != nil {
-		return nil, tx.Error
+	var rewards []RewardEntity
+	getRewardsTx := rewardDb.Limit(dailyBonusRewardCount).Find(&rewards)
+	if getRewardsTx.Error != nil {
+		return nil, getRewardsTx.Error
 	}
 
-	result := make([]Reward, len(randomRewards))
-	for i, reward := range randomRewards {
+	result := make([]Reward, dailyBonusRewardCount)
+	for i, reward := range rewards {
 		if reward.Count == 0 {
 			return nil, ErrRewardNotFound
 		}
-		claim := RewardClaimEntity{
-			DueDate:  today,
-			RewardID: reward.ID,
-			Count:    reward.Count * 5,
-			Claimed:  false,
-		}
-		claimsDb.Create(&claim)
+
 		result[i] = Reward{
-			ID:          claim.RewardID,
-			Count:       claim.Count,
+			ID:          reward.ID,
+			Count:       reward.Count * 5,
 			ImageBase64: reward.ImageBase64,
 			Type:        reward.Type,
 		}
@@ -212,7 +181,7 @@ func (s *RewardService) ClaimCommissionRewards(rewardIds []uint) error {
 }
 
 func (s *RewardService) ClaimBonusRewards() error {
-	today := ConvertDateMsToDueDate(time.Now().Unix())
+	today := GetDueDateForTime(time.Now())
 	claimsDb, err := InitDb(&RewardClaimEntity{})
 	if err != nil {
 		return err

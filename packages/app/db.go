@@ -15,10 +15,10 @@ type CommissionEntity struct {
 
 type HistoryEntity struct {
 	gorm.Model
-	ID           uint  `json:"id"`
-	CommissionID uint  `json:"commissionId"`
-	Completed    bool  `json:"completed"`
-	DueDate      int64 `json:"dueDate"`
+	ID           uint   `json:"id"`
+	CommissionID uint   `json:"commissionId"`
+	Completed    bool   `json:"completed"`
+	DueDate      string `json:"dueDate"`
 }
 
 type RewardEntity struct {
@@ -31,10 +31,10 @@ type RewardEntity struct {
 
 type RewardClaimEntity struct {
 	gorm.Model
-	DueDate  int64 `json:"dueDate"`
-	RewardID uint  `json:"rewardId"`
-	Count    int   `json:"count"`
-	Claimed  bool  `json:"claimed"`
+	DueDate  string `json:"dueDate"`
+	RewardID uint   `json:"rewardId"`
+	Count    int    `json:"count"`
+	Claimed  bool   `json:"claimed"`
 }
 
 func InitDb[Model comparable](instance *Model) (*gorm.DB, error) {

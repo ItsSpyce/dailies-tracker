@@ -27,7 +27,7 @@ type CommissionService struct {
 }
 
 func (s *CommissionService) MarkTodayAsClaimed() error {
-	dueDate := ConvertDateMsToDueDate(time.Now().Unix())
+	dueDate := GetDueDateForTime(time.Now())
 	historyDb, err := InitDb(&HistoryEntity{})
 	if err != nil {
 		return err
@@ -45,8 +45,8 @@ func (s *CommissionService) MarkTodayAsClaimed() error {
 	return s.RewardService.ClaimBonusRewards()
 }
 
-func (s *CommissionService) LoadCommissionsForDate(dateMs int64) ([]Commission, error) {
-	dueDate := ConvertDateMsToDueDate(dateMs)
+func (s *CommissionService) LoadCommissionsForDate(dueDate time.Time) ([]Commission, error) {
+	dueDateStr := GetDueDateForTime(dueDate)
 	fmt.Printf("Loading commissions for date: %v\n", dueDate)
 	var commissions []CommissionEntity
 	commissionDb, err := InitDb(&CommissionEntity{})
@@ -69,7 +69,7 @@ func (s *CommissionService) LoadCommissionsForDate(dateMs int64) ([]Commission, 
 		findHistoryTx := historyDb.Where(
 			"commission_id = ? AND due_date = ?",
 			commission.ID,
-			dueDate).First(&history)
+			dueDateStr).First(&history)
 		if findHistoryTx.Error != nil {
 			if findHistoryTx.Error == gorm.ErrRecordNotFound {
 				history = HistoryEntity{
@@ -130,7 +130,7 @@ func (s *CommissionService) CreateNewCommission(
 }
 
 func (s *CommissionService) CompleteCommission(commissionId uint) error {
-	dueDate := ConvertDateMsToDueDate(time.Now().Unix())
+	dueDate := GetDueDateForTime(time.Now())
 	historyDb, err := InitDb(&HistoryEntity{})
 	if err != nil {
 		return err
@@ -141,13 +141,15 @@ func (s *CommissionService) CompleteCommission(commissionId uint) error {
 		if tx.Error == gorm.ErrRecordNotFound {
 			historyDb.Create(&HistoryEntity{
 				CommissionID: commissionId,
-				Completed:    false,
+				Completed:    true,
 				DueDate:      dueDate,
 			})
+			return nil
 		} else {
 			return tx.Error
 		}
 	}
+
 	history.Completed = !history.Completed
 	tx = historyDb.Save(&history)
 	if tx.Error != nil {
