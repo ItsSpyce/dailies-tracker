@@ -5,10 +5,11 @@ export const StyledApp = styled.main`
   display: grid;
   grid-template-columns: auto 1fr;
   margin: 24px;
-  height: calc(100% - 48px);
+  height: calc(100vh - 48px);
   border: 2px solid ${(props) => props.theme.colors.border};
   border-radius: 8px;
   font-size: 1rem;
+  overflow: hidden;
 `;
 
 export const LeftPanel = styled.div`
@@ -24,7 +25,7 @@ export const RightPanel = styled.div`
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
   display: grid;
-  grid-template-rows: auto 1fr auto 2fr;
+  grid-template-rows: auto 1fr auto 2fr auto;
   row-gap: 1.5rem;
 `;
 
@@ -53,7 +54,7 @@ export const ExtraRewards = styled.div`
   display: flex;
   flex-direction: row;
   flex-flow: wrap;
-  gap: 0.5rem;
+  justify-content: space-evenly;
 `;
 
 export const NotesPanel = styled.div``;

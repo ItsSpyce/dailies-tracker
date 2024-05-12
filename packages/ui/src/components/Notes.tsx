@@ -17,27 +17,31 @@ import {
   thematicBreakPlugin,
 } from '@mdxeditor/editor';
 import '@mdxeditor/editor/style.css';
-import { useLocalStorage } from '../hooks';
+import { useConfirm, useLocalStorage } from '../hooks';
 import { I18n } from './I18n';
+import { Confirm } from './Confirm';
 
-export type NotesProps = {
-  leftContent: string;
-  onChangeLeft: (content: string) => void;
-  rightContent: string;
-  onChangeRight: (content: string) => void;
-};
+export type NotesProps = {};
 
-export const Notes: React.FC<NotesProps> = ({
-  leftContent,
-  rightContent,
-  onChangeLeft,
-  onChangeRight,
-}) => {
+export const Notes: React.FC<NotesProps> = ({}) => {
   const leftRef = useRef<MDXEditorMethods>(null);
   const rightRef = useRef<MDXEditorMethods>(null);
+  const [leftNotes, setLeftNotes] = useLocalStorage('notes-left', '');
+  const [rightNotes, setRightNotes] = useLocalStorage('notes-right', '');
+  const [confirmClear, confirmClearProps] = useConfirm({
+    onConfirm() {
+      setLeftNotes('');
+      setRightNotes('');
+    },
+  });
 
   return (
-    <ContainerWithTail>
+    <ContainerWithTail onClick={confirmClear}>
+      <Confirm
+        title="app.dailies.notes.clear"
+        message="app.dailies.notes.clearConfirm"
+        {...confirmClearProps}
+      />
       <StyledNotes>
         <NotesBackground src="/images/notes-bg.png" />
         <ActualContent>
@@ -54,8 +58,8 @@ export const Notes: React.FC<NotesProps> = ({
                   thematicBreakPlugin(),
                 ]}
                 ref={leftRef}
-                markdown={leftContent}
-                onChange={onChangeLeft}
+                markdown={leftNotes}
+                onChange={setLeftNotes}
               />
             </NotesLeft>
             <NotesRight onClick={(e) => rightRef.current?.focus()}>
@@ -67,8 +71,8 @@ export const Notes: React.FC<NotesProps> = ({
                   thematicBreakPlugin(),
                 ]}
                 ref={rightRef}
-                markdown={rightContent}
-                onChange={onChangeRight}
+                markdown={rightNotes}
+                onChange={setRightNotes}
               />
             </NotesRight>
           </NotesContainer>

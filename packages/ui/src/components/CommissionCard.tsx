@@ -14,27 +14,25 @@ import { ContainerWithTail } from './ContainerWithTail';
 import { Reward } from './Reward';
 import { Confirm } from './Confirm';
 import { useConfirm } from '../hooks';
-import { useCommissionService, useI18n } from '../states';
 
 export type CommissionCardProps = React.HTMLAttributes<HTMLDivElement> & {
   commission: DailyCommission;
   readOnly: boolean;
   onStatusChange?: (completed: boolean) => void;
+  onDeleteRequested?: (id: number) => void;
 };
 
 export const CommissionCard: React.FC<CommissionCardProps> = ({
   commission,
   onStatusChange,
+  onDeleteRequested,
   readOnly,
   ...props
 }) => {
   const [isCompleted, setIsCompleted] = useState(commission.completed);
-  const [commissionService] = useCommissionService();
   const [confirmDelete, confirmDeleteProps] = useConfirm({
-    async onConfirm() {
-      if (commissionService != null) {
-        await commissionService.deleteCommission(commission.id);
-      }
+    onConfirm() {
+      onDeleteRequested?.(commission.id);
     },
   });
 
@@ -74,7 +72,7 @@ export const CommissionCard: React.FC<CommissionCardProps> = ({
         </CommissionCardText>
         <Rewards>
           {commission.rewards.map((reward) => (
-            <Reward {...reward} />
+            <Reward {...reward} key={reward.id} size="md" />
           ))}
         </Rewards>
         <CompletedPanel>

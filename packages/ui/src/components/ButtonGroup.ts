@@ -3,7 +3,7 @@ import { breakpoints } from '../utils';
 
 export const ButtonGroup = styled.div<{ direction?: 'row' | 'column' }>`
   display: flex;
-  justify-content: stretch;
+  justify-content: center;
   flex-direction: column;
   gap: 16px;
 

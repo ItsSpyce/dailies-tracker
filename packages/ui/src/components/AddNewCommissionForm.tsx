@@ -11,7 +11,8 @@ import { Button } from './Button';
 import { ButtonGroup } from './ButtonGroup';
 import { Checkbox } from './Checkbox';
 import { Select } from './Select';
-import { useI18n, useRewardService, useAvailableRealms } from '../states';
+import { useI18n, useRewardService } from '../states';
+import { useLocalStorage } from '../hooks';
 
 export type AddNewCommissionFormProps = {
   onSubmit: (description: string, realm: string, rewards: TaskReward[]) => void;
@@ -22,13 +23,13 @@ export const AddNewCommissionForm: React.FC<AddNewCommissionFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
-  const [rewardService] = useRewardService();
+  const i18n = useI18n();
+  const rewardService = useRewardService();
   const [availableRewards, setAvailableRewards] = useState<TaskReward[]>([]);
   const [description, setDescription] = useState('');
   const [rewards, setRewards] = useState<number[]>([]);
-  const [realms] = useAvailableRealms();
+  const [realms] = useLocalStorage<string[]>('realms', i18n.realms);
   const [realm, setRealm] = useState(realms[0]);
-  const i18n = useI18n();
 
   useEffect(() => {
     rewardService.getAvailableRewards().then((rewards) => {

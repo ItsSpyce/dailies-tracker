@@ -9,5 +9,5 @@ export interface CommissionService {
   ): Promise<DailyCommission>;
   markCommissionAsCompleted(id: number): Promise<void>;
   deleteCommission(id: number): Promise<void>;
-  markTodayAsClaimed(): Promise<void>;
+  setupForNewDay(): Promise<void>;
 }

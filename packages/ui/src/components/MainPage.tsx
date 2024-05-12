@@ -6,20 +6,18 @@ import {
   LeftPanel,
   StyledApp,
   DailiesView,
-  SettingsButton,
 } from './MainPage.styles';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as dateFns from 'date-fns';
-import { useModal, useLocalStorage, useAsyncState } from '../hooks';
+import { useModal, useAsyncState } from '../hooks';
 import {
+  LanguageSelector,
   useCommissionService,
-  useLang,
-  useLangService,
   useRewardService,
 } from '../states';
 import { DailyCommission, TaskReward } from '../types';
 import { AddNewCommissionForm } from './AddNewCommissionForm';
-import { Button, IconButton, TextButton } from './Button';
+import { Button, TextButton } from './Button';
 import { ButtonGroup } from './ButtonGroup';
 import { Checkbox } from './Checkbox';
 import { CommissionCard } from './CommissionCard';
@@ -29,33 +27,36 @@ import { Label } from './Label';
 import { Modal } from './Modal';
 import { Notes } from './Notes';
 import { Reward } from './Reward';
-import { Rarity } from './Reward.styles';
 import { Section } from './Section';
 import { TaskCompletionStatus } from './TaskCompletionStatus';
 import { Title } from './Title';
 import { SettingsAndAboutModal } from './SettingsModal';
-import { Heart } from 'react-feather';
 import { AboutModal } from './AboutModal';
+import { DebugModal } from './DebugModal';
+import { useRecoilValue } from 'recoil';
 
 const today = new Date();
 
 export const MainPage = () => {
-  const [commissionService] = useCommissionService();
-  const [rewardService] = useRewardService();
-  const [lang] = useLang();
+  const commissionService = useCommissionService();
+  const rewardService = useRewardService();
+  const lang = useRecoilValue(LanguageSelector);
   const [commissions, setCommissions] = useState<DailyCommission[]>([]);
   const [isClaimed, setIsClaimed] = useState(false);
-  const [availableRewards] = useAsyncState(rewardService.getAvailableRewards);
+  const [bonusRewards] = useAsyncState(rewardService.setupForNewDay);
   const [addNewCommissionModal, toggleCommissionModal] = useModal();
-  const [settingsModal, toggleSettingsModal] = useModal();
-  const [aboutModal, toggleAboutModal] = useModal();
+  const [settingsModal] = useModal();
+  const [aboutModal] = useModal();
+  const [debugModal] = useModal();
   const [date, setDate] = useState(today);
-  const [leftNotes, setLeftNotes] = useLocalStorage('notes-left', '');
-  const [rightNotes, setRightNotes] = useLocalStorage('notes-right', '');
 
-  function markAsClaimed() {
-    // TODO: store
-    setIsClaimed((prev) => !prev);
+  async function markAsClaimed() {
+    try {
+      await rewardService.claimDailyRewards();
+      setIsClaimed(true);
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   async function onSubmitNewCommission(
@@ -95,9 +96,22 @@ export const MainPage = () => {
     );
   }
 
+  async function onDeleteCommission(id: number) {
+    await commissionService.deleteCommission(id);
+    setCommissions((prev) => prev.filter((c) => c.id !== id));
+  }
+
   useEffect(() => {
     commissionService.getCommissions(date.getTime()).then(setCommissions);
   }, [date]);
+
+  useEffect(() => {
+    console.log('Bonus rewards', bonusRewards);
+  }, [bonusRewards]);
+
+  useEffect(() => {
+    console.log('Commissions', commissions);
+  }, [commissions]);
 
   return (
     <StyledApp>
@@ -115,15 +129,12 @@ export const MainPage = () => {
           align="center"
         >
           <ExtraRewards>
-            {availableRewards &&
-              availableRewards.map((reward) => (
-                <Reward
-                  key={reward.id}
-                  {...reward}
-                  count={reward.count * 5}
-                  size="lg"
-                />
-              ))}
+            {bonusRewards &&
+              bonusRewards
+                .sort((a, b) => b.count - a.count)
+                .map((reward) => (
+                  <Reward key={reward.id} {...reward} size="lg" />
+                ))}
           </ExtraRewards>
         </Section>
         <ButtonGroup direction="column">
@@ -134,9 +145,6 @@ export const MainPage = () => {
             <Checkbox checked={isClaimed} />
             <I18n iden="app.dailies.claimed" />
           </Button>
-          <TextButton noLine {...aboutModal.bind}>
-            About
-          </TextButton>
         </ButtonGroup>
       </LeftPanel>
       <RightPanel>
@@ -168,6 +176,7 @@ export const MainPage = () => {
                 onStatusChange={(status) =>
                   onCommissionStatusChanged(status, commission.id)
                 }
+                onDeleteRequested={onDeleteCommission}
                 readOnly={!dateFns.isSameDay(date, today)}
               />
             ))}
@@ -187,18 +196,24 @@ export const MainPage = () => {
             />
           </Modal.Body>
         </Modal>
-        <Notes
-          leftContent={leftNotes}
-          rightContent={rightNotes}
-          onChangeLeft={setLeftNotes}
-          onChangeRight={setRightNotes}
-        />
+        <Notes />
+        <ButtonGroup>
+          <TextButton noLine {...settingsModal.bind}>
+            <I18n iden="app.settings" />
+          </TextButton>
+          <TextButton noLine {...aboutModal.bind}>
+            <I18n iden="app.about" />
+          </TextButton>
+          {import.meta.env.DEV && (
+            <TextButton noLine {...debugModal.bind}>
+              Debug
+            </TextButton>
+          )}
+        </ButtonGroup>
       </RightPanel>
-      <SettingsButton>
-        <IconButton icon="Settings" {...settingsModal.bind} />
-      </SettingsButton>
       <SettingsAndAboutModal {...settingsModal} />
       <AboutModal {...aboutModal} />
+      <DebugModal {...debugModal} />
     </StyledApp>
   );
 };

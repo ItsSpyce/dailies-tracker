@@ -1,29 +1,22 @@
 import { atom, useRecoilState } from 'recoil';
-import { CommissionService, LangService, RewardService } from '../services';
+import { CommissionService, RewardService } from '../services';
+import { createContext, useContext } from 'react';
 
-export const CommissionServiceAtom = atom<CommissionService>({
-  key: 'CommissionService',
-  default: null!,
-});
-
-export const RewardServiceAtom = atom<RewardService>({
-  key: 'RewardService',
-  default: null!,
-});
-
-export const LangServiceAtom = atom<LangService>({
-  key: 'LangService',
-  default: null!,
+export const CommissionServiceContext = createContext<CommissionService>(null!);
+export const RewardServiceContext = createContext<RewardService>(null!);
+export const DailyCheckAtom = atom<NodeJS.Timeout | null>({
+  key: 'DailyCheckAtom',
+  default: null,
 });
 
 export function useCommissionService() {
-  return useRecoilState(CommissionServiceAtom);
+  return useContext(CommissionServiceContext);
 }
 
 export function useRewardService() {
-  return useRecoilState(RewardServiceAtom);
+  return useContext(RewardServiceContext);
 }
 
-export function useLangService() {
-  return useRecoilState(LangServiceAtom);
+export function useDailyCheckTimer() {
+  return useRecoilState(DailyCheckAtom);
 }

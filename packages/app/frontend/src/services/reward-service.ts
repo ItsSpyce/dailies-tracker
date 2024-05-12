@@ -1,17 +1,5 @@
 import { RewardService, images } from '@dailies-tracker/ui';
-import * as app from '@/internal/main/App';
-
-function getAvailableRewards() {
-  return app.GetAvailableRewards();
-}
-
-function addReward(name: string, cost: number, imageBase64: string) {
-  return app.CreateReward(name, cost, imageBase64);
-}
-
-function deleteReward(id: number) {
-  return app.DeleteReward(id);
-}
+import * as rewardServiceImpl from '@/internal/main/RewardService';
 
 function convertImageUrlToBase64(imageUrl: string): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -32,33 +20,64 @@ function convertImageUrlToBase64(imageUrl: string): Promise<string> {
 
 // TODO: switch this to an atom probably
 export async function rewardService(): Promise<RewardService> {
-  const rewards = await getAvailableRewards();
+  const rewards = await rewardServiceImpl.GetAvailableRewards();
   if (rewards.length === 0) {
-    await addReward(
-      'Primos',
-      400,
-      await convertImageUrlToBase64(images.Primos)
-    );
-    await addReward('ARExp', 200, await convertImageUrlToBase64(images.ARExp));
-    await addReward(
-      'Cleaning Points',
-      150,
-      await convertImageUrlToBase64(images.CleanPoints)
-    );
-    await addReward(
-      'Creative Points',
-      150,
-      await convertImageUrlToBase64(images.CreativePoints)
-    );
-    await addReward(
-      'Health',
-      100,
-      await convertImageUrlToBase64(images.HealthPoints)
-    );
+    const createdRewards = await Promise.all([
+      rewardServiceImpl.CreateReward({
+        type: 'Primos',
+        count: 400,
+        imageBase64: await convertImageUrlToBase64(images.Primos),
+        id: 0,
+      }),
+      rewardServiceImpl.CreateReward({
+        type: 'ARExp',
+        count: 200,
+        imageBase64: await convertImageUrlToBase64(images.ARExp),
+        id: 0,
+      }),
+      rewardServiceImpl.CreateReward({
+        type: 'Cleaning Points',
+        count: 150,
+        imageBase64: await convertImageUrlToBase64(images.CleanPoints),
+        id: 0,
+      }),
+      rewardServiceImpl.CreateReward({
+        type: 'Creative Points',
+        count: 150,
+        imageBase64: await convertImageUrlToBase64(images.CreativePoints),
+        id: 0,
+      }),
+      rewardServiceImpl.CreateReward({
+        type: 'Health',
+        count: 100,
+        imageBase64: await convertImageUrlToBase64(images.HealthPoints),
+        id: 0,
+      }),
+    ]);
+    console.log('Created rewards', createdRewards);
+  } else {
+    console.log('Existing rewards', rewards);
   }
   return {
-    getAvailableRewards,
-    addReward,
-    deleteReward,
+    getAvailableRewards() {
+      return rewardServiceImpl.GetAvailableRewards();
+    },
+    addReward(type: string, count: number, imageBase64: string) {
+      return rewardServiceImpl.CreateReward({
+        type,
+        count,
+        imageBase64,
+        id: 0,
+      });
+    },
+    deleteReward(id: number) {
+      return rewardServiceImpl.DeleteReward(id);
+    },
+    async claimDailyRewards() {
+      //
+    },
+    setupForNewDay() {
+      return rewardServiceImpl.SetupRewardsForToday();
+    },
   };
 }

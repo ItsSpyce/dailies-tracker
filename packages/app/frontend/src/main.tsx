@@ -1,13 +1,10 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import Modal from 'react-modal';
 import App from './App';
 import { deskify } from './deskify';
 import { StyleSheetManager, ThemeProvider } from 'styled-components';
 import { theme, GlobalStyle, AppProvider } from '@dailies-tracker/ui';
-import { commissionService } from './services/commission-service';
-import { rewardService } from './services/reward-service';
-import { langService } from './services/lang-service';
+import * as services from './services';
 
 deskify({
   allowContextMenu: false,
@@ -17,21 +14,25 @@ deskify({
 const container = document.getElementById('root');
 const root = createRoot(container!);
 
-Modal.setAppElement(container!);
+(async () => {
+  const [commissionService, rewardService] = await Promise.all([
+    services.commissionService(),
+    services.rewardService(),
+  ]);
 
-root.render(
-  <React.StrictMode>
-    <StyleSheetManager>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <AppProvider
-          commissionService={commissionService}
-          rewardService={rewardService}
-          langService={langService}
-        >
-          <App />
-        </AppProvider>
-      </ThemeProvider>
-    </StyleSheetManager>
-  </React.StrictMode>
-);
+  root.render(
+    <React.StrictMode>
+      <StyleSheetManager>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <AppProvider
+            commissionService={commissionService}
+            rewardService={rewardService}
+          >
+            <App />
+          </AppProvider>
+        </ThemeProvider>
+      </StyleSheetManager>
+    </React.StrictMode>
+  );
+})();

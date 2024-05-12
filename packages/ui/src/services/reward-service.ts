@@ -8,4 +8,6 @@ export interface RewardService {
     imageBase64: string
   ): Promise<TaskReward>;
   deleteReward(id: number): Promise<void>;
+  claimDailyRewards(): Promise<void>;
+  setupForNewDay(): Promise<TaskReward[]>;
 }

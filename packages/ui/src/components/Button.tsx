@@ -1,4 +1,4 @@
-import { sif } from '../utils/scomp';
+import { childrenCount, sif } from '../utils/scomp';
 import { darken } from 'polished';
 import React from 'react';
 import styled, { useTheme } from 'styled-components';
@@ -21,6 +21,9 @@ export const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
   width: 100%;
   height: fit-content;
   box-sizing: border-box;
+  display: inline-flex;
+  justify-content: space-around;
+  align-items: center;
 
   &:hover {
     background-color: ${(props) =>
@@ -47,12 +50,7 @@ export const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
     background-color: ${(props) => props.theme.colors.background};
   }
 
-  ${sif((props) => React.Children.count(props.children) === 1)} {
-    display: grid;
-    grid-template-columns: 1fr;
-  }
-
-  ${sif((props) => React.Children.count(props.children) === 2)} {
+  ${childrenCount(2)} {
     display: grid;
     grid-template-columns: auto 1fr;
   }

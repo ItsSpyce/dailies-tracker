@@ -2,8 +2,6 @@ package main
 
 import (
 	"embed"
-	"os"
-	"strings"
 
 	"github.com/spf13/viper"
 	"github.com/wailsapp/wails/v2"
@@ -23,15 +21,6 @@ type Config struct {
 
 func main() {
 	var err error
-	// Create an instance of the app structure
-
-	viper.SetConfigFile("config")
-	viper.SetConfigType("json")
-	viper.AddConfigPath(".")
-
-	viper.SetDefault("locale", getLocale())
-	viper.SetDefault("notify", true)
-	viper.SetDefault("checkForUpdates", true)
 
 	var config Config
 
@@ -42,18 +31,24 @@ func main() {
 
 	app := NewApp(&config)
 
+	rewardService := &RewardService{}
+	commissionService := &CommissionService{
+		RewardService: rewardService,
+	}
+
 	// Create application with options
 	err = wails.Run(&options.App{
 		Title:  "Dailies Tracker",
 		Width:  1200,
-		Height: 1024,
+		Height: 1100,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
 		BackgroundColour: &options.RGBA{R: 255, G: 255, B: 255, A: 1},
 		OnStartup:        app.startup,
 		Bind: []interface{}{
-			app,
+			rewardService,
+			commissionService,
 		},
 		Debug: options.Debug{
 			OpenInspectorOnStartup: app.IsDev(),
@@ -65,12 +60,4 @@ func main() {
 	if err != nil {
 		println("An error occured when starting, %v", err)
 	}
-}
-
-func getLocale() string {
-	envVar := os.Getenv("LANG")
-	if len(envVar) == 0 {
-		return "en"
-	}
-	return strings.Split(envVar, ".")[0]
 }

@@ -49,9 +49,13 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
                 isDefaultPrevented: false,
                 persist: true,
                 target: ref?.current,
+                currentTarget: {
+                  ...ref?.current,
+                  checked: !isChecked,
+                },
               };
               // @ts-ignore
-              props.onChange(event);
+              props.onChange?.(event);
             }
           } else {
             setIsChecked((prev) => !prev);

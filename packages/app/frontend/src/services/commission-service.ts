@@ -1,10 +1,12 @@
 import { CommissionService } from '@dailies-tracker/ui';
-import * as app from '@/internal/main/App';
+import * as commissionServiceImpl from '@/internal/main/CommissionService';
 
 export async function commissionService(): Promise<CommissionService> {
   return {
     async getCommissions(unixDate) {
-      const results = await app.LoadCommissions(unixDate);
+      const results = await commissionServiceImpl.LoadCommissionsForDate(
+        unixDate
+      );
       return results.map((result) => ({
         id: result.id,
         description: result.description,
@@ -14,16 +16,18 @@ export async function commissionService(): Promise<CommissionService> {
       }));
     },
     async addCommission(description, realm, rewards) {
-      return await app.CreateTask(description, realm, rewards);
+      return await commissionServiceImpl.CreateNewCommission(
+        description,
+        realm,
+        rewards
+      );
     },
     async markCommissionAsCompleted(id) {
-      await app.CompleteTask(id);
+      await commissionServiceImpl.CompleteCommission(id);
     },
     async deleteCommission(id) {
-      await app.DeleteTask(id);
+      await commissionServiceImpl.DeleteCommission(id);
     },
-    async markTodayAsClaimed() {
-      //
-    },
+    async setupForNewDay() {},
   };
 }

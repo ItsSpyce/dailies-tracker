@@ -1,16 +1,16 @@
 import styled from 'styled-components';
+import { childrenCount } from '../utils';
 
 export const SettingsPanel = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-auto-flow: column;
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
   margin: 1.5rem 0;
 `;
 
 export const FormGroup = styled.div`
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(${childrenCount()}, 1fr);
   align-items: center;
 `;
 
@@ -51,6 +51,12 @@ export const RewardInputFields = styled.div`
   gap: 1rem;
 `;
 
-export const AboutSection = styled.div`
-  text-align: center;
+export const RealmsSection = styled.div``;
+
+export const RealmsTable = styled.table`
+  thead {
+    th {
+      text-align: left;
+    }
+  }
 `;

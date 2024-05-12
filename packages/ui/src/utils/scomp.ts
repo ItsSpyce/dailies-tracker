@@ -1,6 +1,8 @@
 import React from 'react';
 import { DefaultTheme, Interpolation } from 'styled-components';
 
+const NEVER = '&.__never__';
+
 export function sif<T extends object>(
   field: keyof T | ((props: T) => boolean),
   value?: T[keyof T]
@@ -8,14 +10,14 @@ export function sif<T extends object>(
   return (props) => {
     if (typeof field === 'function') {
       if (field(props)) {
-        return `&`;
+        return '&';
       }
-      return `&.__never__`;
+      return NEVER;
     }
     if (props[field] === value) {
       return `&`;
     }
-    return `&.__never__`;
+    return NEVER;
   };
 }
 
@@ -26,14 +28,14 @@ export function sifNot<T extends object>(
   return (props) => {
     if (typeof field === 'function') {
       if (field(props)) {
-        return `&.__never__`;
+        return NEVER;
       }
-      return `&`;
+      return '&';
     }
     if (props[field] === value) {
-      return `&.__never__`;
+      return NEVER;
     }
-    return `&`;
+    return '&';
   };
 }
 
@@ -92,19 +94,18 @@ export function breakpoints<T extends { theme: DefaultTheme }>(
   };
 }
 
-export function childrenCount<T extends React.PropsWithChildren<unknown>>(): (
-  props: T
-) => number;
 export function childrenCount<T extends React.PropsWithChildren<unknown>>(
   count?: number
 ): Interpolation<T> {
   return (props) => {
+    const childrenCount = React.Children.count(props.children);
     if (count == null) {
-      return React.Children.count(props.children);
+      return childrenCount;
     }
-    if (count === React.Children.count(props.children)) {
-      return `&`;
+    if (count === childrenCount) {
+      return '&';
     }
+    return NEVER;
   };
 }
 
@@ -114,12 +115,12 @@ export function areChildrenOf<T extends React.PropsWithChildren<unknown>>(
   return (props) => {
     const children = React.Children.toArray(props.children);
     if (children.length !== types.length) {
-      return undefined;
+      return NEVER;
     }
     for (let i = 0; i < types.length; i++) {
       const child = children[i];
       if (!React.isValidElement(child) || child.type !== types[i]) {
-        return undefined;
+        return NEVER;
       }
     }
     return '&';
@@ -138,6 +139,7 @@ export function hasChildOf<T extends React.PropsWithChildren<unknown>>(
     ) {
       return '&';
     }
+    return NEVER;
   };
 }
 
@@ -153,5 +155,6 @@ export function doesNotHaveChildOf<T extends React.PropsWithChildren<unknown>>(
     ) {
       return '&';
     }
+    return NEVER;
   };
 }
