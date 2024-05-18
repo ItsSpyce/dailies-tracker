@@ -31,8 +31,8 @@ jobs:
 
       - name: Build and Package
         run: |
-          npm install
-          npm run build:macos
+          bun install
+          bun run build:macos
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
@@ -63,8 +63,8 @@ jobs:
 
       - name: Build and Package
         run: |
-          npm install
-          npm run build:windows
+          bun install
+          bun run build:windows
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
@@ -100,8 +100,8 @@ jobs:
 
       - name: Build and Package
         run: |
-          npm install
-          npm run build:linux
+          bun install
+          bun run build:linux
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
