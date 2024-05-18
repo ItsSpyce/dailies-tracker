@@ -7,7 +7,9 @@ export const StyledCommissionCard = styled.div`
   border: 3px solid ${(props) => lighten(0.1, props.theme.colors.border)};
   border-radius: 0.5rem;
   display: grid;
-  grid-template-columns: auto 50% 40% 10%;
+  grid-template-columns: auto auto 1fr auto;
+  gap: 1rem;
+  padding-left: 1rem;
   align-items: center;
   cursor: pointer;
 
@@ -26,7 +28,6 @@ export const CommissionCardText = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 0.5rem;
-  padding: 1.5rem 1rem;
   z-index: 1;
   background-color: ${(props) => rgba(props.theme.colors.background, 0.7)};
 `;
@@ -56,6 +57,7 @@ export const CompletedPanel = styled.div`
   align-items: center;
   border-radius: 0 0.5rem 0.5rem 0;
   height: 100%;
+  width: 60px;
 
   ${CheckboxBox} {
     border-color: ${(props) => lighten(0.1, props.theme.colors.border)};

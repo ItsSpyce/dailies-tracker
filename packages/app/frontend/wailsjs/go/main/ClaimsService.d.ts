@@ -7,6 +7,8 @@ export function ClaimCommissionForToday(arg1:number):Promise<void>;
 
 export function ClaimDailyBonusForToday():Promise<void>;
 
+export function ClearTodaysClaims():Promise<void>;
+
 export function IsCommissionClaimed(arg1:number,arg2:time.Time):Promise<boolean>;
 
 export function IsTodaysBonusClaimed():Promise<boolean>;

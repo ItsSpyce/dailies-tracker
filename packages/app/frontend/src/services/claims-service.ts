@@ -15,5 +15,8 @@ export async function claimsService(): Promise<ClaimsService> {
     isTodaysBonusClaimed() {
       return claimsServiceImpl.IsTodaysBonusClaimed();
     },
+    clearTodaysClaims() {
+      return claimsServiceImpl.ClearTodaysClaims();
+    },
   };
 }

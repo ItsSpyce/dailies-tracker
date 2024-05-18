@@ -1,10 +1,9 @@
 import { StyledClaimRewardsButton } from './ClaimRewardsButton.styles';
 import { Checkbox } from './Checkbox';
 import { useState } from 'react';
-import { useI18n } from '../states';
+import { I18n } from './I18n';
 
 export const ClaimRewardsButton = () => {
-  const [i18n] = useI18n();
   const [isClaimed, setIsClaimed] = useState(false);
 
   return (
@@ -14,7 +13,7 @@ export const ClaimRewardsButton = () => {
       }}
     >
       <Checkbox checked={isClaimed} />
-      {i18n['app.dailies.claimed']}
+      <I18n iden="app.dailies.claimed" />
     </StyledClaimRewardsButton>
   );
 };

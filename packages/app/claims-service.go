@@ -146,6 +146,21 @@ func (s *ClaimsService) IsTodaysBonusClaimed() (bool, error) {
 	return claim.Claimed, nil
 }
 
+func (s *ClaimsService) ClearTodaysClaims() error {
+	dueDate := GetDueDateForTime(time.Now())
+	commissionClaimsDb, err := InitDb(&CommissionClaimEntity{})
+	if err != nil {
+		return err
+	}
+	commissionClaimsDb.Where("due_date = ?", dueDate).Delete(&CommissionClaimEntity{})
+	bonusClaimsDb, err := InitDb(&BonusClaimEntity{})
+	if err != nil {
+		return err
+	}
+	bonusClaimsDb.Where("due_date = ?", dueDate).Delete(&BonusClaimEntity{})
+	return nil
+}
+
 func (s *ClaimsService) getRewardsFromBonusClaim(bonusClaimEntity *BonusClaimEntity) ([]Reward, error) {
 	rewardIds := strings.Split(bonusClaimEntity.Rewards, ",")
 	rewardCounts := strings.Split(bonusClaimEntity.RewardCounts, ",")

@@ -5,4 +5,5 @@ export interface ClaimsService {
   claimCommissionForToday(commissionId: number): Promise<void>;
   claimDailyBonusForToday(): Promise<void>;
   isTodaysBonusClaimed(): Promise<boolean>;
+  clearTodaysClaims(): Promise<void>;
 }

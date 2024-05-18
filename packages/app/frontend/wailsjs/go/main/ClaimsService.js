@@ -10,6 +10,10 @@ export function ClaimDailyBonusForToday() {
   return window['go']['main']['ClaimsService']['ClaimDailyBonusForToday']();
 }
 
+export function ClearTodaysClaims() {
+  return window['go']['main']['ClaimsService']['ClearTodaysClaims']();
+}
+
 export function IsCommissionClaimed(arg1, arg2) {
   return window['go']['main']['ClaimsService']['IsCommissionClaimed'](arg1, arg2);
 }

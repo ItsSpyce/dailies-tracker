@@ -14,6 +14,7 @@ import { ContainerWithTail } from './ContainerWithTail';
 import { Reward } from './Reward';
 import { Confirm } from './Confirm';
 import { useConfirm } from '../hooks';
+import * as images from '../images';
 
 export type CommissionCardProps = React.HTMLAttributes<HTMLDivElement> & {
   commission: DailyCommission;
@@ -37,8 +38,11 @@ export const CommissionCard: React.FC<CommissionCardProps> = ({
   });
 
   useEffect(() => {
-    if (isCompleted !== commission.completed)
+    try {
       setIsCompleted(commission.completed);
+    } catch (e) {
+      console.error('Error setting commission completed status', e);
+    }
   }, [commission]);
 
   useEffect(() => {
@@ -60,10 +64,15 @@ export const CommissionCard: React.FC<CommissionCardProps> = ({
             return;
           }
           if (props.onClick) props.onClick(e);
-          setIsCompleted((prev) => !prev);
+          if (isCompleted) {
+            return;
+          }
+          setIsCompleted(true);
         }}
       >
-        <CommissionMarker></CommissionMarker>
+        <CommissionMarker>
+          <img src={images.CommissionOutline} height="40px" width="40px" />
+        </CommissionMarker>
         <CommissionCardText>
           <CommissionTitle>{commission.description}</CommissionTitle>
           <CommissionRealm>
