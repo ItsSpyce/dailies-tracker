@@ -34,6 +34,7 @@ import { SettingsAndAboutModal } from './SettingsModal';
 import { AboutModal } from './AboutModal';
 import { DebugModal } from './DebugModal';
 import { useRecoilValue } from 'recoil';
+import { Link } from './Link';
 
 const today = new Date();
 
@@ -206,6 +207,9 @@ export const MainPage = () => {
           <TextButton noLine {...aboutModal.bind}>
             <I18n iden="app.about" />
           </TextButton>
+          <Link href="https://github.com/ItsSpyce/dailies-tracker/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=">
+            <TextButton noLine>Report a bug</TextButton>
+          </Link>
           {import.meta.env.DEV && (
             <TextButton noLine {...debugModal.bind}>
               Debug
