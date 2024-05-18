@@ -96,7 +96,7 @@ export const SettingsAndAboutModal: React.FC<NewModalProps> = (props) => {
                   onChange={(e) => changeLanguage(e.currentTarget.value)}
                   label={<I18n iden="app.language" />}
                 >
-                  {availableLanguages.map(([key, value]) => (
+                  {availableLanguages?.map(([key, value]) => (
                     <option key={key} value={key}>
                       {value.languageName}
                     </option>
@@ -209,7 +209,7 @@ export const SettingsAndAboutModal: React.FC<NewModalProps> = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {realms.map((realm) => (
+                  {realms?.map((realm) => (
                     <tr key={realm}>
                       <td width="90%">{realm}</td>
                       <td>

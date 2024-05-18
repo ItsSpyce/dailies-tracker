@@ -108,14 +108,6 @@ export const MainPage = () => {
     commissionService.getCommissions(date.toISOString()).then(setCommissions);
   }, [date]);
 
-  useEffect(() => {
-    console.log('Bonus rewards', bonusRewards);
-  }, [bonusRewards]);
-
-  useEffect(() => {
-    console.log('Commissions', commissions);
-  }, [commissions]);
-
   return (
     <StyledApp>
       <LeftPanel>

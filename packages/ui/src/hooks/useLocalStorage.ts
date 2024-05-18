@@ -7,6 +7,9 @@ export function useLocalStorage<T>(
   const [storedValue, setStoredValue] = useState<T>(() => {
     const item = localStorage.getItem(key);
     try {
+      if (item === 'undefined') {
+        return initialValue;
+      }
       return item ? JSON.parse(item) : initialValue;
     } catch (err) {
       console.error(err);
