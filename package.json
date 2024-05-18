@@ -20,6 +20,7 @@
     "styled-components": "^5.3.11"
   },
   "trustedDependencies": [
-    "es5-ext"
+    "es5-ext",
+    "esbuild"
   ]
 }

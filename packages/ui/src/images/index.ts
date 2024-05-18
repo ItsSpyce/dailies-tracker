@@ -1,4 +1,4 @@
-import ARExp from './ARExp.png';
+import ARExp from './AREXP.png';
 import CleanPoints from './cleanPTS.png';
 import CommissionBeige from './commsicon_beige.png';
 import CommissionOutline from './commsicon_outline.png';
