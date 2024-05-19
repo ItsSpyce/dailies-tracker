@@ -84,7 +84,7 @@ async function notify(message: string) {
     Notification.permission === 'default'
       ? await Notification.requestPermission()
       : Notification.permission;
-  if (permission === 'granted') {
-    new Notification('Dailies tracker', { body: message });
-  }
+  // if (permission === 'granted') {
+  //   new Notification('Dailies tracker', { body: message });
+  // }
 }

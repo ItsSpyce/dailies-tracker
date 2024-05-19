@@ -3,8 +3,16 @@
 import {main} from '../models';
 import {time} from '../models';
 
+export function AddRealm(arg1:string):Promise<void>;
+
+export function AddRealms(arg1:Array<string>):Promise<void>;
+
 export function CreateNewCommission(arg1:string,arg2:string,arg3:Array<main.Reward>):Promise<main.Commission>;
 
 export function DeleteCommission(arg1:number):Promise<void>;
+
+export function DeleteRealm(arg1:string):Promise<void>;
+
+export function GetAvailableRealms():Promise<Array<string>>;
 
 export function LoadCommissionsForDate(arg1:time.Time):Promise<Array<main.Commission>>;

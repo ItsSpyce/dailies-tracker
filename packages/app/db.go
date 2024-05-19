@@ -5,6 +5,11 @@ import (
 	"gorm.io/gorm"
 )
 
+type RealmEntity struct {
+	gorm.Model
+	Name string `json:"name"`
+}
+
 type CommissionEntity struct {
 	gorm.Model
 	ID          uint   `json:"id"`

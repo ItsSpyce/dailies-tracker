@@ -105,3 +105,61 @@ func (s *CommissionService) DeleteCommission(commissionId int) error {
 	}
 	return nil
 }
+
+func (s *CommissionService) GetAvailableRealms() ([]string, error) {
+	realmsDb, err := InitDb(&RealmEntity{})
+	if err != nil {
+		return nil, err
+	}
+	var realms []string
+	tx := realmsDb.Model(&RealmEntity{}).Select("name").Find(&realms)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	return realms, nil
+}
+
+func (s *CommissionService) AddRealm(name string) error {
+	realmsDb, err := InitDb(&RealmEntity{})
+	if err != nil {
+		return err
+	}
+	realm := RealmEntity{Name: name}
+	tx := realmsDb.Create(&realm)
+	if tx.Error != nil {
+		return tx.Error
+	}
+	return nil
+}
+
+func (s *CommissionService) AddRealms(names []string) error {
+	realmsDb, err := InitDb(&RealmEntity{})
+	if err != nil {
+		return err
+	}
+	for _, name := range names {
+		realm := RealmEntity{Name: name}
+		tx := realmsDb.Create(&realm)
+		if tx.Error != nil {
+			return tx.Error
+		}
+	}
+	return nil
+}
+
+func (s *CommissionService) DeleteRealm(name string) error {
+	realmsDb, err := InitDb(&RealmEntity{})
+	if err != nil {
+		return err
+	}
+	var realm RealmEntity
+	tx := realmsDb.Where("name = ?", name).First(&realm)
+	if tx.Error != nil {
+		return tx.Error
+	}
+	tx = realmsDb.Delete(&realm)
+	if tx.Error != nil {
+		return tx.Error
+	}
+	return nil
+}

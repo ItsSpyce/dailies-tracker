@@ -25,5 +25,17 @@ export async function commissionService(): Promise<CommissionService> {
     async deleteCommission(id) {
       await commissionServiceImpl.DeleteCommission(id);
     },
+    getAvailableRealms() {
+      return commissionServiceImpl.GetAvailableRealms();
+    },
+    addRealm(realm) {
+      return commissionServiceImpl.AddRealm(realm);
+    },
+    addRealms(realms) {
+      return commissionServiceImpl.AddRealms(realms);
+    },
+    deleteRealm(realm) {
+      return commissionServiceImpl.DeleteRealm(realm);
+    },
   };
 }

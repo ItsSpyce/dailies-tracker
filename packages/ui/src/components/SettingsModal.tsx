@@ -18,6 +18,7 @@ import {
   ShouldNotifySelector,
   ShowReleasePopupSelector,
   TimeBeforeAlertingSelector,
+  useCommissionService,
   useI18n,
   useRewardService,
 } from '../states';
@@ -56,10 +57,13 @@ export const SettingsAndAboutModal: React.FC<NewModalProps> = (props) => {
   const i18n = useI18n();
   const theme = useTheme();
   const rewardService = useRewardService();
+  const commissionService = useCommissionService();
   const [rewards, setRewards] = useAsyncState(
     rewardService.getAvailableRewards
   );
-  const [realms, setRealms] = useLocalStorage('realms', i18n.realms);
+  const [realms, setRealms] = useAsyncState(
+    commissionService.getAvailableRealms
+  );
   const [newRealmName, setNewRealmName] = useState('');
   const currentLanguageName = availableLanguages.find(
     ([name]) => name === lang
@@ -70,11 +74,13 @@ export const SettingsAndAboutModal: React.FC<NewModalProps> = (props) => {
   }
 
   function addRealm(name: string) {
-    setRealms([...realms, name]);
+    setRealms([...realms!, name]);
+    commissionService.addRealm(name);
   }
 
   function removeRealm(name: string) {
-    setRealms(realms.filter((realm) => realm !== name));
+    setRealms(realms!.filter((realm) => realm !== name));
+    commissionService.deleteRealm(name);
   }
 
   useEffect(() => {
