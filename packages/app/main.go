@@ -2,6 +2,8 @@ package main
 
 import (
 	"embed"
+	"os"
+	"path"
 
 	"github.com/spf13/viper"
 	"github.com/wailsapp/wails/v2"
@@ -17,14 +19,35 @@ type Config struct {
 	Locale          string
 	Notify          bool
 	CheckForUpdates bool
+	MinimizeToTray  bool
 }
 
+const configDirName = "DailiesTracker"
+
 func main() {
-	var err error
+	userConfigDir, err := os.UserConfigDir()
+	if err != nil {
+		println("Error getting user config dir:", err.Error())
+	}
+	appConfigDir := path.Join(userConfigDir, configDirName)
+	if _, err := os.Stat(appConfigDir); os.IsNotExist(err) {
+		err := os.Mkdir(appConfigDir, 0755)
+		if err != nil {
+			println("Error creating app config dir:", err.Error())
+		}
+	}
 
-	var config Config
+	config := Config{
+		Locale:          "en_US",
+		Notify:          true,
+		CheckForUpdates: true,
+		MinimizeToTray:  true,
+	}
 
+	viper.AddConfigPath(appConfigDir)
+	viper.SetConfigName("config")
 	err = viper.Unmarshal(&config)
+	viper.SafeWriteConfig()
 	if err != nil {
 		println("Error reading config:", err.Error())
 	}

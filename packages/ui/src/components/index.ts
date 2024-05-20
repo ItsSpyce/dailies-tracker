@@ -20,3 +20,4 @@ export * from './Text';
 export * from './Title';
 export * from './Label';
 export * from './Link';
+export * from './ErrorBoundary';

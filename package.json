@@ -2,6 +2,7 @@
   "name": "dailies-tracker",
   "private": true,
   "workspaces": [
+    "packages/electron",
     "packages/app/frontend",
     "packages/ui",
     "packages/i18n"
@@ -14,10 +15,14 @@
     "build:linux": "cd packages/app && wails build -platform linux"
   },
   "dependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
     "cross-env": "^7.0.3",
+    "electron-settings": "^4.0.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "styled-components": "^5.3.11"
+    "reflect-metadata": "^0.2.2",
+    "styled-components": "^5.3.11",
+    "vite-plugin-tsconfig-paths": "^1.4.1"
   },
   "trustedDependencies": [
     "es5-ext",

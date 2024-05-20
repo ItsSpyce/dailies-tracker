@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dailies Tracker</title>
+    <style>
+      @font-face {
+        font-family: 'ZH';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        font-smooth: antialiased;
+        src: url('/fonts/zh-cn.ttf') format('truetype');
+      }
+
+      #error-fallback {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 2rem;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+          Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
+          sans-serif;
+        background-color: rgb(34, 34, 34);
+        color: white;
+        overflow-y: auto;
+      }
+
+      .btn-group {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+      }
+
+      #error-fallback button {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 0.25rem;
+        background-color: rgb(0, 122, 255);
+        color: white;
+        cursor: pointer;
+      }
+
+      #error-fallback pre {
+        background-color: rgb(0, 0, 0);
+        color: white;
+        padding: 1rem;
+        border-radius: 0.25rem;
+        overflow: auto;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+    </style>
+    <script>
+      const errors = [];
+      window.addEventListener('error', (event) => {
+        errors.push(event.error.stack || event.error);
+      });
+
+      function copyErrorsToClipboard() {
+        const errorsAsJson = JSON.stringify(errors, null, 2);
+        navigator.clipboard.writeText(errorsAsJson);
+      }
+
+      function showErrors() {
+        const errorsElement = document.getElementById('errors');
+        errorsElement.textContent = errors.join('\n');
+        errorsElement.style.display = 'block';
+      }
+
+      function openBugReport() {
+        const url =
+          'https://github.com/ItsSpyce/dailies-tracker/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=';
+        window.open(url, '_blank');
+      }
+    </script>
+  </head>
+  <body>
+    <div id="error-fallback" hidden="hidden">
+      <h1>An error occurred.</h1>
+      <p>
+        To prevent you from not being able to do anything, a few tools have been
+        provided on this page.
+      </p>
+      <div class="btn-group">
+        <button onclick="window.location.reload()">Reload</button>
+        <button onclick="localStorage.clear(); window.location.reload()">
+          Clear Cache
+        </button>
+      </div>
+      <p>
+        To make reporting your issue easier, a button has been provided below
+        that will copy your messages to the clipboard.
+      </p>
+      <div class="btn-group">
+        <button onclick="copyErrorsToClipboard()">Copy Errors</button>
+        <button onclick="showErrors()">Show errors below</button>
+        <button onclick="openBugReport()">Create a bug report</button>
+      </div>
+      <pre id="errors" style="display: none"></pre>
+    </div>
+    <div id="root"></div>
+    <script type="module" src="/src/renderer.ts"></script>
+    <script>
+      setTimeout(() => {
+        const root = document.getElementById('root');
+        if (root.childElementCount === 0) {
+          document.getElementById('error-fallback').removeAttribute('hidden');
+        }
+      }, 1000);
+    </script>
+  </body>
+</html>
