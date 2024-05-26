@@ -54,7 +54,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@dailies-tracker/i18n": "workspace:*",
+    "@dailies-tracker/i18n": "*",
     "recoil": "^0.7.7"
   }
 }

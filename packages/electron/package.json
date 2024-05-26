@@ -1,5 +1,5 @@
 {
-  "name": "electron",
+  "name": "@dailies-tracker/electron",
   "productName": "electron",
   "version": "1.0.0",
   "description": "My Electron application description",
@@ -9,7 +9,10 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx ."
+    "lint": "eslint --ext .ts,.tsx .",
+    "test": "run-p test:*",
+    "test:renderer": "vitest --config vitest.renderer.config.ts",
+    "test:main": "vitest --config vitest.main.config.ts"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.4.0",
@@ -38,11 +41,15 @@
   "license": "MIT",
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1",
-    "@dailies-tracker/ui": "workspace:*",
-    "@dailies-tracker/i18n": "workspace:*"
+    "@dailies-tracker/ui": "*",
+    "@dailies-tracker/i18n": "*",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.3",
+    "sqlite3": "^5.1.7"
   },
   "trustedDependencies": [
     "electron",
-    "electron-winstaller"
+    "electron-winstaller",
+    "sqlite3"
   ]
 }

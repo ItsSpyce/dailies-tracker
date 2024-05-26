@@ -1,7 +1,13 @@
-import { Route, Controller } from '../router';
+import { Route, Controller } from '../main/router';
 
 @Controller('commissionService')
 export class CommissionService {
+  static instance: CommissionService;
+
+  constructor() {
+    CommissionService.instance = this;
+  }
+
   @Route()
   getCommissions(date: string) {
     return [];

@@ -55,6 +55,8 @@ declare global {
       updateReward(reward: import('./types').Reward): Promise<void>;
     };
   }
+
+  declare type Nullable<T> = T | null;
 }
 
 declare module 'vite' {

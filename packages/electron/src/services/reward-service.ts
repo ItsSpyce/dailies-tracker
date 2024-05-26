@@ -1,14 +1,24 @@
-import { Route, Controller } from '../router';
+import { RewardEntity, sql } from '../main/db';
+import { Route, Controller } from '../main/router';
+import { TaskReward } from '@dailies-tracker/ui';
 
 @Controller('rewardService')
 export class RewardService {
+  static instance: RewardService;
+
+  constructor() {
+    RewardService.instance = this;
+  }
+
   @Route()
-  getAvailableRewards() {
+  async getAvailableRewards() {
+    const rewards =
+      await sql`SELECT * FROM ${RewardEntity} WHERE ${RewardEntity.id} > 0`;
     return [];
   }
 
   @Route()
-  addReward(description: string, realm: string, rewards: any[]) {
+  async addReward(description: string, realm: string, imageBase64: string) {
     return {};
   }
 
@@ -23,13 +33,13 @@ export class RewardService {
   }
 
   @Route()
-  addRealm(realm: string) {
-    return;
+  async addRealm(name: string) {
+    return {};
   }
 
   @Route()
-  addRealms(realms: string[]) {
-    return;
+  async addRealms(names: string[]) {
+    return [];
   }
 
   @Route()
