@@ -1,4 +1,4 @@
-import { Route, Controller } from '../main/router';
+import { Route, Controller } from '../router';
 
 @Controller('commissionService')
 export class CommissionService {

@@ -1,4 +1,4 @@
-import { Route, Controller } from '../main/router';
+import { Route, Controller } from '../router';
 import * as dateFns from 'date-fns';
 
 @Controller('claimsService')

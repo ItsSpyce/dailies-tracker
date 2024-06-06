@@ -12,7 +12,7 @@ export function Controller(name: string) {
   return (constructor: new () => any) => {
     let instance = new constructor();
     for (const [routeName, methodName] of currentControllerRoutes) {
-      ipcMain.handle(
+      ipcMain?.handle(
         `${name ?? constructor.name}:${routeName}`,
         async (_, ...args) => {
           const result = instance[methodName].apply(instance, args);

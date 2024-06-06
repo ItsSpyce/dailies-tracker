@@ -1,10 +1,25 @@
-import { column, createBaseSchema, table } from './table-builder';
+import path from 'path';
+import * as sqlite3 from 'sqlite3';
+import { appStorage } from '../consts';
+import { initializeDatabase } from './factory';
 
-const BaseEntity = createBaseSchema({
+const db = new sqlite3.Database(
+  path.join(appStorage, 'database.sqlite'),
+  sqlite3.OPEN_CREATE | sqlite3.OPEN_READWRITE,
+  (err) => {
+    if (err != null) {
+      console.error(err);
+      throw err;
+    }
+  }
+);
+const { base, table, column } = initializeDatabase(db);
+
+const BaseEntity = base({
   id: column.id(),
-  createdAt: column.date('created_at').default('datetime("now")'),
-  updatedAt: column.date('updated_at').nullable(),
-  deletedAt: column.date('deleted_at').nullable(),
+  createdAt: column.createdAt(),
+  updatedAt: column.updatedAt(),
+  deletedAt: column.deletedAt(),
 }).mapsTo((entity) => ({
   id: entity.id,
   createdAt: entity.createdAt,
@@ -13,60 +28,60 @@ const BaseEntity = createBaseSchema({
 }));
 
 export const RealmEntity = table('realm_entities', {
-  name: column.text('name').unique(),
+  name: column.text().unique(),
 })
   .mapsTo((entity) => ({
     name: entity.name,
   }))
   .extends(BaseEntity)
-  .seal();
+  .entity();
 
 export const RewardEntity = table('reward_entities', {
-  type: column.text('type'),
-  count: column.int('count').default(0),
-  imageBase64: column.text('image_base64'),
+  type: column.text(),
+  count: column.int().default(0),
+  imageBase64: column.text(),
 })
+  .extends(BaseEntity)
   .mapsTo((entity) => ({
     type: entity.type,
     count: entity.count,
     imageBase64: entity.imageBase64,
   }))
-  .extends(BaseEntity)
-  .seal();
+  .entity();
 
 export const CommissionEntity = table('commission_entities', {
-  description: column.text('description'),
-  realm: column.text('realm'),
-  rewards: column.text('rewards'),
+  description: column.text(),
+  realm: column.text(),
+  rewards: column.text(),
 })
+  .extends(BaseEntity)
   .mapsTo((entity) => ({
     description: entity.description,
     realm: entity.realm,
     rewards: entity.rewards,
   }))
-  .extends(BaseEntity)
-  .seal();
+  .entity();
 
 export const CommissionClaimEntity = table('commission_claim_entities', {
-  commissionId: column.int('commission_id'),
-  claimed: column.boolean('claimed'),
-  dueDate: column.date('due_date'),
+  commissionId: column.int(),
+  claimed: column.boolean(),
+  dueDate: column.date(),
 })
+  .extends(BaseEntity)
   .mapsTo((entity) => ({
     commissionId: entity.commissionId,
     claimed: entity.claimed,
     dueDate: entity.dueDate,
   }))
-  .extends(BaseEntity)
-  .seal();
+  .entity();
 
 export const BonusClaimEntity = table('bonus_claim_entities', {
-  rewards: column.text('rewards'),
-  rewardCounts: column.text('reward_counts'),
+  rewards: column.text(),
+  rewardCounts: column.text(),
 })
+  .extends(BaseEntity)
   .mapsTo((entity) => ({
     rewards: entity.rewards,
     rewardCounts: entity.rewardCounts,
   }))
-  .extends(BaseEntity)
-  .seal();
+  .entity();

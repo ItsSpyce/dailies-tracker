@@ -1,2 +1,3 @@
 export * from './entities';
-export * from './connection';
+export * from './factory';
+export * from './table';
