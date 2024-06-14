@@ -37,32 +37,6 @@ const createLogMessage = (type: keyof LoggerEventMap, ...args: any[]) =>
 
 const logsDir = path.join(appStorage, 'logs');
 
-export class RealmEntity {
-  name!: string;
-}
-
-export class CommissionEntity {
-  description!: string;
-  completed!: boolean;
-}
-
-export class CommissionClaimEntity {
-  date!: Date;
-  commissionId!: number;
-}
-
-export class BonusClaimEntity {
-  date!: Date;
-  rewards!: string;
-  rewardCounts!: string;
-}
-
-export class RewardEntity {
-  type!: string;
-  imageBase64!: string;
-  count!: number;
-}
-
 export function setupLogger(
   init: LoggerInit = { includeEvents: ['log', 'info', 'error'] }
 ): () => Promise<void> {

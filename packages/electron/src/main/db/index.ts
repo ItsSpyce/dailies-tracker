@@ -1,3 +1,3 @@
 export * from './entities';
-export * from './factory';
+export * from './connection';
 export * from './table';

@@ -1,9 +1,9 @@
 import { app, BrowserWindow } from 'electron';
 import path from 'path';
 import fs from 'fs';
-import { setupDb } from './db';
 import { setupLogger } from './logger';
 import { appStorage } from './consts';
+import { initializeConnection } from './db';
 import 'reflect-metadata';
 import './services/commission-service';
 import './services/claims-service';
@@ -19,16 +19,9 @@ if (!fs.existsSync(appStorage)) {
 }
 
 const closeLogger = setupLogger({ redirectToFile: true, includeEvents: 'all' });
+initializeConnection(path.join(appStorage, 'database.sqlite'));
 
 const createWindow = async () => {
-  try {
-    await setupDb();
-  } catch (err) {
-    console.error('Failed to setup database', err);
-    app.quit();
-    return;
-  }
-
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 1200,

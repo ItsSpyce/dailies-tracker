@@ -1,3 +1,4 @@
+import { RealmEntity } from '../db';
 import { Route, Controller } from '../router';
 
 @Controller('commissionService')
@@ -24,22 +25,22 @@ export class CommissionService {
   }
 
   @Route()
-  getAvailableRealms() {
-    return [];
+  async getAvailableRealms() {
+    return RealmEntity.select('*');
   }
 
   @Route()
-  addRealm(realm: string) {
-    return;
+  async addRealm(name: string) {
+    return RealmEntity.insert({ name });
   }
 
   @Route()
-  addRealms(realms: string[]) {
-    return;
+  async addRealms(names: string[]) {
+    return RealmEntity.batchInsert(names.map((name) => ({ name })));
   }
 
   @Route()
-  deleteRealm(realm: string) {
-    return;
+  async deleteRealm(name: string) {
+    return RealmEntity.delete({ name });
   }
 }
