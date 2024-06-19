@@ -11,7 +11,7 @@ export class RewardService {
 
   @Route()
   async getAvailableRewards() {
-    return RewardEntity.select('*');
+    return RewardEntity.select({ deletedAt: null });
   }
 
   @Route()
@@ -21,6 +21,6 @@ export class RewardService {
 
   @Route()
   async deleteReward(id: number) {
-    return RewardEntity.delete(id);
+    return RewardEntity.delete({ id });
   }
 }

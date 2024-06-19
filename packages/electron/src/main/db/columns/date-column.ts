@@ -20,4 +20,8 @@ export class DateColumn<N extends string> extends Column<
   }
 
   _validate(value: Date, state: ValidationState<N>) {}
+
+  defaultNow(): this {
+    return this.default(() => new Date());
+  }
 }

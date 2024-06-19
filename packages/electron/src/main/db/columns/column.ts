@@ -65,6 +65,7 @@ export abstract class Column<
   _isUnique: boolean = false;
   _isAutoIncrement: boolean = false;
   _default: T | (() => T) | null = null;
+  _transform: Function | null = null;
 
   abstract get _columnType(): string;
 
@@ -86,6 +87,19 @@ export abstract class Column<
   default(value: typeof this._default): this {
     this._default = value;
     return this;
+  }
+
+  transform<T2>(transform: (value: T) => T2): Column<T2, N, E> {
+    this._transform = transform;
+    return this as any;
+  }
+
+  readValue(value: any): T {
+    const read = this._readValue(value);
+    if (this._transform) {
+      return this._transform(read);
+    }
+    return read;
   }
 
   parse(value: any, state: ValidationState<N>): T {
@@ -124,11 +138,13 @@ export class NullableColumn<
   InferColumnName<TColumn>,
   InferColumnErrorDefinitions<TColumn>
 > {
+  _isNullable = true;
   get _columnType(): string {
     return this._column._columnType;
   }
   constructor(private _column: TColumn) {
     super(_column._name);
+    _column._isNullable = true;
   }
 
   _readValue(value: any): InferColumnType<TColumn> {

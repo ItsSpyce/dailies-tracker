@@ -115,13 +115,9 @@ export function setupLogger(
   console.log('Logger initialized with', init);
 
   return () =>
-    new Promise((resolve, reject) => {
-      logFileStream?.end((err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
+    new Promise((resolve) => {
+      logFileStream?.end('Closing logger', () => {
+        resolve();
       });
     });
 }

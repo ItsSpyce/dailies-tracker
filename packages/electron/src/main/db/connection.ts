@@ -2,8 +2,17 @@ import { EventEmitter } from 'events';
 import sqlite3 from 'sqlite3';
 import * as columns from './columns';
 import { Table } from './table';
+import { parameterizeScript } from './utils';
 
 type Enum = Record<string | symbol, string | number>;
+
+type QueryableTable<T extends Table<any>> = T extends Table<infer U>
+  ? T & {
+      [K in keyof U]: U[K] extends columns.Column<any, string, any>
+        ? U[K]
+        : never;
+    }
+  : never;
 
 type Columns = {
   text<TName extends string>(name?: TName): columns.TextColumn<TName>;
@@ -20,21 +29,21 @@ type Columns = {
 
 const tableFields = {
   id: new columns.IntColumn('id').primaryKey(),
-  createdAt: new columns.DateColumn('created_at').default(() => new Date()),
+  createdAt: new columns.DateColumn('created_at').defaultNow(),
   updatedAt: new columns.DateColumn('updated_at').nullable(),
   deletedAt: new columns.DateColumn('deleted_at').nullable(),
 };
 
 export interface Connection {
   initializeConnection(filename: string): void;
-  execute(sql: string | TemplateStringsArray, ...values: any[]): Promise<any[]>;
+  execute(sql: string, values: any[]): Promise<any[]>;
   table<
     T extends Record<string, columns.Column<any, string, any>>,
     TName extends string = string
   >(
     name: TName,
     columns: T
-  ): Table<typeof tableFields & T>;
+  ): QueryableTable<Table<typeof tableFields & T>>;
   get column(): Columns;
 }
 
@@ -94,33 +103,53 @@ class LazyConnection
 
   constructor() {
     super();
+    this.on('error', (err) => {
+      console.error(err);
+    });
+    this.on('ready', async () => {
+      for (const [name, table] of this._tables) {
+        // if the table doesn't exist, make it
+        const columnDeclarations: string[] = [];
+        for (const [_, column] of Object.entries(table._schema)) {
+          if (column instanceof columns.Column) {
+            columnDeclarations.push(
+              [
+                column._columnName,
+                column._columnType,
+                column._isNullable ? 'NULL' : false,
+                column._isPrimaryKey ? 'PRIMARY KEY' : false,
+                column._isUnique ? 'UNIQUE' : false,
+              ]
+                .filter(Boolean)
+                .join(' ')
+            );
+          }
+        }
+        const script = `CREATE TABLE IF NOT EXISTS ${name} (${columnDeclarations.join(
+          ', '
+        )})`;
+        await this.execute(script, []);
+      }
+    });
+    this.on('tablesInitialized', () => {});
   }
 
   initializeConnection = (filename: string) => {
-    this._db = new sqlite3.Database(
-      filename,
-      sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
-      (err) => {
-        if (err) {
-          this.emit('error', err);
-        } else {
-          this.emit('ready');
+    try {
+      this._db = new sqlite3.Database(
+        filename,
+        sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
+        (err) => {
+          if (err) {
+            this.emit('error', err);
+          } else {
+            this.emit('ready');
+          }
         }
-      }
-    );
-    this._db.on('error', (err) => {
+      );
+    } catch (err) {
       this.emit('error', err);
-    });
-    this.on('ready', async () => {
-      // setup tables
-      const DbTable = this.table('db', {
-        version: this.column.int(),
-        columnName: this.column.text().oneOf(Object.keys(this._tables)),
-      });
-    });
-    this.on('tablesInitialized', () => {
-      // tables are setup, ready to go
-    });
+    }
   };
 
   table = <
@@ -129,7 +158,7 @@ class LazyConnection
   >(
     name: TName,
     columns: T
-  ): Table<typeof tableFields & T> => {
+  ): QueryableTable<Table<typeof tableFields & T>> => {
     const table = new Table(
       name,
       {
@@ -139,21 +168,18 @@ class LazyConnection
       this
     );
     this._tables.set(name, table);
-    return table;
+    return {
+      ...table,
+      ...(tableFields as any),
+      ...(columns as any),
+    };
   };
 
-  execute = (
-    sql: string | TemplateStringsArray,
-    ...values: any[]
-  ): Promise<any[]> => {
-    // convert sql to sql script with params
-    if (Array.isArray(sql)) {
-      sql = sql.reduce((acc, str, i) => acc + str + '?', '');
-    }
-    console.log(sql);
+  execute = (script: string, args: any[]): Promise<any[]> => {
     return this._queue.add(async () => {
       return new Promise((resolve, reject) => {
-        this._db.all(sql as string satisfies string, values, (err, rows) => {
+        console.debug(script, args);
+        this._db.all(script, args, (err, rows) => {
           if (err) {
             reject(err);
             this.emit('error', err);
@@ -166,18 +192,7 @@ class LazyConnection
   };
 }
 
-function parseSqlArgument(arg: any): string {
-  if (arg instanceof Table) {
-    return arg._name;
-  } else if (arg instanceof columns.Column) {
-    return arg._columnName;
-  } else {
-    return JSON.stringify(arg);
-  }
-}
-
 export function connect(): Connection {
   const connection = new LazyConnection();
-
   return connection;
 }

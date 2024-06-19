@@ -1,7 +1,6 @@
 import { type Column, type InferColumnType, ValidationState } from './columns';
-import type { Connection } from './connection';
-import { getIdColumnName } from './utils';
 import { snakeCase } from '../utils/change-case';
+import type { Connection } from './connection';
 
 export type SchemaDefinitionMap = Record<string, Column<any, string, any>>;
 export type SchemaSelectorMap<T extends SchemaDefinitionMap> = {
@@ -10,178 +9,201 @@ export type SchemaSelectorMap<T extends SchemaDefinitionMap> = {
 type ConvertSchemaToType<T> = {
   [key in keyof T]: InferColumnType<T[key]>;
 };
-type WhereStatement<T extends SchemaDefinitionMap> =
-  | {
-      [key in keyof T]?: InferColumnType<T[key]>;
-    }
-  | number;
-
-const buildWhereStatement = <T extends SchemaDefinitionMap>(
-  schema: T,
-  where?: WhereStatement<T>
-) => {
-  if (typeof where === 'number') {
-    where = { [getIdColumnName(schema)]: where } as any;
-  }
-  where = {
-    deleted_at: null,
-    ...(where as any),
-  };
-  return (
-    'WHERE ' +
-    Object.entries(where)
-      .map(
-        ([key, value]) =>
-          `${key} = ${typeof value === 'string' ? `'${value}'` : value}`
-      )
-      .join(' AND ')
-  );
+type WhereStatement<T extends SchemaDefinitionMap> = {
+  [key in keyof T]?:
+    | {
+        eq: InferColumnType<T[key]>;
+        ne: InferColumnType<T[key]>;
+        gt: InferColumnType<T[key]>;
+        gte: InferColumnType<T[key]>;
+        lt: InferColumnType<T[key]>;
+        lte: InferColumnType<T[key]>;
+        like: InferColumnType<T[key]>;
+        in: InferColumnType<T[key]>[];
+        notIn: InferColumnType<T[key]>[];
+      }
+    | InferColumnType<T[key]>
+    | null;
 };
 
 export class Table<T extends Record<string, Column<any, string, any>>> {
-  private _columnNameMap: Record<keyof T, string> = Object.create(null);
-
-  get columns(): { [K in keyof T]: string } {
-    return;
-  }
+  private _columnNameToObjectField = new Map<string, string>();
+  private _objectFieldToColumnName = new Map<string, string>();
 
   constructor(
-    public _name: string,
+    public _tableName: string,
     public _schema: T,
     private _connection: Connection
   ) {
     for (const [key, value] of Object.entries(_schema)) {
-      if (value._columnName == null) {
+      if (!value._columnName) {
         value._columnName = snakeCase(key);
       }
-      // @ts-ignore
-      this._columnNameMap[key] = value._columnName;
+      this._columnNameToObjectField.set(value._columnName, key);
+      this._objectFieldToColumnName.set(key, value._columnName);
     }
   }
-  parse = (
-    from: Partial<ConvertSchemaToType<T>>
-  ): { [K in keyof T]: InferColumnType<T[K]> } => {
-    let result = Object.create(null);
-    const self = this;
-    const state = new ValidationState(this._name);
-    for (const [columnName, column] of Object.entries(self._schema)) {
-      const key = self._columnNameMap[columnName] ?? columnName;
-      const value = from[key];
-      const converted = column.parse(value, state);
-      result[key] = converted;
-    }
-    if (state.hasErrors()) {
-      throw state.errors[0];
-    }
-    return result;
-  };
 
-  private _parseColumns = (
-    data: any
-  ): { [K in keyof T]: InferColumnType<T[K]> } => {
-    if (data == null) {
-      return null;
-    }
+  private _convertRowToObject(
+    row: Record<string, any>
+  ): ConvertSchemaToType<T> {
     const result = Object.create(null);
-    const state = new ValidationState(this._name);
-    for (const [key, value] of Object.entries(data)) {
-      const objectFieldName = this._columnNameMap[key];
-      if (objectFieldName != null) {
-        result[objectFieldName] = this._schema[objectFieldName].parse(
-          value,
-          state
-        );
+    for (const [key, value] of Object.entries(row)) {
+      const objectField = this._columnNameToObjectField.get(key);
+      if (objectField) {
+        result[objectField] = this._schema[objectField].readValue(value);
       }
     }
     return result;
-  };
+  }
 
   select = async (
-    fields: (keyof T)[] | '*',
     where?: WhereStatement<T>
-  ): Promise<{ [K in keyof T]: InferColumnType<T[K]> }[]> => {
-    const self = this;
-    const selectFields =
-      fields === '*' ? '*' : fields.map((field) => this._schema[field]);
-    const result = await self._connection
-      .execute`SELECT ${selectFields} FROM ${self} ${buildWhereStatement(
-      this._schema,
-      where
-    )}`;
-    return result.map(self._parseColumns);
+  ): Promise<ConvertSchemaToType<T>[]> => {
+    let script = `SELECT * FROM ${this._tableName}`;
+    if (where) {
+      script += ` WHERE ${Object.entries(where)
+        .map(([key, value]) => {
+          if (value === null) {
+            return `${this._objectFieldToColumnName.get(key)} IS NULL`;
+          }
+          if (typeof value === 'object') {
+            const entries = Object.entries(value);
+            if (entries.length === 1) {
+              const [operator, operand] = entries[0] as [string, any];
+              if (operator === 'like') {
+                return `${this._objectFieldToColumnName.get(key)} LIKE ?`;
+              }
+              if (operator === 'in') {
+                return `${this._objectFieldToColumnName.get(key)} IN (${operand
+                  .map(() => '?')
+                  .join(', ')})`;
+              }
+              if (operator === 'notIn') {
+                return `${this._objectFieldToColumnName.get(
+                  key
+                )} NOT IN (${operand.map(() => '?').join(', ')})`;
+              }
+              return `${this._objectFieldToColumnName.get(key)} ${operator} ?`;
+            }
+          }
+          return `${this._objectFieldToColumnName.get(key)} = ?`;
+        })
+        .join(' AND ')}`;
+    }
+    const result = await this._connection.execute(script, []);
+    return result.map((row) => this._convertRowToObject(row));
   };
 
   insert = async (
-    value: Partial<ConvertSchemaToType<T>>
-  ): Promise<{ [K in keyof T]: InferColumnType<T[K]> }> => {
-    const self = this;
-    const columns = Object.keys(value)
-      .map((x) => mapNamesToColumnNames([x], self._schema)[0])
-      .join(', ');
-    const values = Object.values(value)
-      .map((v) => JSON.stringify(v))
-      .join(', ');
-    const [item] = await self._connection
-      .execute`INSERT INTO ${this._name} (${columns}) VALUES (${values})`;
-    return self._parseColumns(item);
+    values: Partial<ConvertSchemaToType<T>>
+  ): Promise<ConvertSchemaToType<T>> => {
+    const script = `
+      INSERT INTO ${this._tableName} (${Object.keys(values)
+      .map((key) => this._objectFieldToColumnName.get(key))
+      .join(', ')})
+      VALUES (${Object.keys(values)
+        .map(() => '?')
+        .join(', ')})
+    `;
+    const validationState = new ValidationState(this._tableName);
+    const parameterizedValue = Object.entries(values).map(([key, value]) => {
+      this._schema[key]._validate(value, validationState);
+      return this._schema[key]._writeValue(value);
+    });
+    if (validationState.hasErrors()) {
+      throw validationState.errors[0];
+    }
+    const result = await this._connection.execute(script, parameterizedValue);
+    return result.map((row) => this._convertRowToObject(row))[0];
   };
 
-  batchInsert = async (
+  bulkInsert = async (
     values: Partial<ConvertSchemaToType<T>>[]
-  ): Promise<{ [K in keyof T]: InferColumnType<T[K]> }[]> => {
-    const self = this;
-    const insertStatements = new Array<string>();
+  ): Promise<ConvertSchemaToType<T>[]> => {
+    let script = '';
     for (const value of values) {
-      const columns = Object.keys(value)
-        .map((x) => mapNamesToColumnNames([x], self._schema)[0])
-        .join(', ');
-      const values = Object.values(value)
-        .map((v) => JSON.stringify(v))
-        .join(', ');
-      insertStatements.push(
-        `INSERT INTO ${this._name} (${columns}) VALUES (${values});`
-      );
+      script += `
+        INSERT INTO ${this._tableName} (${Object.keys(value)
+        .map((key) => this._objectFieldToColumnName.get(key))
+        .join(', ')})
+        VALUES (${Object.keys(value)
+          .map(() => '?')
+          .join(', ')});
+      `;
     }
-    const combinedQuery = insertStatements.join('\n');
-    const result = await self._connection.execute(combinedQuery);
-    return result.map(self._parseColumns);
+    const validationState = new ValidationState(this._tableName);
+    const parameterizedValues = values.map((value) => {
+      const parameterizedValue = Object.entries(value).map(([key, value]) => {
+        this._schema[key]._validate(value, validationState);
+        return this._schema[key]._writeValue(value);
+      });
+      return parameterizedValue;
+    });
+
+    if (validationState.hasErrors()) {
+      throw validationState.errors[0];
+    }
+    const result = await this._connection.execute(script, parameterizedValues);
+    return result.map((row) => this._convertRowToObject(row));
   };
 
   update = async (
-    value: Partial<ConvertSchemaToType<T>>,
-    where?: WhereStatement<T>
-  ): Promise<{ [K in keyof T]: InferColumnType<T[K]> }> => {
-    const self = this;
-    const setClause = Object.entries(value)
-      .map(
-        ([key, value]) =>
-          `${key} = ${typeof value === 'string' ? `'${value}'` : value}`
-      )
-      .join(', ');
-    const [result] = await self._connection.execute`UPDATE ${
-      self._name
-    } SET ${setClause} ${buildWhereStatement(self._schema, where)}`;
-    return self._parseColumns(result);
+    values: Partial<ConvertSchemaToType<T>>,
+    conditions: Partial<ConvertSchemaToType<T>>
+  ): Promise<ConvertSchemaToType<T>[]> => {
+    const script = `
+      UPDATE ${this._tableName}
+      SET ${Object.entries(values)
+        .map(([key, value]) => {
+          this._schema[key]._validate(
+            value,
+            new ValidationState(this._tableName)
+          );
+          return `${this._objectFieldToColumnName.get(key)} = ?`;
+        })
+        .join(', ')}
+      WHERE ${Object.entries(conditions)
+        .map(([key, value]) => {
+          this._schema[key]._validate(
+            value,
+            new ValidationState(this._tableName)
+          );
+          return `${this._objectFieldToColumnName.get(key)} = ?`;
+        })
+        .join(' AND ')}
+    `;
+    const parameterizedValues = [
+      ...Object.entries(values).map(([key, value]) =>
+        this._schema[key]._writeValue(value)
+      ),
+      ...Object.entries(conditions).map(([key, value]) =>
+        this._schema[key]._writeValue(value)
+      ),
+    ];
+    const result = await this._connection.execute(script, parameterizedValues);
+    return result.map((row) => this._convertRowToObject(row));
   };
 
-  delete = async (where: WhereStatement<T>): Promise<void> => {
-    const self = this;
-    await self._connection.execute`DELETE FROM ${
-      self._name
-    } ${buildWhereStatement(self._schema, where)}`;
+  delete = async (
+    conditions: Partial<ConvertSchemaToType<T>>
+  ): Promise<ConvertSchemaToType<T>[]> => {
+    const script = `
+      DELETE FROM ${this._tableName}
+      WHERE ${Object.entries(conditions)
+        .map(([key, value]) => {
+          this._schema[key]._validate(
+            value,
+            new ValidationState(this._tableName)
+          );
+          return `${this._objectFieldToColumnName.get(key)} = ?`;
+        })
+        .join(' AND ')}
+    `;
+    const parameterizedValues = Object.entries(conditions).map(([key, value]) =>
+      this._schema[key]._writeValue(value)
+    );
+    const result = await this._connection.execute(script, parameterizedValues);
+    return result.map((row) => this._convertRowToObject(row));
   };
-
-  toString() {
-    return this._name;
-  }
-}
-
-function mapNamesToColumnNames<T extends SchemaDefinitionMap>(
-  names: string[] | '*',
-  schema: T
-) {
-  if (names === '*') {
-    names = Object.keys(schema);
-  }
-  return names.map((name) => schema[name]._columnName ?? snakeCase(name));
 }

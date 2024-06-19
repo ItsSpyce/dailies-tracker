@@ -54,7 +54,6 @@ app.on('ready', createWindow);
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
-    closeLogger().then(app.quit);
     app.quit();
   }
 });
@@ -66,3 +65,4 @@ app.on('activate', () => {
     createWindow();
   }
 });
+app.on('quit', closeLogger);
