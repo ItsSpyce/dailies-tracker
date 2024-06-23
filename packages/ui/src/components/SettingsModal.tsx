@@ -23,13 +23,13 @@ import {
   useRewardService,
 } from '../states';
 import { Checkbox } from './Checkbox';
-import { useAsyncState, useLocalStorage } from '../hooks';
+import { useAsyncState } from '../hooks';
 import { Button, TextButton } from './Button';
 import { Reward } from './Reward';
 import { Input, InputGroup } from './Input';
 import { Camera, Plus, Trash2 } from 'react-feather';
 import { useTheme } from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Tab, Tabs } from './Tabs';
 import { useRecoilState } from 'recoil';
 
@@ -45,7 +45,7 @@ const validAlertingTimes: Record<number, string> = {
   [1000 * 60 * 60 * 8]: 'time.8hours',
 };
 
-export const SettingsAndAboutModal: React.FC<NewModalProps> = (props) => {
+export const SettingsModal: React.FC<NewModalProps> = (props) => {
   const [lang, setLang] = useRecoilState(LanguageSelector);
   const [showReleasePopup, setShowReleasePopup] = useRecoilState(
     ShowReleasePopupSelector
@@ -74,18 +74,15 @@ export const SettingsAndAboutModal: React.FC<NewModalProps> = (props) => {
   }
 
   function addRealm(name: string) {
-    setRealms([...realms!, name]);
-    commissionService.addRealm(name);
+    commissionService.addRealm(name).then((realm) => {
+      setRealms([...realms!, realm]);
+    });
   }
 
-  function removeRealm(name: string) {
-    setRealms(realms!.filter((realm) => realm !== name));
-    commissionService.deleteRealm(name);
+  function removeRealm(id: number) {
+    setRealms(realms!.filter((realm) => realm.id !== id));
+    commissionService.deleteRealm(id);
   }
-
-  useEffect(() => {
-    setRealms(i18n.realms);
-  }, [i18n]);
 
   return (
     <Modal {...props}>
@@ -216,10 +213,10 @@ export const SettingsAndAboutModal: React.FC<NewModalProps> = (props) => {
                 </thead>
                 <tbody>
                   {realms?.map((realm) => (
-                    <tr key={realm}>
-                      <td width="90%">{realm}</td>
+                    <tr key={realm.id}>
+                      <td width="90%">{realm.name}</td>
                       <td>
-                        <TextButton onClick={() => removeRealm(realm)}>
+                        <TextButton onClick={() => removeRealm(realm.id)}>
                           <Trash2 />
                         </TextButton>
                       </td>

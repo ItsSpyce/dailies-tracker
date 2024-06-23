@@ -17,6 +17,8 @@ const App = () => {
     if (availableRealms?.length === 0) {
       console.log('No realms found, adding in defaults');
       commissionService.addRealms(i18n.realms);
+    } else {
+      console.log('Realms found', availableRealms);
     }
   }, [availableRealms]);
 

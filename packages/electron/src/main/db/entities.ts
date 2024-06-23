@@ -4,7 +4,7 @@ const { table, column, initializeConnection } = connect();
 export { initializeConnection };
 
 export const RealmEntity = table('realm_entities', {
-  name: column.text().unique(),
+  name: column.text(),
 });
 
 export const RewardEntity = table('reward_entities', {

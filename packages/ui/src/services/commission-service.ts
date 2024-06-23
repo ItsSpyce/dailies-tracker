@@ -8,8 +8,22 @@ export interface CommissionService {
     rewards: TaskReward[]
   ): Promise<DailyCommission>;
   deleteCommission(id: number): Promise<void>;
-  getAvailableRealms(): Promise<string[]>;
-  addRealm(realm: string): Promise<void>;
+  getAvailableRealms(): Promise<
+    {
+      id: number;
+      name: string;
+      createdAt: Date;
+      updatedAt: Date | null;
+      deletedAt: Date | null;
+    }[]
+  >;
+  addRealm(realm: string): Promise<{
+    id: number;
+    name: string;
+    createdAt: Date;
+    updatedAt: Date | null;
+    deletedAt: Date | null;
+  }>;
   addRealms(realms: string[]): Promise<void>;
-  deleteRealm(realm: string): Promise<void>;
+  deleteRealm(realm: number): Promise<void>;
 }

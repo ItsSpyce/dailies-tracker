@@ -30,7 +30,7 @@ import { Reward } from './Reward';
 import { Section } from './Section';
 import { TaskCompletionStatus } from './TaskCompletionStatus';
 import { Title } from './Title';
-import { SettingsAndAboutModal } from './SettingsModal';
+import { SettingsModal } from './SettingsModal';
 import { AboutModal } from './AboutModal';
 import { DebugModal } from './DebugModal';
 import { useRecoilValue } from 'recoil';
@@ -209,7 +209,7 @@ export const MainPage = () => {
           )}
         </ButtonGroup>
       </RightPanel>
-      <SettingsAndAboutModal {...settingsModal} />
+      <SettingsModal {...settingsModal} />
       <AboutModal {...aboutModal} />
       <DebugModal {...debugModal} />
     </StyledApp>

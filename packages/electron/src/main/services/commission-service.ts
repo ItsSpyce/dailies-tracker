@@ -25,22 +25,22 @@ export class CommissionService {
   }
 
   @Route()
-  async getAvailableRealms() {
+  getAvailableRealms() {
     return RealmEntity.select({ deletedAt: null });
   }
 
   @Route()
-  async addRealm(name: string) {
+  addRealm(name: string) {
     return RealmEntity.insert({ name });
   }
 
   @Route()
-  async addRealms(names: string[]) {
-    return RealmEntity.bulkInsert(names.map((name) => ({ name })));
+  addRealms(names: string[]) {
+    return Promise.all(names.map((name) => RealmEntity.insert({ name })));
   }
 
   @Route()
-  async deleteRealm(name: string) {
+  deleteRealm(name: string) {
     return RealmEntity.delete({ name });
   }
 }

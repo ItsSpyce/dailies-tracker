@@ -27,13 +27,15 @@ const ErrorPage = () => <h1>An error occured</h1>;
       <StyleSheetManager>
         <ThemeProvider theme={theme}>
           <GlobalStyle />
-          <AppProvider
-            commissionService={commissionService}
-            rewardService={rewardService}
-            claimsService={claimsService}
-          >
-            <App />
-          </AppProvider>
+          <ErrorBoundary fallback={<ErrorPage />}>
+            <AppProvider
+              commissionService={commissionService}
+              rewardService={rewardService}
+              claimsService={claimsService}
+            >
+              <App />
+            </AppProvider>
+          </ErrorBoundary>
         </ThemeProvider>
       </StyleSheetManager>
     </React.StrictMode>

@@ -32,9 +32,7 @@ class ErrorBoundary extends Component<
 const App = () => {
   const commissionService = useCommissionService();
   const i18n = useI18n();
-  const [availableRealms, setAvailableRealms] = useAsyncState(
-    commissionService.getAvailableRealms
-  );
+  const [availableRealms] = useAsyncState(commissionService.getAvailableRealms);
 
   useEffect(() => {
     if (availableRealms?.length === 0) {

@@ -19,7 +19,7 @@ export default defineConfig((env) => {
     },
     plugins: [pluginExposeRenderer(name), react(), tsConfigPaths()],
     resolve: {
-      preserveSymlinks: true,
+      preserveSymlinks: false,
     },
     clearScreen: false,
   } as UserConfig;
